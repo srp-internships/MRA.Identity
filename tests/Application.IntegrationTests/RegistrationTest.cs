@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
 using FluentAssertions;
+using MRA.Identity.Application.Contract.User.Commands.RegisterUser;
 using MRA.Identity.Domain.Entities;
 using MRA.Configurations.Common.Constants;
-using MRA.Identity.Application.Contract.User.Commands.RegisterUser;
 
 namespace MRA.Jobs.Application.IntegrationTests;
 

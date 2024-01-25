@@ -29,9 +29,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\MRA.Identity.Application.Contract\MRA.Identity.Application.Contract.csproj" />
-      <ProjectReference Include="..\..\src\MRA.Identity.Domain\MRA.Identity.Domain.csproj" />
-      <ProjectReference Include="..\..\src\MRA.Identity.Infrastructure\MRA.Identity.Infrastructure.csproj" />
+      <ProjectReference Include="..\..\src\MRA.Identity.Api\MRA.Identity.Api.csproj" />
     </ItemGroup>
 
     <ItemGroup>

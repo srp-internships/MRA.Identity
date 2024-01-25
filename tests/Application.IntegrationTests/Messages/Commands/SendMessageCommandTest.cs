@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Http.Json;
+
 using MRA.Identity.Application.Contract.Messages.Commands;
 
 namespace MRA.Jobs.Application.IntegrationTests.Messages.Commands;

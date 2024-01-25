@@ -22,7 +22,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\src\MRA.Identity.Application\MRA.Identity.Application.csproj" />
-      <ProjectReference Include="..\..\src\MRA.Identity.Application\MRA.Identity.Application.csproj" />
       <ProjectReference Include="..\..\src\MRA.Identity.Infrastructure\MRA.Identity.Infrastructure.csproj" />
     </ItemGroup>
 

@@ -1,6 +1,12 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http;
+using System.Net;
+using System.Net.Http.Json;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
+using MRA.Identity.Application.Contract.User.Commands;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Domain.Entities;
+using System;
 
 namespace MRA.Jobs.Application.IntegrationTests.Users.Query;
 

@@ -27,22 +27,11 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{key}")]
-    public async Task<IActionResult> GetUserByKey([FromRoute] string key, [FromQuery] string id = null)
+    public async Task<IActionResult> Get([FromRoute] string key)
     {
-        IRequest<UserResponse> query;
-        if (Guid.TryParse(id, out var userId))
-        {
-            query = new GetUserByUserIdQuery { Id = userId };
-        }
-        else
-        {
-            query = new GetUserByUsernameQuery { UserName = key };
-        }
-       
-        var userResponse = await _mediator.Send(query);
+        var userResponse = await _mediator.Send(new GetUserByKeyQuery{Key = key});
         return Ok(userResponse);
     }
-
 
     [HttpGet("CheckUserDetails/{userName}/{phoneNumber}/{email}")]
     [AllowAnonymous]

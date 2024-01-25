@@ -17,9 +17,9 @@ using MRA.Identity.Client.Services.ContentService;
 
 namespace MRA.Identity.Client.Services.Profile;
 
-public class UserProfileService(HttpClient httpClient) : IUserProfileService
+public class UserProfileService(HttpClient httpClient ,IContentService ContentService) : IUserProfileService
 {
-    public async Task<string> Update(UpdateProfileCommand command, IContentService ContentService)
+    public async Task<string> Update(UpdateProfileCommand command)
     {
         try
         {

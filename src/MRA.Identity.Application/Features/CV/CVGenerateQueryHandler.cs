@@ -11,26 +11,21 @@ using QuestPDF.Fluent;
 
 
 namespace MRA.Identity.Application.Features.CV;
-public class CVGenerateQueryHandler : IRequestHandler<CVGenerateQuery, MemoryStream>
+public class CVGenerateQueryHandler(
+    IApplicationDbContext dbContext,
+    IUserHttpContextAccessor userHttpContext,
+    IMediator mediator)
+    : IRequestHandler<CVGenerateQuery, MemoryStream>
 {
-    private readonly IApplicationDbContext _dbContext;
-    private readonly IUserHttpContextAccessor _userHttpContext;
-    private readonly IMediator _mediator;
-
-    public CVGenerateQueryHandler(IApplicationDbContext dbContext,
-        IUserHttpContextAccessor userHttpContext, IMediator mediator)
-    {
-        _dbContext = dbContext;
-        _userHttpContext = userHttpContext;
-        _mediator = mediator;
-    }
+    private readonly IApplicationDbContext _dbContext = dbContext;
+    private readonly IUserHttpContextAccessor _userHttpContext = userHttpContext;
 
     public async Task<MemoryStream> Handle(CVGenerateQuery request, CancellationToken cancellationToken)
     {
-        var userProfile = await _mediator.Send(new GetPofileQuery());
-        var userSkills = await _mediator.Send(new GetUserSkillsQuery());
-        var userEducations = await _mediator.Send(new GetEducationsByUserQuery());
-        var userExperience = await _mediator.Send(new GetExperiencesByUserQuery());
+        var userProfile = await mediator.Send(new GetPofileQuery());
+        var userSkills = await mediator.Send(new GetUserSkillsQuery());
+        var userEducations = await mediator.Send(new GetEducationsByUserQuery());
+        var userExperience = await mediator.Send(new GetExperiencesByUserQuery());
 
 
         InvoiceDocument document = new InvoiceDocument(userProfile, userSkills,

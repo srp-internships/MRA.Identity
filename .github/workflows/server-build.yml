@@ -19,7 +19,6 @@ jobs:
       with:
         dotnet-version: 8.0.x
     
-
     - name: Restore dependencies
       run: dotnet restore
       working-directory: ./src
@@ -29,13 +28,3 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
       working-directory: ./src
-
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: ./src/MRA.Jobs.Identity
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: ./src/MRA.Jobs.Identity
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-      working-directory: ./src/MRA.Jobs.Identity

@@ -13,12 +13,13 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Net.Http.Json;
 using Microsoft.IdentityModel.Tokens;
+using MRA.Identity.Client.Services.ContentService;
 
 namespace MRA.Identity.Client.Services.Profile;
 
 public class UserProfileService(HttpClient httpClient) : IUserProfileService
 {
-    public async Task<string> Update(UpdateProfileCommand command)
+    public async Task<string> Update(UpdateProfileCommand command, IContentService ContentService)
     {
         try
         {
@@ -27,20 +28,19 @@ public class UserProfileService(HttpClient httpClient) : IUserProfileService
             if (result.IsSuccessStatusCode)
                 return "";
 
-            if (result.StatusCode == HttpStatusCode.BadRequest)
-                return result.RequestMessage.ToString();
-
-            return "Server is not responding, please try later";
+            return result.StatusCode == HttpStatusCode.BadRequest
+                ? result.RequestMessage.ToString()
+                : ContentService["Profile:Servernotrespondingtry"];
         }
         catch (HttpRequestException ex)
         {
             Console.WriteLine(ex.Message);
-            return "Server is not responding, please try later";
+            return ContentService["Profile:Servernotrespondingtry"];
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
-            return "An error occurred";
+            return ContentService["Profile:Anerroroccurred"];
         }
     }
 

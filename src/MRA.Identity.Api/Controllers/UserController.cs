@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
+using MRA.Identity.Application.Contract.User.Responses;
 
 namespace MRA.Identity.Api.Controllers;
 
@@ -26,31 +27,23 @@ public class UserController : ControllerBase
     }
 
     [HttpGet("{key}")]
-    public async Task<IActionResult> Get([FromRoute] string key)
+    public async Task<IActionResult> GetUserByKey([FromRoute] string key, [FromQuery] string id = null)
     {
-        key = key.Replace("GetById?Id=", "");
-        Guid id;
-        
-        if (Guid.TryParse(key, out id))
+        IRequest<UserResponse> query;
+        if (Guid.TryParse(id, out var userId))
         {
-            var query = new GetUserByUserIdQuery { Id = id };
-            var user = await _mediator.Send(query);
-            return Ok(user);
+            query = new GetUserByUserIdQuery { Id = userId };
         }
-
-        var query1 = new GetUserByUsernameQuery { UserName = key };
-        var userResponse = await _mediator.Send(query1);
+        else
+        {
+            query = new GetUserByUsernameQuery { UserName = key };
+        }
+       
+        var userResponse = await _mediator.Send(query);
         return Ok(userResponse);
     }
 
-    [HttpGet("GetByUserId")]
-    public async Task<IActionResult> GetByUserId([FromQuery] Guid id)
-    {
-            var query = new GetUserByUserIdQuery { Id = id };
-            var user = await _mediator.Send(query);
-            return Ok(user);
-    }
-    
+
     [HttpGet("CheckUserDetails/{userName}/{phoneNumber}/{email}")]
     [AllowAnonymous]
     public async Task<IActionResult> CheckUserDetails([FromRoute] string userName, [FromRoute] string phoneNumber,

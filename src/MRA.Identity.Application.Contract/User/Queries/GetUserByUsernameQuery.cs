@@ -7,3 +7,7 @@ public class GetUserByUsernameQuery : IRequest<UserResponse>
     public string UserName { get; set; }
 }
 
+public class GetUserByUserIdQuery : IRequest<UserResponse>
+{
+    public Guid Id { get; set; }
+}

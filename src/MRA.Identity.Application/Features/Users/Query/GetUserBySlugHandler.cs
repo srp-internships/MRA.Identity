@@ -7,20 +7,26 @@ using MRA.Identity.Application.Contract.User.Responses;
 using MRA.Identity.Domain.Entities;
 
 namespace MRA.Identity.Application.Features.Users.Query;
-public class GetUserBySlugHandler : IRequestHandler<GetUserByUsernameQuery, UserResponse>
+public class GetUserBySlugHandler(UserManager<ApplicationUser> userManager, IMapper mapper)
+    : IRequestHandler<GetUserByUsernameQuery, UserResponse>
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IMapper _mapper;
-
-    public GetUserBySlugHandler(UserManager<ApplicationUser> userManager, IMapper mapper)
-    {
-        _userManager = userManager;
-        _mapper = mapper;
-    }
     public async Task<UserResponse> Handle(GetUserByUsernameQuery request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName == request.UserName);
-        var result = _mapper.Map<UserResponse>(user);
+        var user = await userManager.Users.FirstOrDefaultAsync(u => u.UserName == request.UserName, cancellationToken: cancellationToken);
+        var result = mapper.Map<UserResponse>(user);
+
+        return result;
+    }
+}
+
+
+public class GetUserByIdCommandHandler(UserManager<ApplicationUser> userManager, IMapper mapper)
+    : IRequestHandler<GetUserByUserIdQuery, UserResponse>
+{
+    public async Task<UserResponse> Handle(GetUserByUserIdQuery request, CancellationToken cancellationToken)
+    {
+        var user = await userManager.Users.FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken: cancellationToken);
+        var result = mapper.Map<UserResponse>(user);
 
         return result;
     }

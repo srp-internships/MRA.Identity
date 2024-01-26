@@ -139,25 +139,6 @@ public partial class Profile
         Snackbar.Add(ContentService["Profile:Servernotrespondingtry"], MudBlazor.Severity.Error);
     }
 
-    private async Task BadRequestResponse(HttpResponseMessage response)
-    {
-        var customProblemDetails = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
-        if (customProblemDetails.Detail != null)
-        {
-            Snackbar.Add(customProblemDetails.Detail, MudBlazor.Severity.Error);
-        }
-        else
-        {
-            var errorResponseString = await response.Content.ReadAsStringAsync();
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(errorResponseString);
-            foreach (var error in errorResponse.Errors)
-            {
-                var errorMessage = string.Join(", ", error.Value);
-                Snackbar.Add(errorMessage, MudBlazor.Severity.Error);
-            }
-        }
-    }
-
     private async Task ConfirmDelete<T>(IList<T> collection, T item)
     {
         var parameters = new DialogParameters<DialogMudBlazor>();
@@ -183,7 +164,7 @@ public partial class Profile
         {
             Type itemType = item.GetType();
             var idProperty = itemType.GetProperty("Id");
-            var result = new HttpResponseMessage();
+            var result = new ApiResponse();
             if (idProperty != null || itemType.Name == "String")
             {
                 try
@@ -215,7 +196,7 @@ public partial class Profile
                     return;
                 }
 
-                if (result.IsSuccessStatusCode)
+                if (result.Success)
                 {
                     collection.Remove(item);
                     StateHasChanged();
@@ -314,7 +295,7 @@ public partial class Profile
                 createEducation.UntilNow = true;
 
             var response = await UserProfileService.CreateEducationAsуnc(createEducation);
-            if (response.IsSuccessStatusCode)
+            if (response.Success)
             {
                 Snackbar.Add(ContentService["Profile:Educationdetailsadded"], MudBlazor.Severity.Success);
                 addEducation = false;
@@ -322,9 +303,9 @@ public partial class Profile
                 await GetEducations();
                 StateHasChanged();
             }
-            else if (response.StatusCode == HttpStatusCode.BadRequest)
+            else if (response.HttpStatusCode == HttpStatusCode.BadRequest)
             {
-                await BadRequestResponse(response);
+                Snackbar.Add(response.Error, MudBlazor.Severity.Error);
             }
         }
         catch (HttpRequestException)
@@ -354,7 +335,7 @@ public partial class Profile
         try
         {
             var result = await UserProfileService.UpdateEducationAsync(educationUpdate);
-            if (result.IsSuccessStatusCode)
+            if (result.Success)
             {
                 editingCardId = Guid.NewGuid();
                 Snackbar.Add(ContentService["Profile:UpdateEducationsuccessfully"], MudBlazor.Severity.Success);
@@ -362,9 +343,9 @@ public partial class Profile
                 await GetEducations();
                 StateHasChanged();
             }
-            else if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            else if (result.HttpStatusCode == System.Net.HttpStatusCode.BadRequest)
             {
-                await BadRequestResponse(result);
+                Snackbar.Add(result.Error, MudBlazor.Severity.Error);
             }
         }
         catch (HttpRequestException)
@@ -432,7 +413,7 @@ public partial class Profile
                 createExperience.IsCurrentJob = true;
 
             var response = await UserProfileService.CreateExperienceAsync(createExperience);
-            if (response.IsSuccessStatusCode)
+            if (response.Success)
             {
                 Snackbar.Add(ContentService["Profile:Experiencedetailsadded"], MudBlazor.Severity.Success);
 
@@ -441,8 +422,8 @@ public partial class Profile
                 await GetExperiences();
             }
 
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-                await BadRequestResponse(response);
+            if (response.HttpStatusCode == HttpStatusCode.BadRequest)
+                Snackbar.Add(response.Error, MudBlazor.Severity.Error);
         }
         catch (HttpRequestException)
         {
@@ -487,7 +468,7 @@ public partial class Profile
         try
         {
             var result = await UserProfileService.UpdateExperienceAsync(experienceUpdate);
-            if (result.IsSuccessStatusCode)
+            if (result.Success)
             {
                 Snackbar.Add(ContentService["Profile:UpdateEducationsuccessfully"], MudBlazor.Severity.Success);
 
@@ -495,8 +476,8 @@ public partial class Profile
                 StateHasChanged();
             }
 
-            if (result.StatusCode == HttpStatusCode.BadRequest)
-                await BadRequestResponse(result);
+            if (result.HttpStatusCode == HttpStatusCode.BadRequest)
+                Snackbar.Add(result.Error, MudBlazor.Severity.Error);
         }
         catch (HttpRequestException)
         {

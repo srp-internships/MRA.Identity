@@ -20,22 +20,22 @@ public interface IUserProfileService
     Task<List<UserEducationResponse>> GetEducationsByUser(string username=null);
     Task<List<UserEducationResponse>> GetAllEducations();
 
-    Task<HttpResponseMessage> CreateEducationAsуnc(CreateEducationDetailCommand command);
+    Task<ApiResponse> CreateEducationAsуnc(CreateEducationDetailCommand command);
 
-    Task<HttpResponseMessage> UpdateEducationAsync(UpdateEducationDetailCommand command);
-    Task<HttpResponseMessage> DeleteEducationAsync(Guid id);
-    Task<HttpResponseMessage> DeleteExperienceAsync(Guid id);
+    Task<ApiResponse> UpdateEducationAsync(UpdateEducationDetailCommand command);
+    Task<ApiResponse> DeleteEducationAsync(Guid id);
+    Task<ApiResponse> DeleteExperienceAsync(Guid id);
 
     Task<List<UserExperienceResponse>> GetExperiencesByUser(string username=null);
     Task<List<UserExperienceResponse>> GetAllExperiences();
 
-    Task<HttpResponseMessage> CreateExperienceAsync(CreateExperienceDetailCommand command);
+    Task<ApiResponse> CreateExperienceAsync(CreateExperienceDetailCommand command);
 
-    Task<HttpResponseMessage> UpdateExperienceAsync(UpdateExperienceDetailCommand command);
+    Task<ApiResponse> UpdateExperienceAsync(UpdateExperienceDetailCommand command);
 
     Task<UserSkillsResponse> GetUserSkills(string userName = null);
     Task<UserSkillsResponse> GetAllSkills();
-    Task<HttpResponseMessage> RemoveSkillAsync(string skill);
+    Task<ApiResponse> RemoveSkillAsync(string skill);
 
     Task<UserSkillsResponse> AddSkills(AddSkillsCommand command);
 

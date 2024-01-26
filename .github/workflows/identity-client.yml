@@ -22,6 +22,6 @@ jobs:
           action: "upload"
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
-          app_location: "${{ github.workspace }}/src/MRA.Jobs.Identity/MRA.Identity.Client" # App source code path
+          app_location: "${{ github.workspace }}/src/MRA.Identity.Client" # App source code path
           output_location: "wwwroot" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######

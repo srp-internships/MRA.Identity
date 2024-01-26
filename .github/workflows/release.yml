@@ -18,16 +18,16 @@ jobs:
 
       - name: Restore dependencies
         run: dotnet restore
-        working-directory: ./src/Mra.Identity.Application.Contracts
+        working-directory: ./src/MRA.Identity.Application.Contract
 
       - name: Build project
         run: dotnet build --configuration Release
-        working-directory: ./src/Mra.Identity.Application.Contracts
+        working-directory: ./src/MRA.Identity.Application.Contract
 
       - name: Pack NuGet package
         run: dotnet pack --configuration Release --output ./artifacts
-        working-directory: ./src/Mra.Identity.Application.Contracts
+        working-directory: ./src/MRA.Identity.Application.Contract
 
       - name: Publish to NuGet
         run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
-        working-directory: ./src/Mra.Identity.Application.Contracts
+        working-directory: ./src/MRA.Identity.Application.Contract

@@ -309,9 +309,9 @@
                 Email = _registerUser.Email
             };
             var result = await AuthService.CheckUserDetails(query);
-            if (result.IsSuccessStatusCode)
+            if (result.Success)
             {
-                _userDetailsResponse = await result.Content.ReadFromJsonAsync<UserDetailsResponse>();
+                _userDetailsResponse = result.Result;
             }
         }
         catch (Exception)

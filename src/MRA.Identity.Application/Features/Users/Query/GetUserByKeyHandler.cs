@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MRA.Identity.Application.Common.Exceptions;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Responses;
 using MRA.Identity.Domain.Entities;
@@ -24,6 +25,10 @@ public class GetUserByKeyHandler(UserManager<ApplicationUser> userManager, IMapp
             user=await userManager.Users.FirstOrDefaultAsync(u => u.UserName == request.Key,
                 cancellationToken: cancellationToken);
         }
+
+        if (user == null)
+            throw new NotFoundException("User not found");
+        
         var result = mapper.Map<UserResponse>(user);
         return result;
     }

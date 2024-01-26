@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
+using MRA.Identity.Application.Contract.User.Responses;
 
 namespace MRA.Identity.Api.Controllers;
+
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(ApplicationPolicies.Administrator)]
@@ -16,25 +18,28 @@ public class UserController : ControllerBase
     {
         _mediator = mediator;
     }
+
     [HttpGet]
     public async Task<IActionResult> Get()
     {
         var users = await _mediator.Send(new GetAllUsersQuery());
         return Ok(users);
     }
-    [HttpGet("{userName}")]
-    public async Task<IActionResult> Get(string userName)
+
+    [HttpGet("{key}")]
+    public async Task<IActionResult> Get([FromRoute] string key)
     {
-        var query = new GetUserByUsernameQuery { UserName = userName };
-        var user = await _mediator.Send(query);
-        return Ok(user);
+        var userResponse = await _mediator.Send(new GetUserByKeyQuery{Key = key});
+        return Ok(userResponse);
     }
 
     [HttpGet("CheckUserDetails/{userName}/{phoneNumber}/{email}")]
     [AllowAnonymous]
-    public async Task<IActionResult> CheckUserDetails([FromRoute] string userName, [FromRoute] string phoneNumber, [FromRoute] string email)
+    public async Task<IActionResult> CheckUserDetails([FromRoute] string userName, [FromRoute] string phoneNumber,
+        [FromRoute] string email)
     {
-        var result = await _mediator.Send(new CheckUserDetailsQuery() { UserName = userName, PhoneNumber = phoneNumber, Email = email });
+        var result = await _mediator.Send(new CheckUserDetailsQuery()
+            { UserName = userName, PhoneNumber = phoneNumber, Email = email });
         return Ok(result);
     }
 }

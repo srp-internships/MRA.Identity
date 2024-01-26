@@ -1,10 +1,18 @@
 ﻿@using MRA.Identity.Client.Components
+@using MRA.Identity.Client.Components.Under_Construction
+@using Microsoft.FeatureManagement
 @inherits LayoutComponentBase
 @inject LayoutService LayoutService
+@inject IFeatureManager FeatureManager
 <MudThemeProvider @ref="@_mudThemeProvider" Theme="@LayoutService.CurrentTheme" IsDarkMode="@LayoutService.IsDarkMode" IsDarkModeChanged="LayoutService.SetDarkMode"/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
-
+@if (_IsUnderConstruction)
+{
+    <UnderConstruction/>
+}
+else
+{
 <div class="page">
     <main>
         <article class="content px-4">
@@ -12,9 +20,10 @@
         </article>
     </main>
 </div>
-
+}
 
 @code {
+    private bool _IsUnderConstruction;
     private MudThemeProvider _mudThemeProvider;
 
     protected override void OnInitialized()
@@ -34,6 +43,7 @@
 
     private async Task ApplyUserPreferences()
     {
+        _IsUnderConstruction = await FeatureManager.IsEnabledAsync(FeatureFlags.IsUnderConstruction);
         var defaultDarkMode = await _mudThemeProvider.GetSystemPreference();
         await LayoutService.ApplyUserPreferences(defaultDarkMode);
     }

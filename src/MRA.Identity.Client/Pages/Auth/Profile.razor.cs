@@ -61,7 +61,7 @@ public partial class Profile
         StateHasChanged();
         
         var response = await AuthService.ResendVerificationEmail();
-        if (response.IsSuccessStatusCode)
+        if (response.Success)
             Snackbar.Add(ContentService["Profile:Pleasecheckyouremail"], Severity.Info);
         else
             Snackbar.Add(ContentService["Profile:Servernotrespondingtry"], Severity.Error);

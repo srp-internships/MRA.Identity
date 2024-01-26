@@ -66,7 +66,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        messages = await messageService.GetAllMessagesAsync();
+        messages = (await messageService.GetAllMessagesAsync()).Result;
         if (messages is not null)
         {
             fetching = false;
@@ -79,8 +79,8 @@
         if (await _fluentValidationValidator!.ValidateAsync())
         {
             var response = await messageService.SendMessageAsync(message);
-            var resText = await response.Content.ReadAsStringAsync();
-            if (response.IsSuccessStatusCode && resText == "true")
+            var resText = response.Result;
+            if (response.Success && resText == true)
             {
                 Snackbar.Add("Message sent successfully", Severity.Info);
             } else

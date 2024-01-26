@@ -2,27 +2,21 @@
 using System.Net.Http.Json;
 using MRA.Identity.Application.Contract.Messages.Commands;
 using MRA.Identity.Application.Contract.Messages.Responses;
+using MRA.Identity.Client.Services.HttpClientService;
 
 namespace MRA.Identity.Client.Services.Message;
 
-public class MessageService : IMessageService
+public class MessageService(IHttpClientService httpClient) : IMessageService
 {
-    private readonly HttpClient _httpClient;
-
-    public MessageService(HttpClient httpClient)
+    public async Task<ApiResponse<List<GetMessageResponse>>> GetAllMessagesAsync()
     {
-        _httpClient = httpClient;
-    }
-
-    public async Task<List<GetMessageResponse>> GetAllMessagesAsync()
-    {
-        var result = await _httpClient.GetFromJsonAsync<List<GetMessageResponse>>("message");
+        var result = await httpClient.GetAsJsonAsync<List<GetMessageResponse>>("message");
         return result;
     }
 
-    public async Task<HttpResponseMessage> SendMessageAsync(SendMessageCommand command)
+    public async Task<ApiResponse<bool>> SendMessageAsync(SendMessageCommand command)
     {
-        var result = await _httpClient.PostAsJsonAsync("message", command);
+        var result = await httpClient.PutAsJsonAsync<bool>("message", command);
         return result;
     }
 }

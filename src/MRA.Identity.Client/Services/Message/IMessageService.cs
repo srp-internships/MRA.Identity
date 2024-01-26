@@ -5,6 +5,6 @@ namespace MRA.Identity.Client.Services.Message;
 
 public interface IMessageService
 {
-    Task<HttpResponseMessage> SendMessageAsync(SendMessageCommand command);
-    Task<List<GetMessageResponse>> GetAllMessagesAsync();
+    Task<ApiResponse<bool>> SendMessageAsync(SendMessageCommand command);
+    Task<ApiResponse<List<GetMessageResponse>>> GetAllMessagesAsync();
 }

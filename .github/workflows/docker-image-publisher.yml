@@ -20,7 +20,7 @@ jobs:
       - name: build docker image for Identity Service
         run: |
           docker build -t silkroadprofessionals.azurecr.io/mra-identity-api:${{ steps.taggerDryRun.outputs.new_tag }} .
-        working-directory: ./src/MRA.Jobs.Identity
+        working-directory: ./src
 
       - name: Publish Identity Service to ACR
         run: |

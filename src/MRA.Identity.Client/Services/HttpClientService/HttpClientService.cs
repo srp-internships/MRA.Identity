@@ -42,7 +42,6 @@ namespace MRA.Identity.Client.Services.HttpClientService
             }
         }
 
-        public string err="";
         public async Task<ApiResponse<T>> PostAsJsonAsync<T>(string url, Object content)
         {
 
@@ -50,19 +49,10 @@ namespace MRA.Identity.Client.Services.HttpClientService
             {
                 using var httpClient = await CreateHttpClient();
                 var response = await httpClient.PostAsJsonAsync(url, content);
-                if (response.IsSuccessStatusCode)
-                {
-                    var d = (await response.Content.ReadFromJsonAsync<CustomProblemDetails>()).Detail;
-                    err = d;
-                } 
                 return await GetApiResponseAsync<T>(response);
             }
             catch (HttpRequestException ex)
             {
-                if (err != "")
-                {
-                    return ApiResponse<T>.BuildFailed($"detales = {err} {ex.Message}", ex.StatusCode);
-                }
                 return ApiResponse<T>.BuildFailed($"Server is not responding. {ex.Message}", ex.StatusCode);
             }
         }

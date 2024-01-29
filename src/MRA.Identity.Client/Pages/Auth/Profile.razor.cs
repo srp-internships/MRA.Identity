@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using MRA.Identity.Application.Contract.Educations.Command.Create;
 using MRA.Identity.Application.Contract.Educations.Command.Update;
 using MRA.Identity.Application.Contract.Educations.Responses;
@@ -73,7 +72,7 @@ public partial class Profile
             await UserProfileService.CheckConfirmationCode(_profile.PhoneNumber, _confirmationCode);
         if (response == SmsVerificationCodeStatus.CodeVerifyFailure)
         {
-            Snackbar.Add(ContentService["Profile:Codeisincorrector"], MudBlazor.Severity.Error);
+            Snackbar.Add(ContentService["Profile:Codeisincorrector"], Severity.Error);
         }
         else
         {
@@ -135,7 +134,7 @@ public partial class Profile
 
     private void ServerNotResponding()
     {
-        Snackbar.Add(ContentService["Profile:Servernotrespondingtry"], MudBlazor.Severity.Error);
+        Snackbar.Add(ContentService["Profile:Servernotrespondingtry"], Severity.Error);
     }
 
     private async Task BadRequestResponse(HttpResponseMessage response)
@@ -143,7 +142,7 @@ public partial class Profile
         var customProblemDetails = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
         if (customProblemDetails.Detail != null)
         {
-            Snackbar.Add(customProblemDetails.Detail, MudBlazor.Severity.Error);
+            Snackbar.Add(customProblemDetails.Detail, Severity.Error);
         }
         else
         {
@@ -152,7 +151,7 @@ public partial class Profile
             foreach (var error in errorResponse.Errors)
             {
                 var errorMessage = string.Join(", ", error.Value);
-                Snackbar.Add(errorMessage, MudBlazor.Severity.Error);
+                Snackbar.Add(errorMessage, Severity.Error);
             }
         }
     }
@@ -203,8 +202,6 @@ public partial class Profile
                             case "UserExperienceResponse":
                                 result = await UserProfileService.DeleteExperienceAsync(id);
                                 break;
-                            default:
-                                break;
                         }
                     }
                 }
@@ -228,12 +225,12 @@ public partial class Profile
         var result = await UserProfileService.Update(_updateProfileCommand);
         if (result == "")
         {
-            Snackbar.Add(ContentService["Profile:Profileupdatedsuccessfully"], MudBlazor.Severity.Success);
+            Snackbar.Add(ContentService["Profile:Profileupdatedsuccessfully"], Severity.Success);
             _profile = await UserProfileService.Get();
         }
         else
         {
-            Snackbar.Add(result, MudBlazor.Severity.Error);
+            Snackbar.Add(result, Severity.Error);
         }
     }
 
@@ -309,7 +306,7 @@ public partial class Profile
             var response = await UserProfileService.CreateEducationAsуnc(createEducation);
             if (response.IsSuccessStatusCode)
             {
-                Snackbar.Add(ContentService["Profile:Educationdetailsadded"], MudBlazor.Severity.Success);
+                Snackbar.Add(ContentService["Profile:Educationdetailsadded"], Severity.Success);
                 addEducation = false;
                 createEducation = new CreateEducationDetailCommand();
                 await GetEducations();
@@ -348,12 +345,12 @@ public partial class Profile
             if (result.IsSuccessStatusCode)
             {
                 editingCardId = Guid.NewGuid();
-                Snackbar.Add(ContentService["Profile:UpdateEducationsuccessfully"], MudBlazor.Severity.Success);
+                Snackbar.Add(ContentService["Profile:UpdateEducationsuccessfully"], Severity.Success);
 
                 await GetEducations();
                 StateHasChanged();
             }
-            else if (result.StatusCode == System.Net.HttpStatusCode.BadRequest)
+            else if (result.StatusCode == HttpStatusCode.BadRequest)
             {
                 await BadRequestResponse(result);
             }
@@ -423,7 +420,7 @@ public partial class Profile
             var response = await UserProfileService.CreateExperienceAsync(createExperience);
             if (response.IsSuccessStatusCode)
             {
-                Snackbar.Add(ContentService["Profile:Experiencedetailsadded"], MudBlazor.Severity.Success);
+                Snackbar.Add(ContentService["Profile:Experiencedetailsadded"], Severity.Success);
 
                 addExperience = false;
                 createExperience = new CreateExperienceDetailCommand();
@@ -476,7 +473,7 @@ public partial class Profile
             var result = await UserProfileService.UpdateExperienceAsync(experienceUpdate);
             if (result.IsSuccessStatusCode)
             {
-                Snackbar.Add(ContentService["Profile:UpdateEducationsuccessfully"], MudBlazor.Severity.Success);
+                Snackbar.Add(ContentService["Profile:UpdateEducationsuccessfully"], Severity.Success);
 
                 editingCardExperienceId = Guid.NewGuid();
                 StateHasChanged();
@@ -547,7 +544,7 @@ public partial class Profile
                 var result = await UserProfileService.AddSkills(userSkillsCommand);
                 if (result != null)
                 {
-                    Snackbar.Add(ContentService["Profile:AddSkillssuccessfully"], MudBlazor.Severity.Success);
+                    Snackbar.Add(ContentService["Profile:AddSkillssuccessfully"], Severity.Success);
 
                     newSkills = "";
                     UserSkills = result;

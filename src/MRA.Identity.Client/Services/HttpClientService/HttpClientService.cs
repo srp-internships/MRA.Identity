@@ -41,10 +41,9 @@ namespace MRA.Identity.Client.Services.HttpClientService
                 return ApiResponse.BuildFailed($"Server is not responding. {ex.Message}", ex.StatusCode);
             }
         }
-
+        string errorMessage = null;
         public async Task<ApiResponse<T>> PostAsJsonAsync<T>(string url, Object content)
         {
-
             try
             {
                 using var httpClient = await CreateHttpClient();
@@ -85,7 +84,11 @@ namespace MRA.Identity.Client.Services.HttpClientService
                 var responseContent = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
                 return ApiResponse<T>.BuildFailed(responseContent.Detail, response.StatusCode);
             }
-
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                var responseContent = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
+                return ApiResponse<T>.BuildFailed(responseContent.Detail, response.StatusCode);
+            }
             return ApiResponse<T>.BuildFailed("Error on sending response. Please try again later", response.StatusCode);
         }
 

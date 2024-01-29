@@ -10,12 +10,12 @@ namespace MRA.Identity.Client.Services.Auth;
 public interface IAuthService
 {
     Task<string> RegisterUserAsync(RegisterUserCommand command);
-    Task<string> LoginUserAsync(LoginUserCommand command, bool newRegister = false);
+    Task<string> LoginUserAsync(LoginUserCommand command);
     Task<HttpResponseMessage> ChangePassword(ChangePasswordUserCommand command);
     Task<HttpResponseMessage> IsAvailableUserPhoneNumber(IsAvailableUserPhoneNumberQuery query);
     Task<HttpResponseMessage> ResetPassword(ResetPasswordCommand command);
     Task<HttpResponseMessage> CheckUserName(string userName);
     Task<HttpResponseMessage> CheckUserDetails(CheckUserDetailsQuery checkUserDetailsQuery);
     Task<HttpResponseMessage> ResendVerificationEmail();
-    Task SendVerificationEmailToken(string token,string userId);
+    Task SendVerificationEmailToken(string token, string userId);
 }

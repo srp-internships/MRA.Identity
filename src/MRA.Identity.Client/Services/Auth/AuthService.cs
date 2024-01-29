@@ -19,7 +19,7 @@ namespace MRA.Identity.Client.Services.Auth;
 
 public class AuthService(IHttpClientService httpClient,
         AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager,
-        IAltairCABlazorCookieUtil cookieUtil, IUserProfileService userProfileService, IConfiguration configuration, IContentService ContentService)
+        IAltairCABlazorCookieUtil cookieUtil, IUserProfileService userProfileService, IContentService ContentService)
     : IAuthService
 {
     public async Task<ApiResponse<bool>> ChangePassword(ChangePasswordUserCommand command)
@@ -35,7 +35,7 @@ public class AuthService(IHttpClientService httpClient,
         return result;
     }
 
-    public async Task<string> LoginUserAsync(LoginUserCommand command, bool newRegister = false)
+    public async Task<string> LoginUserAsync(LoginUserCommand command)
     {
         string errorMessage = null;
         try
@@ -50,19 +50,17 @@ public class AuthService(IHttpClientService httpClient,
                     callbackUrl = param;
                 if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
                     page = param;
-                if (callbackUrl.IsNullOrEmpty()) callbackUrl = configuration["HttpClient:JobsClient"];
 
                 var response = result.Result;
 
-                navigationManager.NavigateTo($"{callbackUrl}?atoken={response.AccessToken}&rtoken={response.RefreshToken}&vdate={response.AccessTokenValidateTo}&page={page}");
-
-                await cookieUtil.SetValueAsync("authToken", response, secure:true);
-                await authenticationStateProvider.GetAuthenticationStateAsync();
-                if (!newRegister)
+                if (callbackUrl.IsNullOrEmpty())
                     navigationManager.NavigateTo("/");
+                else
+                    navigationManager.NavigateTo($"{callbackUrl}?atoken={response.AccessToken}&rtoken={response.RefreshToken}&vdate={response.AccessTokenValidateTo}&page={page}");
                 return null;
             }
             else
+            if (result.StatusCode == HttpStatusCode.Unauthorized)
             {
                 errorMessage =result.Error;
             }

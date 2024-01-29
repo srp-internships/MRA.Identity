@@ -8,7 +8,7 @@ using MRA.Identity.Client;
 using MRA.Identity.Client.Services;
 using MRA.Identity.Client.Services.Auth;
 using MRA.Identity.Client.Services.ContentService;
-using MRA.Identity.Client.Services.HttpClientService;
+using MRA.Identity.Client.Services.HttpClients;
 using MRA.Identity.Client.Services.Message;
 using MRA.Identity.Client.Services.Profile;
 using MRA.Identity.Client.Services.UserPreferences;
@@ -28,10 +28,12 @@ builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<LayoutService>();
 builder.Services.AddScoped<IContentService, ContentService>();
 builder.Services.AddScoped<IUserPreferencesService, UserPreferencesService>();
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<IHttpClientService, HttpClientService>();
+builder.Services.AddScoped<ITokenParserService, TokenParserService>();
 builder.Services.AddLocalization();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
-
 
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");

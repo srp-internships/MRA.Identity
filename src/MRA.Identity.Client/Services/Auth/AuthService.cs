@@ -62,11 +62,11 @@ public class AuthService(IHttpClientService httpClient,
                     navigationManager.NavigateTo("/");
                 return null;
             }
-
-            if (result.HttpStatusCode == HttpStatusCode.Unauthorized)
+            else
             {
                 errorMessage =result.Error;
             }
+        
         }
         catch (HttpRequestException ex)
         {

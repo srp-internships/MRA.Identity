@@ -116,13 +116,4 @@ public class LayoutService(
         CurrentTheme = theme;
         OnMajorUpdateOccured();
     }
-
-    public DocPages GetDocsBasePage(string uri)
-    {
-       
-        if (uri.Contains("/profile")) return DocPages.Profile;
-        if (uri.Contains("/usermanager") || uri.Contains("/userroles")) return DocPages.UserManager;
-
-        return DocPages.Home;
-    }
 }

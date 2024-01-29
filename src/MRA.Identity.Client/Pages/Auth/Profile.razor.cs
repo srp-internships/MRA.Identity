@@ -498,7 +498,6 @@ public partial class Profile
     private UserSkillsResponse UserSkills;
     private UserSkillsResponse allSkills;
     string newSkills = "";
-    bool isAdding = false;
     readonly List<string> FoundSkills = new List<string>();
 
     private async Task GetSkills()
@@ -554,8 +553,6 @@ public partial class Profile
                     UserSkills = result;
                     StateHasChanged();
                 }
-
-                isAdding = false;
             }
         }
         catch (HttpRequestException)

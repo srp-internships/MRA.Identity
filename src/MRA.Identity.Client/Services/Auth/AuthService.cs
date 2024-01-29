@@ -52,7 +52,8 @@ public class AuthService(IHttpClientService httpClient,
                     page = param;
 
                 var response = result.Result;
-
+                await cookieUtil.SetValueAsync("authToken", response, secure: true);
+                await authenticationStateProvider.GetAuthenticationStateAsync();
                 if (callbackUrl.IsNullOrEmpty())
                     navigationManager.NavigateTo("/");
                 else
@@ -60,7 +61,7 @@ public class AuthService(IHttpClientService httpClient,
                 return null;
             }
             else
-            if (result.StatusCode == HttpStatusCode.Unauthorized)
+            if (result.HttpStatusCode == HttpStatusCode.Unauthorized)
             {
                 errorMessage =result.Error;
             }

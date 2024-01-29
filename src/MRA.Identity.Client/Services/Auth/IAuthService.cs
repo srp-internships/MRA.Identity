@@ -11,7 +11,7 @@ namespace MRA.Identity.Client.Services.Auth;
 public interface IAuthService
 {
     Task<string> RegisterUserAsync(RegisterUserCommand command);
-    Task<string> LoginUserAsync(LoginUserCommand command, bool newRegister = false);
+    Task<string> LoginUserAsync(LoginUserCommand command);
     Task<ApiResponse<bool>> ChangePassword(ChangePasswordUserCommand command);
     Task<ApiResponse<bool>> IsAvailableUserPhoneNumber(IsAvailableUserPhoneNumberQuery query);
     Task<ApiResponse<bool>> ResetPassword(ResetPasswordCommand command);

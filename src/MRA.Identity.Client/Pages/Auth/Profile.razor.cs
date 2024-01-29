@@ -26,8 +26,7 @@ namespace MRA.Identity.Client.Pages.Auth;
 public partial class Profile
 {
     [Inject] private IAuthService AuthService { get; set; }
-
-    private bool _processing;
+    
     private bool _tryButton;
     private bool _codeSent;
     private int? _confirmationCode;
@@ -226,7 +225,6 @@ public partial class Profile
 
     private async void UpdateProfile()
     {
-        _processing = true;
         var result = await UserProfileService.Update(_updateProfileCommand);
         if (result == "")
         {
@@ -237,9 +235,6 @@ public partial class Profile
         {
             Snackbar.Add(result, MudBlazor.Severity.Error);
         }
-
-        _processing = false;
-        StateHasChanged();
     }
 
     #region education
@@ -304,10 +299,8 @@ public partial class Profile
     private async Task CreateEducationHandle()
     {
         if (!(await _fluentValidationValidator!.ValidateAsync()))
-        {
             return;
-        }
-        _processing = true;
+        
         try
         {
             if (createEducation.EndDate == null)
@@ -332,7 +325,6 @@ public partial class Profile
             ServerNotResponding();
         }
 
-        _processing = false;
     }
 
     private void CancelButtonClicked_CreateEducation()
@@ -350,7 +342,6 @@ public partial class Profile
 
     private async Task UpdateEducationHandle()
     {
-        _processing = true;
         try
         {
             var result = await UserProfileService.UpdateEducationAsync(educationUpdate);
@@ -371,8 +362,6 @@ public partial class Profile
         {
             ServerNotResponding();
         }
-
-        _processing = false;
     }
 
     #endregion
@@ -425,7 +414,7 @@ public partial class Profile
     private async Task CreateExperienceHandle()
     {
         if (!(await _fluentValidationValidator!.ValidateAsync())) return;
-        _processing = true;
+      
         try
         {
             if (createExperience.EndDate == null)
@@ -449,7 +438,6 @@ public partial class Profile
             ServerNotResponding();
         }
 
-        _processing = false;
     }
 
     private async void CancelButtonClicked_CreateExperience()
@@ -483,7 +471,6 @@ public partial class Profile
 
     private async void UpdateExperienceHandle()
     {
-        _processing = true;
         try
         {
             var result = await UserProfileService.UpdateExperienceAsync(experienceUpdate);
@@ -502,8 +489,6 @@ public partial class Profile
         {
             ServerNotResponding();
         }
-
-        _processing = false;
     }
 
     #endregion
@@ -533,19 +518,7 @@ public partial class Profile
     {
         await ConfirmDelete(UserSkills.Skills, chip.Text);
     }
-
-    private async Task KeyDown(KeyboardEventArgs e)
-    {
-        if (e.Key == "Enter")
-        {
-            await Task.Delay(1);
-            if (!isAdding)
-            {
-                isAdding = true;
-                await AddSkills();
-            }
-        }
-    }
+    
 
     private async Task OnBlur()
     {

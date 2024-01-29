@@ -52,7 +52,7 @@
         </MudHidden>
     </a>
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
-        <MudButton Href="/" Color="Color.Inherit" Variant="Variant.Text" Class="@GetActiveClass(DocPages.Home)">
+        <MudButton Href="/" Color="Color.Inherit" Variant="Variant.Text" Class="@GetActiveClass(DocPages.Profile)">
             <MudText>
                 <b>@ContentService["Profile:MyProfile"]</b>
             </MudText>
@@ -64,7 +64,7 @@
                         <b>@ContentService["Header:SendMessage"] </b>
                     </MudText>
                 </MudButton>
-                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/UserManager" Class="@GetActiveClass(DocPages.Academy)">
+                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/UserManager" Class="@GetActiveClass(DocPages.UserManager)">
                     <MudText>
                         <b>User manager</b>
                     </MudText>
@@ -153,12 +153,13 @@
     private void HandleLocationChanged(object sender, LocationChangedEventArgs e)
     {
         _currentPage = LayoutService.GetDocsBasePage(NavigationManager.Uri);
-        StateHasChanged();
     }
 
     private string GetActiveClass(DocPages page)
     {
         return page == _currentPage ? "mud-chip-text mud-chip-color-primary mx-1 px-3" : "mx-1 px-3";
+        StateHasChanged();
+
     }
 
     public void Dispose()

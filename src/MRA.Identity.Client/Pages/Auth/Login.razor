@@ -47,17 +47,9 @@
                     </MudText>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" FullWidth="true">
-                        @if (_processing)
-                        {
-                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                            <MudText Class="ms-2">@ContentService["VacancyApplication:Processing"]</MudText>
-                        }
-                        else
-                        {
-                            <MudText>@ContentService["SignIn:SignIn"]</MudText>
-                        }
-                    </MudButton>
+                    <ProgressTaskButton Function="OnValidSubmit" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" FullWidth="true">
+                         <MudText>@ContentService["SignIn:SignIn"]</MudText>
+                    </ProgressTaskButton>
                 </MudCardActions>
                 <div style="padding:5px">
                     <div style="text-align: center;">
@@ -75,19 +67,14 @@
 
 @code {
     private LoginUserCommand _loginCommand = new();
-    private bool _processing;
     string callback = string.Empty;
     string page = string.Empty;
 
-    private async Task OnValidSubmit(EditContext context)
+    private async Task OnValidSubmit()
     {
-        _processing = true;
-        StateHasChanged();
         var loginMessage = await AuthService.LoginUserAsync(_loginCommand);
         if (loginMessage != "" || loginMessage != null)
             Snackbar.Add(loginMessage, MudBlazor.Severity.Error);
-        _processing = false;
-        StateHasChanged();
     }
 
     protected async override Task OnInitializedAsync()

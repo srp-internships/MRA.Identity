@@ -69,18 +69,10 @@
                     </EditForm>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" OnClick="SendCode" Color="Color.Primary"
-                               Class="ml-auto" FullWidth="true">
-                        @if (_processing)
-                        {
-                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                            <MudText Class="ms-2">@ContentService["VacancyApplication:Processing"]</MudText>
-                        }
-                        else
-                        {
+                    <ProgressTaskButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Function="SendCode" Color="Color.Primary"
+                                        Class="ml-auto" FullWidth="true">
                             <MudText>@ContentService["SignUp:ButtonNext"]</MudText>
-                        }
-                    </MudButton>
+                    </ProgressTaskButton>
                 </MudCardActions>
                 @* <ExternalLoginCard Title="@ContentService["SignUp:ExternalLoginCard"]"/> *@
             </MudCard>
@@ -103,17 +95,9 @@
                     <br/>
                     <br/>
                     <MudCardActions>
-                        <MudButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="ConfirmCode">
-                            @if (_processing)
-                            {
-                                <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true"/>
-                                <MudText Class="ms-2">@ContentService["VacancyApplication:Processing"]</MudText>
-                            }
-                            else
-                            {
-                                <MudText>@ContentService["SignUp:Apply"]</MudText>
-                            }
-                        </MudButton>
+                        <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Function="ConfirmCode">
+                            <MudText>@ContentService["SignUp:Apply"]</MudText>
+                        </ProgressTaskButton>
                         <MudButton Variant="Variant.Text" Color="Color.Info" FullWidth="true" OnClick="SendCode" Disabled="@_isResendDisabled">
                             <MudText>@ContentService["SignUp:ResendCode"]</MudText>
                         </MudButton>
@@ -132,7 +116,6 @@
     private readonly RegisterUserCommand _registerUser = new();
     private FluentValidationValidator _fluentValidationValidator;
     private int _step;
-    private bool _processing;
     string callback = string.Empty;
     string page = string.Empty;
 
@@ -173,12 +156,9 @@
     {
         if (!(await _fluentValidationValidator!.ValidateAsync()) || _isAvailable == 0)
         {
-            _processing = false;
             return;
         }
-
-        _processing = true;
-        StateHasChanged();
+        
         await CheckUserName();
         var check = true;
         if (_userDetailsResponse.IsEmailTaken)
@@ -201,7 +181,6 @@
 
         if (!check)
         {
-            _processing = false;
             return;
         }
 
@@ -211,7 +190,6 @@
 
             if (response)
             {
-                _processing = false;
                 _step = 1;
                 _isResendDisabled = true;
                 _timeLeft = 60;
@@ -221,11 +199,6 @@
         catch (Exception)
         {
             ServerNotResponding();
-        }
-        finally
-        {
-            _processing = false;
-            StateHasChanged();
         }
     }
 
@@ -266,8 +239,6 @@
 
     private async Task ConfirmCode()
     {
-        _processing = true;
-        StateHasChanged();
         try
         {
             SmsVerificationCodeStatus response = await UserProfileService.CheckConfirmationCode(_registerUser.PhoneNumber, _code);
@@ -280,18 +251,12 @@
                 _registerUser.VerificationCode = _code;
                 _registerUser.Username = _registerUser.Username.Trim();
                 var error = await AuthService.RegisterUserAsync(_registerUser);
-                _processing = false;
                 Snackbar.Add(error, Severity.Error);
             }
         }
         catch (Exception)
         {
             ServerNotResponding();
-        }
-        finally
-        {
-            _processing = false;
-            StateHasChanged();
         }
     }
 

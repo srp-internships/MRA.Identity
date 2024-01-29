@@ -119,13 +119,10 @@ public class LayoutService(
 
     public DocPages GetDocsBasePage(string uri)
     {
-        if (uri.Contains("/jobs")) return DocPages.Jobs;
-        if (uri.Contains("/internships")) return DocPages.Internships;
-        if (uri.Contains("/trainings")) return DocPages.Trainings;
-        if (uri.Contains("/contact")) return DocPages.Contact;
+       
         if (uri.Contains("/profile")) return DocPages.Profile;
-        if (uri.Contains("/applications")) return DocPages.Applications;
-        if (uri.Contains("/upload-cv")) return DocPages.NoVacancyUploadCv;
+        if (uri.Contains("/usermanager") || uri.Contains("/userroles")) return DocPages.UserManager;
+
         return DocPages.Home;
     }
 }

@@ -21,8 +21,8 @@ public class ApplicationDbContextInitializer(
 
         await CreateSuperAdminAsync();
 
-        await CreateApplicationAdmin("MraJobs", "mrajobs12@@34,.$3#A");
-        await CreateApplicationAdmin("MraOnlinePlatform", "mraonline2@f@34,/.$3#A");
+        await CreateApplicationAdmin("MraJobs", "12345678");
+        await CreateApplicationAdmin("MraOnlinePlatform", "12345678");
     }
 
     private async Task CreateApplicationAdmin(string applicationName, string adminPassword)

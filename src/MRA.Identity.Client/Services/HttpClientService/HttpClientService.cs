@@ -11,6 +11,21 @@ namespace MRA.Identity.Client.Services.HttpClientService
     IConfiguration configuration):IHttpClientService
     {
         public string BaseAddress => configuration["HttpClient:BaseAddress"];
+        public async Task<ApiResponse> GetAsync(string url)
+        {
+            try
+            {
+                using var httpClient = await CreateHttpClient();
+                var httpReponseMessage = await httpClient.GetAsync(url);
+                if (httpReponseMessage.IsSuccessStatusCode)
+                    return ApiResponse.BuildSuccess();
+                return ApiResponse.BuildFailed("Bad request.", httpReponseMessage.StatusCode);
+            }
+            catch (HttpRequestException ex)
+            {
+                return ApiResponse.BuildFailed($"Server is not responding. {ex.Message}", ex.StatusCode);
+            }
+        }
         public async Task<ApiResponse<T>> GetAsJsonAsync<T>(string url, object content = null)
         {
             try

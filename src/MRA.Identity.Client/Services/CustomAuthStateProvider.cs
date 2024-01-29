@@ -1,20 +1,18 @@
 ﻿using AltairCA.Blazor.WebAssembly.Cookie;
 using Microsoft.AspNetCore.Components.Authorization;
-using MRA.Identity.Application.Contract.User.Queries;
-using MRA.Identity.Application.Contract.User.Responses;
+using MRA.Identity.Client.Services.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Security.Claims;
 
 namespace MRA.Identity.Client.Services;
 
-public class CustomAuthStateProvider(IAltairCABlazorCookieUtil cookieUtil, HttpClient http)
+public class CustomAuthStateProvider(IAltairCABlazorCookieUtil cookieUtil, HttpClient http, ITokenParserService tokenParserService)
     : AuthenticationStateProvider
 {
     public override async Task<AuthenticationState> GetAuthenticationStateAsync()
     {
-        var authToken = await GetTokenAsync();
+        var authToken = await tokenParserService.GetTokenAsync();
         var identity = new ClaimsIdentity();
         http.DefaultRequestHeaders.Authorization = null;
 
@@ -41,34 +39,6 @@ public class CustomAuthStateProvider(IAltairCABlazorCookieUtil cookieUtil, HttpC
         NotifyAuthenticationStateChanged(Task.FromResult(state));
 
         return state;
-    }
-
-    private async Task<JwtTokenResponse> GetTokenAsync()
-    {
-        var token = await cookieUtil.GetValueAsync<JwtTokenResponse>("authToken");
-        if (token == null)
-        {
-            return null;
-        }
-
-        if (token.AccessTokenValidateTo <= DateTime.Now)
-        {
-            var refreshResponse = await http.PostAsJsonAsync("auth/refresh",
-                new GetAccessTokenUsingRefreshTokenQuery
-                {
-                    RefreshToken = token.RefreshToken,
-                    AccessToken = token.AccessToken
-                });
-            if (!refreshResponse.IsSuccessStatusCode)
-            {
-                return null;
-            }
-
-            token = await refreshResponse.Content.ReadFromJsonAsync<JwtTokenResponse>();
-            await cookieUtil.SetValueAsync("authToken", token, secure:true);
-        }
-
-        return token;
     }
 
     private IEnumerable<Claim> ParseClaimsFromJwt(string jwt)

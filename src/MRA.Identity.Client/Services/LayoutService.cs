@@ -95,7 +95,7 @@ public class LayoutService(
         OnMajorUpdateOccured();
     }
 
-    public string Lang =configuration["FeatureManagement:DefaultLanguage"];
+    public string Lang = configuration["FeatureManagement:DefaultLanguage"];
 
     public async Task ChangeLanguage(string lang)
     {
@@ -115,17 +115,5 @@ public class LayoutService(
     {
         CurrentTheme = theme;
         OnMajorUpdateOccured();
-    }
-
-    public DocPages GetDocsBasePage(string uri)
-    {
-        if (uri.Contains("/jobs")) return DocPages.Jobs;
-        if (uri.Contains("/internships")) return DocPages.Internships;
-        if (uri.Contains("/trainings")) return DocPages.Trainings;
-        if (uri.Contains("/contact")) return DocPages.Contact;
-        if (uri.Contains("/profile")) return DocPages.Profile;
-        if (uri.Contains("/applications")) return DocPages.Applications;
-        if (uri.Contains("/upload-cv")) return DocPages.NoVacancyUploadCv;
-        return DocPages.Home;
     }
 }

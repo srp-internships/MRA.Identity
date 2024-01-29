@@ -1,0 +1,33 @@
+on:
+  push:
+    branches:
+      - release
+
+jobs:
+  version_and_publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: dotnet restore
+        working-directory: ./src/MRA.Identity.Application.Contract
+
+      - name: Build project
+        run: dotnet build --configuration Release
+        working-directory: ./src/MRA.Identity.Application.Contract
+
+      - name: Pack NuGet package
+        run: dotnet pack --configuration Release --output ./artifacts
+        working-directory: ./src/MRA.Identity.Application.Contract
+
+      - name: Publish to NuGet
+        run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        working-directory: ./src/MRA.Identity.Application.Contract

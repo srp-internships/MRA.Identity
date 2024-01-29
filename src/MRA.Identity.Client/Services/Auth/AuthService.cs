@@ -10,6 +10,7 @@ using MRA.Identity.Application.Contract.User.Commands.ResetPassword;
 using MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
 using MRA.Identity.Application.Contract.User.Queries.GetUserNameByPhoneNymber;
 using MRA.Identity.Application.Contract.User.Responses;
+using MRA.Identity.Client.Services.ContentService;
 using MRA.Identity.Client.Services.Profile;
 using System.Net;
 using System.Net.Http.Json;
@@ -18,12 +19,11 @@ namespace MRA.Identity.Client.Services.Auth;
 
 public class AuthService(HttpClient httpClient,
         AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager,
-        IAltairCABlazorCookieUtil cookieUtil, IUserProfileService userProfileService, IConfiguration configuration)
+        IAltairCABlazorCookieUtil cookieUtil, IUserProfileService userProfileService, IContentService ContentService)
     : IAuthService
 {
     public async Task<HttpResponseMessage> ChangePassword(ChangePasswordUserCommand command)
     {
-
         var result = await httpClient.PutAsJsonAsync("Auth/ChangePassword", command);
         return result;
     }
@@ -34,7 +34,7 @@ public class AuthService(HttpClient httpClient,
         return result;
     }
 
-    public async Task<string> LoginUserAsync(LoginUserCommand command, bool newRegister = false)
+    public async Task<string> LoginUserAsync(LoginUserCommand command)
     {
         string errorMessage = null;
         try
@@ -49,19 +49,17 @@ public class AuthService(HttpClient httpClient,
                     callbackUrl = param;
                 if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
                     page = param;
-                if (callbackUrl.IsNullOrEmpty()) callbackUrl = configuration["HttpClient:JobsClient"];
 
                 var response = await result.Content.ReadFromJsonAsync<JwtTokenResponse>();
-
-                navigationManager.NavigateTo($"{callbackUrl}?atoken={response.AccessToken}&rtoken={response.RefreshToken}&vdate={response.AccessTokenValidateTo}&page={page}");
-
-                await cookieUtil.SetValueAsync("authToken", response, secure:true);
+                await cookieUtil.SetValueAsync("authToken", response, secure: true);
                 await authenticationStateProvider.GetAuthenticationStateAsync();
-                if (!newRegister)
+
+                if (callbackUrl.IsNullOrEmpty())
                     navigationManager.NavigateTo("/");
+                else
+                    navigationManager.NavigateTo($"{callbackUrl}?atoken={response.AccessToken}&rtoken={response.RefreshToken}&vdate={response.AccessTokenValidateTo}&page={page}");
                 return null;
             }
-
             if (result.StatusCode == HttpStatusCode.Unauthorized)
             {
                 errorMessage = (await result.Content.ReadFromJsonAsync<CustomProblemDetails>()).Detail;
@@ -70,12 +68,12 @@ public class AuthService(HttpClient httpClient,
         catch (HttpRequestException ex)
         {
             Console.WriteLine(ex);
-            errorMessage = "Server is not responding, please try later";
+            errorMessage = ContentService["Profile:Servernotrespondingtry"];
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            errorMessage = "An error occurred";
+            errorMessage = ContentService["Profile:Anerroroccurred"];
         }
 
         return errorMessage;
@@ -103,7 +101,7 @@ public class AuthService(HttpClient httpClient,
                 return "";
             }
             if (result.StatusCode is not (HttpStatusCode.Unauthorized or HttpStatusCode.BadRequest))
-                return "server error, please try again later";
+                return ContentService["Profile:Servernotrespondingtry"];
 
             var response = await result.Content.ReadFromJsonAsync<CustomProblemDetails>();
             return response.Detail;
@@ -111,12 +109,12 @@ public class AuthService(HttpClient httpClient,
         catch (HttpRequestException ex)
         {
             Console.WriteLine(ex);
-            return "Server is not responding, please try later";
+            return ContentService["Profile:Servernotrespondingtry"];
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            return "An error occurred";
+            return ContentService["Profile:Anerroroccurred"];
         }
     }
 

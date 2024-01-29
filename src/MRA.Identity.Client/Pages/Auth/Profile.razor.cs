@@ -58,7 +58,7 @@ public partial class Profile
     private async Task SendEmailConfirms()
     {
         StateHasChanged();
-        
+
         var response = await AuthService.ResendVerificationEmail();
         if (response.IsSuccessStatusCode)
             Snackbar.Add(ContentService["Profile:Pleasecheckyouremail"], Severity.Info);
@@ -564,7 +564,6 @@ public partial class Profile
         }
     }
 
-
     private async Task<IEnumerable<string>> SearchSkills(string value)
     {
         await Task.Delay(5);
@@ -572,13 +571,6 @@ public partial class Profile
         return allSkills.Skills
             .Where(s => s.Contains(value, StringComparison.InvariantCultureIgnoreCase) && !userSkillsSet.Contains(s))
             .ToList();
-    }
-
-    private async Task LogOut()
-    {
-        await CookieUtil.RemoveAsync("authToken");
-        await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        Navigation.NavigateTo("login");
     }
 
     #endregion

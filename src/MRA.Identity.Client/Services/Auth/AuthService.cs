@@ -19,12 +19,11 @@ namespace MRA.Identity.Client.Services.Auth;
 
 public class AuthService(HttpClient httpClient,
         AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager,
-        IAltairCABlazorCookieUtil cookieUtil, IUserProfileService userProfileService, IConfiguration configuration, IContentService ContentService)
+        IAltairCABlazorCookieUtil cookieUtil, IUserProfileService userProfileService, IContentService ContentService)
     : IAuthService
 {
     public async Task<HttpResponseMessage> ChangePassword(ChangePasswordUserCommand command)
     {
-
         var result = await httpClient.PutAsJsonAsync("Auth/ChangePassword", command);
         return result;
     }
@@ -35,7 +34,7 @@ public class AuthService(HttpClient httpClient,
         return result;
     }
 
-    public async Task<string> LoginUserAsync(LoginUserCommand command, bool newRegister = false)
+    public async Task<string> LoginUserAsync(LoginUserCommand command)
     {
         string errorMessage = null;
         try
@@ -50,19 +49,17 @@ public class AuthService(HttpClient httpClient,
                     callbackUrl = param;
                 if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
                     page = param;
-                if (callbackUrl.IsNullOrEmpty()) callbackUrl = configuration["HttpClient:JobsClient"];
 
                 var response = await result.Content.ReadFromJsonAsync<JwtTokenResponse>();
-
-                navigationManager.NavigateTo($"{callbackUrl}?atoken={response.AccessToken}&rtoken={response.RefreshToken}&vdate={response.AccessTokenValidateTo}&page={page}");
-
-                await cookieUtil.SetValueAsync("authToken", response, secure:true);
+                await cookieUtil.SetValueAsync("authToken", response, secure: true);
                 await authenticationStateProvider.GetAuthenticationStateAsync();
-                if (!newRegister)
+
+                if (callbackUrl.IsNullOrEmpty())
                     navigationManager.NavigateTo("/");
+                else
+                    navigationManager.NavigateTo($"{callbackUrl}?atoken={response.AccessToken}&rtoken={response.RefreshToken}&vdate={response.AccessTokenValidateTo}&page={page}");
                 return null;
             }
-
             if (result.StatusCode == HttpStatusCode.Unauthorized)
             {
                 errorMessage = (await result.Content.ReadFromJsonAsync<CustomProblemDetails>()).Detail;

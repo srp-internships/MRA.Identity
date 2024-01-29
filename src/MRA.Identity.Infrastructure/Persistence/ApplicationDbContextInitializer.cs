@@ -21,8 +21,8 @@ public class ApplicationDbContextInitializer(
 
         await CreateSuperAdminAsync();
 
-        await CreateApplicationAdmin("MraJobs", "mrajobs12@@34,.$3#A");
-        await CreateApplicationAdmin("MraOnlinePlatform", "mraonline2@f@34,/.$3#A");
+        await CreateApplicationAdmin("MraJobs", "12345678");
+        await CreateApplicationAdmin("MraOnlinePlatform", "12345678");
     }
 
     private async Task CreateApplicationAdmin(string applicationName, string adminPassword)
@@ -50,7 +50,9 @@ public class ApplicationDbContextInitializer(
         //create userRole
         var userRole = new ApplicationUserRole
         {
-            UserId = mraJobsAdminUser.Id, RoleId = _applicationRole.Id, Slug = $"{mraJobsAdminUser.UserName}-role"
+            UserId = mraJobsAdminUser.Id,
+            RoleId = _applicationRole.Id,
+            Slug = $"{mraJobsAdminUser.UserName}-role"
         };
 
         if (!await context.UserRoles.AnyAsync(s => s.RoleId == userRole.RoleId && s.UserId == userRole.UserId))
@@ -165,7 +167,9 @@ public class ApplicationDbContextInitializer(
 
             var userRole = new ApplicationUserRole
             {
-                UserId = superAdmin.Id, RoleId = _superAdminRole.Id, Slug = $"role-{superAdmin.UserName}"
+                UserId = superAdmin.Id,
+                RoleId = _superAdminRole.Id,
+                Slug = $"role-{superAdmin.UserName}"
             };
 
             if (!await context.UserRoles.AnyAsync(s => s.RoleId == userRole.RoleId && s.UserId == userRole.UserId))
@@ -276,7 +280,10 @@ public class ApplicationDbContextInitializer(
         {
             role = new ApplicationRole
             {
-                Id = Guid.NewGuid(), Name = roleString, NormalizedName = roleString.ToUpper(), Slug = roleString
+                Id = Guid.NewGuid(),
+                Name = roleString,
+                NormalizedName = roleString.ToUpper(),
+                Slug = roleString
             };
 
             createRoleResult = await roleManager.CreateAsync(role);
@@ -290,7 +297,10 @@ public class ApplicationDbContextInitializer(
         {
             role = new ApplicationRole
             {
-                Id = Guid.NewGuid(), Name = roleString, NormalizedName = roleString.ToUpper(), Slug = roleString
+                Id = Guid.NewGuid(),
+                Name = roleString,
+                NormalizedName = roleString.ToUpper(),
+                Slug = roleString
             };
 
             createRoleResult = await roleManager.CreateAsync(role);
@@ -304,7 +314,10 @@ public class ApplicationDbContextInitializer(
         {
             role = new ApplicationRole
             {
-                Id = Guid.NewGuid(), Name = roleString, NormalizedName = roleString.ToUpper(), Slug = roleString
+                Id = Guid.NewGuid(),
+                Name = roleString,
+                NormalizedName = roleString.ToUpper(),
+                Slug = roleString
             };
 
             createRoleResult = await roleManager.CreateAsync(role);
@@ -317,7 +330,10 @@ public class ApplicationDbContextInitializer(
         {
             role = new ApplicationRole
             {
-                Id = Guid.NewGuid(), Name = roleString, NormalizedName = roleString.ToUpper(), Slug = roleString
+                Id = Guid.NewGuid(),
+                Name = roleString,
+                NormalizedName = roleString.ToUpper(),
+                Slug = roleString
             };
 
             createRoleResult = await roleManager.CreateAsync(role);

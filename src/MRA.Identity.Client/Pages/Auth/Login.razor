@@ -4,25 +4,23 @@
 @inject IAuthService AuthService
 @inject ISnackbar Snackbar
 @inject IContentService ContentService
-@inject LayoutService LayoutService
-@inject NavigationManager navigationManager
+@inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
-@inject ITokenParserService tokenParser;
 
 <MudGrid Justify="Justify.Center" Class="align-items-center">
     <MudItem xs="12" sm="8" md="6" lg="3">
         <EditForm Model="@_loginCommand" OnValidSubmit="OnValidSubmit">
-            <DataAnnotationsValidator />
+            <FluentValidationValidator/>
             <MudCard>
                 <MudCardHeader>
                     <CardHeaderActions>
-                        <ToolBarSettingsButtons />
+                        <ToolBarSettingsButtons/>
                     </CardHeaderActions>
                     <CardHeaderContent>
                         <div class="d-flex flex-grow-1">
                             <div class="flex-none d-flex justify-content-center">
                                 <a href="">
-                                    <MudImage Src="/images/srp_icon.png" Height="45" /><br />
+                                    <MudImage Src="/images/srp_icon.png" Height="45"/><br/>
                                 </a>
                             </div>
                             <div class="flex-initial d-flex py-1">
@@ -33,38 +31,30 @@
                         </div>
                         <MudText>
                             @ContentService["SignIn:LabelDontAccount"] <MudLink Href="@($"registration?callback={callback}&page={page}")"> @ContentService["SignIn:LinkSignUp"]</MudLink>
-                            </MudText>
-                        </CardHeaderContent>
-                    </MudCardHeader>
-                    <MudCardContent>
-                        <MudTextField Label="@ContentService["SignIn:UserName"]"
-                                      @bind-Value="_loginCommand.Username" For="@(() => _loginCommand.Username)" />
-
-                        <MudTextField Label="@ContentService["SignIn:Password"]"
-                                      @bind-Value="_loginCommand.Password" For="@(() => _loginCommand.Password)" InputType="InputType.Password" />
-                        <br />
-                        <MudText>
-                            @ContentService["SignIn:LabelForgot"] <MudLink href="/resetPassword">@ContentService["SignIn:LinkReset"]</MudLink>
                         </MudText>
-                    </MudCardContent>
-                    <MudCardActions>
-                        <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" FullWidth="true">
-                            @if (_processing)
-                        {
-                            <MudProgressCircular Class="ms-n1" Size="Size.Small" Indeterminate="true" />
-                            <MudText Class="ms-2">@ContentService["VacancyApplication:Processing"]</MudText>
-                        }
-                        else
-                        {
-                            <MudText>@ContentService["SignIn:SignIn"]</MudText>
-                        }
-                    </MudButton>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudTextField Label="@ContentService["SignIn:UserName"]"
+                                  @bind-Value="_loginCommand.Username" For="@(() => _loginCommand.Username)"/>
+
+                    <MudTextField Label="@ContentService["SignIn:Password"]"
+                                  @bind-Value="_loginCommand.Password" For="@(() => _loginCommand.Password)" InputType="InputType.Password"/>
+                    <br/>
+                    <MudText >
+                        @ContentService["SignIn:LabelForgot"] <MudLink href="/resetPassword">@ContentService["SignIn:LinkReset"]</MudLink>
+                    </MudText>
+                </MudCardContent>
+                <MudCardActions>
+                    <ProgressTaskButton Function="OnValidSubmit" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" FullWidth="true">
+                         <MudText>@ContentService["SignIn:SignIn"]</MudText>
+                    </ProgressTaskButton>
                 </MudCardActions>
                 <div style="padding:5px">
                     <div style="text-align: center;">
                         @* <ExternalLoginCard Title="Continue With"/> *@
 
-                    </div> <br />
+                    </div> <br/>
                 </div>
             </MudCard>
 
@@ -76,46 +66,31 @@
 
 @code {
     private LoginUserCommand _loginCommand = new();
-    private bool _processing;
     string callback = string.Empty;
     string page = string.Empty;
 
-    private async Task OnValidSubmit(EditContext context)
+    private async Task OnValidSubmit()
     {
-        _processing = true;
-        StateHasChanged();
         var loginMessage = await AuthService.LoginUserAsync(_loginCommand);
         if (loginMessage != "" || loginMessage != null)
             Snackbar.Add(loginMessage, MudBlazor.Severity.Error);
-        _processing = false;
-        StateHasChanged();
     }
 
     protected async override Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
-        var currentUri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
 
+        if (user.Identity.IsAuthenticated)
+        {
+            NavigationManager.NavigateTo("/");
+            return;
+        }
+        var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("callback", out var param))
             callback = param;
         if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
             page = param;
-
-        if (user.Identity.IsAuthenticated)
-        {
-            if (!string.IsNullOrEmpty(callback))
-            {
-                var response = await tokenParser.GetTokenAsync();
-                navigationManager.NavigateTo($"{callback}?atoken={response.AccessToken}&rtoken={response.RefreshToken}&vdate={response.AccessTokenValidateTo}&page={page}");
-            }
-            else
-            {
-                navigationManager.NavigateTo("/");
-            }
-            return;
-        }
-
         StateHasChanged();
     }
 

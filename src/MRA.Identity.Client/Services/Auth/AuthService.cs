@@ -14,23 +14,25 @@ using MRA.Identity.Client.Services.ContentService;
 using MRA.Identity.Client.Services.Profile;
 using System.Net;
 using System.Net.Http.Json;
+using MRA.BlazorComponents.HttpClient.Responses;
+using MRA.BlazorComponents.HttpClient.Services;
 
 namespace MRA.Identity.Client.Services.Auth;
 
-public class AuthService(HttpClient httpClient,
+public class AuthService(IHttpClientService httpClient,
         AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager,
-        IAltairCABlazorCookieUtil cookieUtil, IUserProfileService userProfileService, IContentService ContentService)
+        IAltairCABlazorCookieUtil cookieUtil, IUserProfileService userProfileService, IContentService contentService)
     : IAuthService
 {
-    public async Task<HttpResponseMessage> ChangePassword(ChangePasswordUserCommand command)
+    public async Task<ApiResponse> ChangePassword(ChangePasswordUserCommand command)
     {
-        var result = await httpClient.PutAsJsonAsync("Auth/ChangePassword", command);
+        var result = await httpClient.PutAsJsonAsync<object>("Auth/ChangePassword", command);
         return result;
     }
 
-    public async Task<HttpResponseMessage> IsAvailableUserPhoneNumber(IsAvailableUserPhoneNumberQuery query)
+    public async Task<ApiResponse<bool>> IsAvailableUserPhoneNumber(IsAvailableUserPhoneNumberQuery query)
     {
-        var result = await httpClient.GetAsync($"Auth/IsAvailableUserPhoneNumber/{Uri.EscapeDataString(query.PhoneNumber)}");
+        var result = await httpClient.GetAsJsonAsync<bool>($"Auth/IsAvailableUserPhoneNumber/{Uri.EscapeDataString(query.PhoneNumber)}");
         return result;
     }
 
@@ -40,6 +42,15 @@ public class AuthService(HttpClient httpClient,
         try
         {
             var result = await httpClient.PostAsJsonAsync("Auth/login", command);
+            if (!result.Success)
+            {
+                return contentService["Profile:Anerroroccurred"];
+            }
+
+            if (result.HttpStatusCode==)
+            {
+                
+            }
             if (result.IsSuccessStatusCode)
             {
                 string callbackUrl = string.Empty;
@@ -68,12 +79,12 @@ public class AuthService(HttpClient httpClient,
         catch (HttpRequestException ex)
         {
             Console.WriteLine(ex);
-            errorMessage = ContentService["Profile:Servernotrespondingtry"];
+            errorMessage = contentService["Profile:Servernotrespondingtry"];
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            errorMessage = ContentService["Profile:Anerroroccurred"];
+            errorMessage = contentService["Profile:Anerroroccurred"];
         }
 
         return errorMessage;
@@ -101,7 +112,7 @@ public class AuthService(HttpClient httpClient,
                 return "";
             }
             if (result.StatusCode is not (HttpStatusCode.Unauthorized or HttpStatusCode.BadRequest))
-                return ContentService["Profile:Servernotrespondingtry"];
+                return contentService["Profile:Servernotrespondingtry"];
 
             var response = await result.Content.ReadFromJsonAsync<CustomProblemDetails>();
             return response.Detail;
@@ -109,12 +120,12 @@ public class AuthService(HttpClient httpClient,
         catch (HttpRequestException ex)
         {
             Console.WriteLine(ex);
-            return ContentService["Profile:Servernotrespondingtry"];
+            return contentService["Profile:Servernotrespondingtry"];
         }
         catch (Exception e)
         {
             Console.WriteLine(e);
-            return ContentService["Profile:Anerroroccurred"];
+            return contentService["Profile:Anerroroccurred"];
         }
     }
 

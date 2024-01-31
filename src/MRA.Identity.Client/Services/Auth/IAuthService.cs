@@ -1,4 +1,5 @@
-﻿using MRA.Identity.Application.Contract.User.Commands.ChangePassword;
+﻿using MRA.BlazorComponents.HttpClient.Responses;
+using MRA.Identity.Application.Contract.User.Commands.ChangePassword;
 using MRA.Identity.Application.Contract.User.Commands.LoginUser;
 using MRA.Identity.Application.Contract.User.Commands.RegisterUser;
 using MRA.Identity.Application.Contract.User.Commands.ResetPassword;
@@ -11,11 +12,11 @@ public interface IAuthService
 {
     Task<string> RegisterUserAsync(RegisterUserCommand command);
     Task<string> LoginUserAsync(LoginUserCommand command);
-    Task<HttpResponseMessage> ChangePassword(ChangePasswordUserCommand command);
-    Task<HttpResponseMessage> IsAvailableUserPhoneNumber(IsAvailableUserPhoneNumberQuery query);
-    Task<HttpResponseMessage> ResetPassword(ResetPasswordCommand command);
-    Task<HttpResponseMessage> CheckUserName(string userName);
-    Task<HttpResponseMessage> CheckUserDetails(CheckUserDetailsQuery checkUserDetailsQuery);
-    Task<HttpResponseMessage> ResendVerificationEmail();
+    Task<ApiResponse> ChangePassword(ChangePasswordUserCommand command);
+    Task<ApiResponse<bool>> IsAvailableUserPhoneNumber(IsAvailableUserPhoneNumberQuery query);
+    Task<ApiResponse> ResetPassword(ResetPasswordCommand command);
+    Task<ApiResponse> CheckUserName(string userName);
+    Task<ApiResponse> CheckUserDetails(CheckUserDetailsQuery checkUserDetailsQuery);
+    Task<ApiResponse> ResendVerificationEmail();
     Task SendVerificationEmailToken(string token, string userId);
 }

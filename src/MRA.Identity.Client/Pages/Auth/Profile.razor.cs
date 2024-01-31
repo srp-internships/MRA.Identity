@@ -11,7 +11,6 @@ using MRA.Identity.Application.Contract.Skills.Command;
 using MRA.Identity.Application.Contract.Skills.Responses;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Client.Services.Auth;
-using MRA.Identity.Client.Services;
 using MudBlazor;
 using Newtonsoft.Json;
 using System.Net.Http.Json;
@@ -19,6 +18,8 @@ using System.Net;
 using Microsoft.IdentityModel.Tokens;
 using MRA.Identity.Client.Components.Dialogs;
 using Blazored.FluentValidation;
+using MRA.BlazorComponents.HttpClient.Responses;
+using CustomProblemDetails = MRA.Identity.Client.Services.CustomProblemDetails;
 
 namespace MRA.Identity.Client.Pages.Auth;
 

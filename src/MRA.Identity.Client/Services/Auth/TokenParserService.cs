@@ -1,7 +1,7 @@
 ﻿using AltairCA.Blazor.WebAssembly.Cookie;
+using MRA.BlazorComponents.HttpClient.Services;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Responses;
-using MRA.Identity.Client.Services.HttpClients;
 
 namespace MRA.Identity.Client.Services.Auth
 {

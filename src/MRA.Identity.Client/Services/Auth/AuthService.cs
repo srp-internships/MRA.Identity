@@ -13,148 +13,131 @@ using MRA.Identity.Application.Contract.User.Responses;
 using MRA.Identity.Client.Services.ContentService;
 using MRA.Identity.Client.Services.Profile;
 using System.Net;
-using System.Net.Http.Json;
-using MRA.BlazorComponents.HttpClient.Responses;
+using MRA.BlazorComponents.Configuration;
 using MRA.BlazorComponents.HttpClient.Services;
+using MRA.BlazorComponents.Snackbar.Extensions;
+using MudBlazor;
 
 namespace MRA.Identity.Client.Services.Auth;
 
-public class AuthService(IHttpClientService httpClient,
-        AuthenticationStateProvider authenticationStateProvider, NavigationManager navigationManager,
-        IAltairCABlazorCookieUtil cookieUtil, IUserProfileService userProfileService, IContentService contentService)
+public class AuthService(
+    IHttpClientService httpClient,
+    NavigationManager navigationManager,
+    IAltairCABlazorCookieUtil cookieUtil,
+    IUserProfileService userProfileService,
+    IConfiguration configuration,
+    IContentService contentService,
+    ISnackbar snackbar)
     : IAuthService
 {
-    public async Task<ApiResponse> ChangePassword(ChangePasswordUserCommand command)
+    public async Task<bool> ChangePassword(ChangePasswordUserCommand command)
     {
-        var result = await httpClient.PutAsJsonAsync<object>("Auth/ChangePassword", command);
-        return result;
+        var result =
+            await httpClient.PutAsJsonAsync(configuration.GetIdentityUrl("Auth/ChangePassword"), command);
+        snackbar.ShowIfError(result, contentService["Profile:Servernotrespondingtry"]);
+        return result.HttpStatusCode == HttpStatusCode.OK;
     }
 
-    public async Task<ApiResponse<bool>> IsAvailableUserPhoneNumber(IsAvailableUserPhoneNumberQuery query)
+    public async Task<bool> IsAvailableUserPhoneNumber(IsAvailableUserPhoneNumberQuery query)
     {
-        var result = await httpClient.GetAsJsonAsync<bool>($"Auth/IsAvailableUserPhoneNumber/{Uri.EscapeDataString(query.PhoneNumber)}");
-        return result;
+        var result =
+            await httpClient.GetFromJsonAsync<bool>(
+                configuration.GetIdentityUrl(
+                    $"Auth/IsAvailableUserPhoneNumber/{Uri.EscapeDataString(query.PhoneNumber)}"));
+        snackbar.ShowIfError(result, contentService["Profile:Servernotrespondingtry"],
+            contentService["Profile:Educationdetailsadded"]);
+        return result.Result;
     }
 
-    public async Task<string> LoginUserAsync(LoginUserCommand command)
+    public async Task<bool> LoginUserAsync(LoginUserCommand command)
     {
-        string errorMessage = null;
-        try
+        var result =
+            await httpClient.PostAsJsonAsync<JwtTokenResponse>(configuration.GetIdentityUrl("Auth/login"), command);
+        snackbar.ShowIfError(result, contentService["Profile:Servernotrespondingtry"]);
+
+        if (result.Success)
         {
-            var result = await httpClient.PostAsJsonAsync("Auth/login", command);
-            if (!result.Success)
-            {
-                return contentService["Profile:Anerroroccurred"];
-            }
+            string callbackUrl = string.Empty;
+            string page = string.Empty;
+            var currentUri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
+            if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("callback", out var param))
+                callbackUrl = param;
+            if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
+                page = param;
 
-            if (result.HttpStatusCode==)
-            {
-                
-            }
-            if (result.IsSuccessStatusCode)
-            {
-                string callbackUrl = string.Empty;
-                string page = string.Empty;
-                var currentUri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
-                if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("callback", out var param))
-                    callbackUrl = param;
-                if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
-                    page = param;
+            await cookieUtil.SetValueAsync("authToken", result.Result, secure: true);
 
-                var response = await result.Content.ReadFromJsonAsync<JwtTokenResponse>();
-                await cookieUtil.SetValueAsync("authToken", response, secure: true);
-                await authenticationStateProvider.GetAuthenticationStateAsync();
-
-                if (callbackUrl.IsNullOrEmpty())
-                    navigationManager.NavigateTo("/");
-                else
-                    navigationManager.NavigateTo($"{callbackUrl}?atoken={response.AccessToken}&rtoken={response.RefreshToken}&vdate={response.AccessTokenValidateTo}&page={page}");
-                return null;
-            }
-            if (result.StatusCode == HttpStatusCode.Unauthorized)
-            {
-                errorMessage = (await result.Content.ReadFromJsonAsync<CustomProblemDetails>()).Detail;
-            }
-        }
-        catch (HttpRequestException ex)
-        {
-            Console.WriteLine(ex);
-            errorMessage = contentService["Profile:Servernotrespondingtry"];
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            errorMessage = contentService["Profile:Anerroroccurred"];
-        }
-
-        return errorMessage;
-    }
-
-    public async Task<string> RegisterUserAsync(RegisterUserCommand command)
-    {
-        try
-        {
-            command.PhoneNumber = command.PhoneNumber.Trim();
-            if (command.PhoneNumber.Length == 9) command.PhoneNumber = "+992" + command.PhoneNumber.Trim();
-            else if (command.PhoneNumber.Length == 12 && command.PhoneNumber[0] != '+') command.PhoneNumber = "+" + command.PhoneNumber;
-
-            var result = await httpClient.PostAsJsonAsync("Auth/register", command);
-            if (result.IsSuccessStatusCode)
-            {
-                await LoginUserAsync(new LoginUserCommand()
-                {
-                    Password = command.Password,
-                    Username = command.Username
-                });
-                await userProfileService.Get();
+            if (callbackUrl.IsNullOrEmpty())
                 navigationManager.NavigateTo("/");
-
-                return "";
-            }
-            if (result.StatusCode is not (HttpStatusCode.Unauthorized or HttpStatusCode.BadRequest))
-                return contentService["Profile:Servernotrespondingtry"];
-
-            var response = await result.Content.ReadFromJsonAsync<CustomProblemDetails>();
-            return response.Detail;
+            else
+                navigationManager.NavigateTo(
+                    $"{callbackUrl}?atoken={result.Result.AccessToken}&rtoken={result.Result.RefreshToken}&vdate={result.Result.AccessTokenValidateTo}&page={page}");
+            return true;
         }
-        catch (HttpRequestException ex)
+
+        return false;
+    }
+
+
+    public async Task<bool> RegisterUserAsync(RegisterUserCommand command)
+    {
+        command.PhoneNumber = command.PhoneNumber.Trim();
+        if (command.PhoneNumber.Length == 9) command.PhoneNumber = "+992" + command.PhoneNumber.Trim();
+        else if (command.PhoneNumber.Length == 12 && command.PhoneNumber[0] != '+')
+            command.PhoneNumber = "+" + command.PhoneNumber;
+
+        var result = await httpClient.PostAsJsonAsync(configuration.GetIdentityUrl("Auth/register"), command);
+
+        snackbar.ShowIfError(result, contentService["Profile:Servernotrespondingtry"]);
+
+        if (result.HttpStatusCode == HttpStatusCode.OK)
         {
-            Console.WriteLine(ex);
-            return contentService["Profile:Servernotrespondingtry"];
+            await LoginUserAsync(new LoginUserCommand
+            {
+                Password = command.Password,
+                Username = command.Username
+            });
+            await userProfileService.Get();
+            navigationManager.NavigateTo("/");
+            return true;
         }
-        catch (Exception e)
+
+        return false;
+    }
+
+    public async Task<bool> ResetPassword(ResetPasswordCommand command)
+    {
+        var result = await httpClient.PostAsJsonAsync(configuration.GetIdentityUrl("Auth/ResetPassword"), command);
+        snackbar.ShowIfError(result, contentService["Profile:Servernotrespondingtry"],
+            contentService["Profile:Resetpasswordsuccessfully"]);
+        return result.HttpStatusCode == HttpStatusCode.OK;
+    }
+
+    public async Task<UserDetailsResponse> CheckUserDetails(CheckUserDetailsQuery query)
+    {
+        var result =
+            await httpClient.GetFromJsonAsync<UserDetailsResponse>(
+                configuration.GetIdentityUrl(
+                    $"User/CheckUserDetails/{query.UserName}/{query.PhoneNumber}/{query.Email}"));
+
+        snackbar.ShowIfError(result, contentService["Profile:Servernotrespondingtry"]);
+        return result.Result;
+    }
+
+    public async Task ResendVerificationEmail()
+    {
+        var result = await httpClient.PostAsJsonAsync(configuration.GetIdentityUrl("Auth/VerifyEmail"), null!);
+        snackbar.ShowIfError(result, contentService["Profile:Servernotrespondingtry"]);
+        if (result.HttpStatusCode == HttpStatusCode.OK)
         {
-            Console.WriteLine(e);
-            return contentService["Profile:Anerroroccurred"];
+            snackbar.Add(contentService["Profile:Pleasecheckyouremail"], Severity.Info);
         }
-    }
-
-    public async Task<HttpResponseMessage> ResetPassword(ResetPasswordCommand command)
-    {
-        var result = await httpClient.PostAsJsonAsync("Auth/ResetPassword", command);
-        return result;
-    }
-
-    public async Task<HttpResponseMessage> CheckUserName(string userName)
-    {
-        var result = await httpClient.GetAsync($"User/CheckUserName/{userName}");
-        return result;
-    }
-
-    public async Task<HttpResponseMessage> CheckUserDetails(CheckUserDetailsQuery query)
-    {
-        var result = await httpClient.GetAsync($"User/CheckUserDetails/{query.UserName}/{query.PhoneNumber}/{query.Email}");
-        return result;
-    }
-
-    public async Task<HttpResponseMessage> ResendVerificationEmail()
-    {
-        var result = await httpClient.PostAsync("Auth/VerifyEmail", null);
-        return result;
     }
 
     public async Task SendVerificationEmailToken(string token, string userId)
     {
-        await httpClient.GetAsync($"Auth/verify?token={WebUtility.UrlEncode(token)}&userid={userId}");
+        snackbar.ShowIfError(await httpClient.GetAsync(
+                configuration.GetIdentityUrl($"Auth/verify?token={WebUtility.UrlEncode(token)}&userid={userId}")),
+            contentService["Profile:Servernotrespondingtry"]);
     }
 }

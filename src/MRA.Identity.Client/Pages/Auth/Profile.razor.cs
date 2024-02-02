@@ -12,21 +12,17 @@ using MRA.Identity.Application.Contract.Skills.Responses;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Client.Services.Auth;
 using MudBlazor;
-using Newtonsoft.Json;
-using System.Net.Http.Json;
 using System.Net;
 using Microsoft.IdentityModel.Tokens;
 using MRA.Identity.Client.Components.Dialogs;
 using Blazored.FluentValidation;
-using MRA.BlazorComponents.HttpClient.Responses;
-using CustomProblemDetails = MRA.Identity.Client.Services.CustomProblemDetails;
 
 namespace MRA.Identity.Client.Pages.Auth;
 
 public partial class Profile
 {
     [Inject] private IAuthService AuthService { get; set; }
-    
+
     private bool _tryButton;
     private bool _codeSent;
     private int? _confirmationCode;
@@ -42,40 +38,31 @@ public partial class Profile
             return;
         }
 
-        ServerNotResponding();
+        Snackbar.Add(ContentService["Profile:Servernotrespondingtry"], Severity.Error);
     }
 
     private UserProfileResponse _profile;
-    private readonly UpdateProfileCommand _updateProfileCommand = new UpdateProfileCommand();
+    private readonly UpdateProfileCommand _updateProfileCommand = new();
     private FluentValidationValidator _fluentValidationValidator;
 
     private async Task SendCode()
     {
-        bool response = await UserProfileService.SendConfirmationCode(_profile.PhoneNumber);
+        var response = await UserProfileService.SendConfirmationCode(_profile.PhoneNumber);
         if (response) _codeSent = true;
     }
 
     private async Task SendEmailConfirms()
     {
-        StateHasChanged();
-
-        var response = await AuthService.ResendVerificationEmail();
-        if (response.IsSuccessStatusCode)
-            Snackbar.Add(ContentService["Profile:Pleasecheckyouremail"], Severity.Info);
-        else
-            Snackbar.Add(ContentService["Profile:Servernotrespondingtry"], Severity.Error);
+        await AuthService.ResendVerificationEmail();
         StateHasChanged();
     }
 
     private async Task Verify()
     {
-        SmsVerificationCodeStatus response =
+        var response =
             await UserProfileService.CheckConfirmationCode(_profile.PhoneNumber, _confirmationCode);
-        if (response == SmsVerificationCodeStatus.CodeVerifyFailure)
-        {
-            Snackbar.Add(ContentService["Profile:Codeisincorrector"], Severity.Error);
-        }
-        else
+
+        if (response)
         {
             _profile = await UserProfileService.Get();
             _codeSent = false;
@@ -88,7 +75,7 @@ public partial class Profile
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
-        if (!user.Identity.IsAuthenticated)
+        if (!(user.Identity?.IsAuthenticated ?? true))
         {
             Navigation.NavigateTo("login");
             return;
@@ -103,25 +90,22 @@ public partial class Profile
         StateHasChanged();
 
 
-        try
+        var profile = await UserProfileService.Get();
+        if (profile == null)
         {
-            _profile = await UserProfileService.Get();
+            return;
+        }
 
-            _updateProfileCommand.AboutMyself = _profile.AboutMyself;
-            _updateProfileCommand.DateOfBirth = _profile.DateOfBirth;
-            _updateProfileCommand.Email = _profile.Email;
-            _updateProfileCommand.FirstName = _profile.FirstName;
-            _updateProfileCommand.LastName = _profile.LastName;
-            _updateProfileCommand.Gender = _profile.Gender;
-            _updateProfileCommand.PhoneNumber = _profile.PhoneNumber;
-            _isPhoneNumberNull = !_updateProfileCommand.PhoneNumber.IsNullOrEmpty();
-        }
-        catch (Exception)
-        {
-            ServerNotResponding();
-            _tryButton = true;
-            StateHasChanged();
-        }
+        _profile = profile;
+
+        _updateProfileCommand.AboutMyself = _profile.AboutMyself;
+        _updateProfileCommand.DateOfBirth = _profile.DateOfBirth;
+        _updateProfileCommand.Email = _profile.Email;
+        _updateProfileCommand.FirstName = _profile.FirstName;
+        _updateProfileCommand.LastName = _profile.LastName;
+        _updateProfileCommand.Gender = _profile.Gender;
+        _updateProfileCommand.PhoneNumber = _profile.PhoneNumber;
+        _isPhoneNumberNull = !_updateProfileCommand.PhoneNumber.IsNullOrEmpty();
 
 
         await GetEducations();
@@ -133,41 +117,43 @@ public partial class Profile
         StateHasChanged();
     }
 
-    private void ServerNotResponding()
-    {
-        Snackbar.Add(ContentService["Profile:Servernotrespondingtry"], Severity.Error);
-    }
+    // private void ServerNotResponding()
+    // {
+    //     Snackbar.Add(ContentService["Profile:Servernotrespondingtry"], Severity.Error);
+    // }
 
-    private async Task BadRequestResponse(HttpResponseMessage response)
-    {
-        var customProblemDetails = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
-        if (customProblemDetails.Detail != null)
-        {
-            Snackbar.Add(customProblemDetails.Detail, Severity.Error);
-        }
-        else
-        {
-            var errorResponseString = await response.Content.ReadAsStringAsync();
-            var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(errorResponseString);
-            foreach (var error in errorResponse.Errors)
-            {
-                var errorMessage = string.Join(", ", error.Value);
-                Snackbar.Add(errorMessage, Severity.Error);
-            }
-        }
-    }
+    // private async Task BadRequestResponse(HttpResponseMessage response)
+    // {
+    //     var customProblemDetails = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
+    //     if (customProblemDetails.Detail != null)
+    //     {
+    //         Snackbar.Add(customProblemDetails.Detail, Severity.Error);
+    //     }
+    //     else
+    //     {
+    //         var errorResponseString = await response.Content.ReadAsStringAsync();
+    //         var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(errorResponseString);
+    //         foreach (var error in errorResponse.Errors)
+    //         {
+    //             var errorMessage = string.Join(", ", error.Value);
+    //             Snackbar.Add(errorMessage, Severity.Error);
+    //         }
+    //     }
+    // }
 
     private async Task ConfirmDelete<T>(IList<T> collection, T item)
     {
-        var parameters = new DialogParameters<DialogMudBlazor>();
-        parameters.Add(x => x.ContentText,
-           ContentService["Profile:Doyoureally"]);
-        parameters.Add(x => x.ButtonText, ContentService["Profile:Delete"]);
-        parameters.Add(x => x.Color, Color.Error);
+        var parameters = new DialogParameters<DialogMudBlazor>
+        {
+            { x => x.ContentText, ContentService["Profile:Doyoureally"] },
+            { x => x.ButtonText, ContentService["Profile:Delete"] },
+            { x => x.Color, Color.Error }
+        };
 
-        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
+        var options = new DialogOptions { CloseButton = true, MaxWidth = MaxWidth.ExtraSmall };
 
-        var dialog = DialogService.Show<DialogMudBlazor>(ContentService["Profile:Delete"], parameters, options);
+        var dialog =
+            await DialogService.ShowAsync<DialogMudBlazor>(ContentService["Profile:Delete"], parameters, options);
         var result = await dialog.Result;
 
         if (!result.Canceled)
@@ -182,41 +168,32 @@ public partial class Profile
         {
             Type itemType = item.GetType();
             var idProperty = itemType.GetProperty("Id");
-            var result = new HttpResponseMessage();
+            var result = true;
             if (idProperty != null || itemType.Name == "String")
             {
-                try
+                if (itemType.Name == "String")
                 {
-                    if (itemType.Name == "String")
-                    {
-                        result = await UserProfileService.RemoveSkillAsync(item.ToString());
-                    }
-                    else
-                    {
-                        Guid id = (Guid)idProperty.GetValue(item);
+                    result = await UserProfileService.RemoveSkillAsync(item.ToString());
+                }
+                else
+                {
+                    Guid id = (Guid)idProperty?.GetValue(item)!;
 
-                        switch (itemType.Name)
-                        {
-                            case "UserEducationResponse":
-                                result = await UserProfileService.DeleteEducationAsync(id);
-                                break;
-                            case "UserExperienceResponse":
-                                result = await UserProfileService.DeleteExperienceAsync(id);
-                                break;
-                        }
+                    switch (itemType.Name)
+                    {
+                        case "UserEducationResponse":
+                            result = await UserProfileService.DeleteEducationAsync(id);
+                            break;
+                        case "UserExperienceResponse":
+                            result = await UserProfileService.DeleteExperienceAsync(id);
+                            break;
                     }
                 }
-                catch (HttpRequestException)
-                {
-                    ServerNotResponding();
-                    return;
-                }
 
-                if (result.IsSuccessStatusCode)
-                {
-                    collection.Remove(item);
-                    StateHasChanged();
-                }
+
+                if (!result) return;
+                collection.Remove(item);
+                StateHasChanged();
             }
         }
     }
@@ -224,46 +201,34 @@ public partial class Profile
     private async void UpdateProfile()
     {
         var result = await UserProfileService.Update(_updateProfileCommand);
-        if (result == "")
+        if (result)
         {
-            Snackbar.Add(ContentService["Profile:Profileupdatedsuccessfully"], Severity.Success);
             _profile = await UserProfileService.Get();
-        }
-        else
-        {
-            Snackbar.Add(result, Severity.Error);
         }
     }
 
     #region education
 
-    List<UserEducationResponse> educations = new List<UserEducationResponse>();
-    private bool addEducation = false;
-    CreateEducationDetailCommand createEducation = new CreateEducationDetailCommand();
-    List<UserEducationResponse> allEducctions = new List<UserEducationResponse>();
+    private List<UserEducationResponse> _educations = [];
+    private bool _addEducation;
+    private CreateEducationDetailCommand _createEducation = new();
+    private List<UserEducationResponse> _allEducations = [];
 
 
-    Guid editingCardId = new Guid();
-    UpdateEducationDetailCommand educationUpdate = null;
+    private Guid _editingCardId;
+    private UpdateEducationDetailCommand _educationUpdate;
 
     private async Task GetEducations()
     {
-        try
-        {
-            educations = await UserProfileService.GetEducationsByUser();
-            allEducctions = await UserProfileService.GetAllEducations();
-        }
-        catch (Exception)
-        {
-            ServerNotResponding();
-        }
+        _educations = await UserProfileService.GetEducationsByUser() ?? default;
+        _allEducations = await UserProfileService.GetAllEducations() ?? default;
     }
 
     private async Task<IEnumerable<string>> SearchEducation(string value)
     {
         await Task.Delay(5);
 
-        return allEducctions.Where(e => e.Speciality
+        return _allEducations.Where(e => e.Speciality
                 .Contains(value, StringComparison.InvariantCultureIgnoreCase))
             .Select(e => e.Speciality).Distinct()
             .ToList();
@@ -273,7 +238,7 @@ public partial class Profile
     {
         await Task.Delay(5);
 
-        return allEducctions.Where(e => e.University
+        return _allEducations.Where(e => e.University
                 .Contains(value, StringComparison.InvariantCultureIgnoreCase))
             .Select(e => e.University).Distinct()
             .ToList();
@@ -281,8 +246,8 @@ public partial class Profile
 
     private void EditButtonClicked(Guid cardId, UserEducationResponse educationResponse)
     {
-        editingCardId = cardId;
-        educationUpdate = new UpdateEducationDetailCommand()
+        _editingCardId = cardId;
+        _educationUpdate = new UpdateEducationDetailCommand()
         {
             EndDate = educationResponse.EndDate.HasValue ? educationResponse.EndDate.Value : default(DateTime),
             StartDate =
@@ -296,69 +261,43 @@ public partial class Profile
 
     private async Task CreateEducationHandle()
     {
-        if (!(await _fluentValidationValidator!.ValidateAsync()))
+        if (!await _fluentValidationValidator!.ValidateAsync())
             return;
-        
-        try
-        {
-            if (createEducation.EndDate == null)
-                createEducation.UntilNow = true;
 
-            var response = await UserProfileService.CreateEducationAsуnc(createEducation);
-            if (response.IsSuccessStatusCode)
-            {
-                Snackbar.Add(ContentService["Profile:Educationdetailsadded"], Severity.Success);
-                addEducation = false;
-                createEducation = new CreateEducationDetailCommand();
-                await GetEducations();
-                StateHasChanged();
-            }
-            else if (response.StatusCode == HttpStatusCode.BadRequest)
-            {
-                await BadRequestResponse(response);
-            }
-        }
-        catch (HttpRequestException)
-        {
-            ServerNotResponding();
-        }
+        if (_createEducation.EndDate == null)
+            _createEducation.UntilNow = true;
 
+        var response = await UserProfileService.CreateEducationAsync(_createEducation);
+        if (response)
+        {
+            _addEducation = false;
+            _createEducation = new CreateEducationDetailCommand();
+            await GetEducations();
+            StateHasChanged();
+        }
     }
 
     private void CancelButtonClicked_CreateEducation()
     {
-        addEducation = false;
-        createEducation = new CreateEducationDetailCommand();
+        _addEducation = false;
+        _createEducation = new CreateEducationDetailCommand();
     }
 
     private async void CancelButtonClicked_UpdateEducation()
     {
-        editingCardId = Guid.NewGuid();
+        _editingCardId = Guid.NewGuid();
         await GetEducations();
         StateHasChanged();
     }
 
     private async Task UpdateEducationHandle()
     {
-        try
+        var result = await UserProfileService.UpdateEducationAsync(_educationUpdate);
+        if (result)
         {
-            var result = await UserProfileService.UpdateEducationAsync(educationUpdate);
-            if (result.IsSuccessStatusCode)
-            {
-                editingCardId = Guid.NewGuid();
-                Snackbar.Add(ContentService["Profile:UpdateEducationsuccessfully"], Severity.Success);
-
-                await GetEducations();
-                StateHasChanged();
-            }
-            else if (result.StatusCode == HttpStatusCode.BadRequest)
-            {
-                await BadRequestResponse(result);
-            }
-        }
-        catch (HttpRequestException)
-        {
-            ServerNotResponding();
+            _editingCardId = Guid.NewGuid();
+            await GetEducations();
+            StateHasChanged();
         }
     }
 
@@ -366,24 +305,24 @@ public partial class Profile
 
     #region Experience
 
-    List<UserExperienceResponse> experiences = new List<UserExperienceResponse>();
-    private bool addExperience = false;
-    CreateExperienceDetailCommand createExperience = new CreateExperienceDetailCommand();
-    UpdateExperienceDetailCommand experienceUpdate = null;
-    List<UserExperienceResponse> allExperiences = new List<UserExperienceResponse>();
-    private Guid editingCardExperienceId;
+    private List<UserExperienceResponse> _experiences = new();
+    private bool _addExperience;
+    private CreateExperienceDetailCommand _createExperience = new();
+    private UpdateExperienceDetailCommand? _experienceUpdate = null;
+    private List<UserExperienceResponse> _allExperiences = new();
+    private Guid _editingCardExperienceId;
 
     private async Task GetExperiences()
     {
-        experiences = await UserProfileService.GetExperiencesByUser();
-        allExperiences = await UserProfileService.GetAllExperiences();
+        _experiences = await UserProfileService.GetExperiencesByUser();
+        _allExperiences = await UserProfileService.GetAllExperiences();
     }
 
     private async Task<IEnumerable<string>> SearchJobTitle(string value)
     {
         await Task.Delay(5);
 
-        return allExperiences.Where(e => e.JobTitle
+        return _allExperiences.Where(e => e.JobTitle
                 .Contains(value, StringComparison.InvariantCultureIgnoreCase))
             .Select(e => e.JobTitle).Distinct()
             .ToList();
@@ -393,7 +332,7 @@ public partial class Profile
     {
         await Task.Delay(5);
 
-        return allExperiences.Where(e => e.CompanyName
+        return _allExperiences.Where(e => e.CompanyName
                 .Contains(value, StringComparison.InvariantCultureIgnoreCase))
             .Select(e => e.CompanyName).Distinct()
             .ToList();
@@ -403,7 +342,7 @@ public partial class Profile
     {
         await Task.Delay(5);
 
-        return allExperiences.Where(e => e.Address
+        return _allExperiences.Where(e => e.Address
                 .Contains(value, StringComparison.InvariantCultureIgnoreCase))
             .Select(e => e.Address).Distinct()
             .ToList();
@@ -411,51 +350,38 @@ public partial class Profile
 
     private async Task CreateExperienceHandle()
     {
-        if (!(await _fluentValidationValidator!.ValidateAsync())) return;
-      
-        try
+        if (!await _fluentValidationValidator!.ValidateAsync()) return;
+
+        if (_createExperience.EndDate == null)
+            _createExperience.IsCurrentJob = true;
+
+        var response = await UserProfileService.CreateExperienceAsync(_createExperience);
+        if (response)
         {
-            if (createExperience.EndDate == null)
-                createExperience.IsCurrentJob = true;
-
-            var response = await UserProfileService.CreateExperienceAsync(createExperience);
-            if (response.IsSuccessStatusCode)
-            {
-                Snackbar.Add(ContentService["Profile:Experiencedetailsadded"], Severity.Success);
-
-                addExperience = false;
-                createExperience = new CreateExperienceDetailCommand();
-                await GetExperiences();
-            }
-
-            if (response.StatusCode == HttpStatusCode.BadRequest)
-                await BadRequestResponse(response);
+            _addExperience = false;
+            _createExperience = new CreateExperienceDetailCommand();
+            await GetExperiences();
         }
-        catch (HttpRequestException)
-        {
-            ServerNotResponding();
-        }
-
     }
 
     private async void CancelButtonClicked_CreateExperience()
     {
-        addExperience = false;
-        createExperience = new CreateExperienceDetailCommand();
+        _addExperience = false;
+        _createExperience = new CreateExperienceDetailCommand();
         await GetExperiences();
     }
 
     private async void CancelButtonClicked_UpdateExperience()
     {
-        editingCardExperienceId = Guid.NewGuid();
+        _editingCardExperienceId = Guid.NewGuid();
         await GetExperiences();
         StateHasChanged();
     }
 
     private void EditCardExperienceButtonClicked(Guid cardExperienceId, UserExperienceResponse experienceResponse)
     {
-        editingCardExperienceId = cardExperienceId;
-        experienceUpdate = new UpdateExperienceDetailCommand()
+        _editingCardExperienceId = cardExperienceId;
+        _experienceUpdate = new UpdateExperienceDetailCommand()
         {
             Id = experienceResponse.Id,
             JobTitle = experienceResponse.JobTitle,
@@ -469,23 +395,11 @@ public partial class Profile
 
     private async void UpdateExperienceHandle()
     {
-        try
+        var result = await UserProfileService.UpdateExperienceAsync(_experienceUpdate!);
+        if (result)
         {
-            var result = await UserProfileService.UpdateExperienceAsync(experienceUpdate);
-            if (result.IsSuccessStatusCode)
-            {
-                Snackbar.Add(ContentService["Profile:UpdateEducationsuccessfully"], Severity.Success);
-
-                editingCardExperienceId = Guid.NewGuid();
-                StateHasChanged();
-            }
-
-            if (result.StatusCode == HttpStatusCode.BadRequest)
-                await BadRequestResponse(result);
-        }
-        catch (HttpRequestException)
-        {
-            ServerNotResponding();
+            _editingCardExperienceId = Guid.NewGuid();
+            StateHasChanged();
         }
     }
 
@@ -493,29 +407,21 @@ public partial class Profile
 
     #region Skills
 
-    private UserSkillsResponse UserSkills;
-    private UserSkillsResponse allSkills;
-    string newSkills = "";
-    readonly List<string> FoundSkills = new List<string>();
+    private UserSkillsResponse _userSkills;
+    private UserSkillsResponse _allSkills;
+    private string _newSkills = "";
 
     private async Task GetSkills()
     {
-        try
-        {
-            UserSkills = await UserProfileService.GetUserSkills();
-            allSkills = await UserProfileService.GetAllSkills();
-        }
-        catch (HttpRequestException)
-        {
-            ServerNotResponding();
-        }
+        _userSkills = await UserProfileService.GetUserSkills();
+        _allSkills = await UserProfileService.GetAllSkills();
     }
 
     async void Closed(MudChip chip)
     {
-        await ConfirmDelete(UserSkills.Skills, chip.Text);
+        await ConfirmDelete(_userSkills.Skills, chip.Text);
     }
-    
+
 
     private async Task OnBlur()
     {
@@ -525,45 +431,38 @@ public partial class Profile
     private async Task AddSkills(string foundSkill = null)
     {
         if (foundSkill != null)
-            newSkills = foundSkill;
+            _newSkills = foundSkill;
 
-        try
+        if (!string.IsNullOrWhiteSpace(_newSkills))
         {
-            if (!string.IsNullOrWhiteSpace(newSkills))
+            var userSkillsCommand = new AddSkillsCommand();
+            var skills = _newSkills.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            foreach (var skill in skills)
             {
-                var userSkillsCommand = new AddSkillsCommand();
-                var skills = newSkills.Split(',', StringSplitOptions.RemoveEmptyEntries);
-                foreach (var skill in skills)
+                var trimmedSkill = skill.Trim();
+                if (!string.IsNullOrWhiteSpace(trimmedSkill))
                 {
-                    var trimmedSkill = skill.Trim();
-                    if (!string.IsNullOrWhiteSpace(trimmedSkill))
-                    {
-                        userSkillsCommand.Skills.Add(trimmedSkill);
-                    }
-                }
-
-                var result = await UserProfileService.AddSkills(userSkillsCommand);
-                if (result != null)
-                {
-                    Snackbar.Add(ContentService["Profile:AddSkillssuccessfully"], Severity.Success);
-
-                    newSkills = "";
-                    UserSkills = result;
-                    StateHasChanged();
+                    userSkillsCommand.Skills.Add(trimmedSkill);
                 }
             }
-        }
-        catch (HttpRequestException)
-        {
-            ServerNotResponding();
+
+            var result = await UserProfileService.AddSkills(userSkillsCommand);
+            if (result != null)
+            {
+                Snackbar.Add(ContentService["Profile:AddSkillssuccessfully"], Severity.Success);
+
+                _newSkills = "";
+                _userSkills = result;
+                StateHasChanged();
+            }
         }
     }
 
     private async Task<IEnumerable<string>> SearchSkills(string value)
     {
         await Task.Delay(5);
-        var userSkillsSet = new HashSet<string>(UserSkills.Skills);
-        return allSkills.Skills
+        var userSkillsSet = new HashSet<string>(_userSkills.Skills);
+        return _allSkills.Skills
             .Where(s => s.Contains(value, StringComparison.InvariantCultureIgnoreCase) && !userSkillsSet.Contains(s))
             .ToList();
     }

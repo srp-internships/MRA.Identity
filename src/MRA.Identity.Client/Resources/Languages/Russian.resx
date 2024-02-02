@@ -123,6 +123,9 @@
   <data name="Header:Internships" xml:space="preserve">
     <value>Стажировки</value>
   </data>
+  <data name="Header:SendMessage" xml:space="preserve">
+    <value>Отправить сообщение</value>
+  </data>
   <data name="Header:Jobs" xml:space="preserve">
     <value>Вакансии</value>
   </data>
@@ -293,6 +296,9 @@
   </data>
   <data name="Profile:Emailisnotavailable" xml:space="preserve">
     <value>Email недоступен</value>
+  </data>
+  <data name="Profile:EndDate" xml:space="preserve">
+    <value>Дата конца</value>
   </data>
   <data name="Profile:UserNameisnotavailable" xml:space="preserve">
     <value>Имя пользователя недоступно</value>

@@ -2,7 +2,6 @@
 @using Microsoft.AspNetCore.WebUtilities
 @layout MainLayout
 @inject IAuthService AuthService
-@inject ISnackbar Snackbar
 @inject IContentService ContentService
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -30,7 +29,7 @@
                             </div>
                         </div>
                         <MudText>
-                            @ContentService["SignIn:LabelDontAccount"] <MudLink Href="@($"registration?callback={callback}&page={page}")"> @ContentService["SignIn:LinkSignUp"]</MudLink>
+                            @ContentService["SignIn:LabelDontAccount"] <MudLink Href="@($"registration?callback={_callback}&page={_page}")"> @ContentService["SignIn:LinkSignUp"]</MudLink>
                         </MudText>
                     </CardHeaderContent>
                 </MudCardHeader>
@@ -47,7 +46,7 @@
                 </MudCardContent>
                 <MudCardActions>
                     <ProgressTaskButton Function="OnValidSubmit" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" FullWidth="true">
-                         <MudText>@ContentService["SignIn:SignIn"]</MudText>
+                        <MudText>@ContentService["SignIn:SignIn"]</MudText>
                     </ProgressTaskButton>
                 </MudCardActions>
                 <div style="padding:5px">
@@ -65,32 +64,31 @@
 
 
 @code {
-    private LoginUserCommand _loginCommand = new();
-    string callback = string.Empty;
-    string page = string.Empty;
+    private readonly LoginUserCommand _loginCommand = new();
+    string _callback = string.Empty;
+    string _page = string.Empty;
 
     private async Task OnValidSubmit()
     {
-        var loginMessage = await AuthService.LoginUserAsync(_loginCommand);
-        if (loginMessage != "" || loginMessage != null)
-            Snackbar.Add(loginMessage, MudBlazor.Severity.Error);
+        await AuthService.LoginUserAsync(_loginCommand);
     }
 
-    protected async override Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
 
-        if (user.Identity.IsAuthenticated)
+        if (user.Identity?.IsAuthenticated ?? false)
         {
             NavigationManager.NavigateTo("/");
             return;
         }
+
         var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("callback", out var param))
-            callback = param;
+            _callback = param;
         if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
-            page = param;
+            _page = param;
         StateHasChanged();
     }
 

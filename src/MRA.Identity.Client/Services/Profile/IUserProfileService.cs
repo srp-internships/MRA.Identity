@@ -1,4 +1,5 @@
-﻿using MRA.Identity.Application.Contract.Educations.Command.Create;
+﻿#nullable enable
+using MRA.Identity.Application.Contract.Educations.Command.Create;
 using MRA.Identity.Application.Contract.Educations.Command.Update;
 using MRA.Identity.Application.Contract.Educations.Responses;
 using MRA.Identity.Application.Contract.Experiences.Commands.Create;
@@ -14,31 +15,31 @@ namespace MRA.Identity.Client.Services.Profile;
 
 public interface IUserProfileService
 {
-    Task<UserProfileResponse> Get(string userName = null);
-    Task<string> Update(UpdateProfileCommand command);
+    Task<UserProfileResponse> Get(string? userName = null);
+    Task<bool> Update(UpdateProfileCommand command);
 
-    Task<List<UserEducationResponse>> GetEducationsByUser(string username=null);
-    Task<List<UserEducationResponse>> GetAllEducations();
+    Task<List<UserEducationResponse>?> GetEducationsByUser(string? username=null);
+    Task<List<UserEducationResponse>?> GetAllEducations();
 
-    Task<HttpResponseMessage> CreateEducationAsуnc(CreateEducationDetailCommand command);
+    Task<bool> CreateEducationAsync(CreateEducationDetailCommand command);
 
-    Task<HttpResponseMessage> UpdateEducationAsync(UpdateEducationDetailCommand command);
-    Task<HttpResponseMessage> DeleteEducationAsync(Guid id);
-    Task<HttpResponseMessage> DeleteExperienceAsync(Guid id);
+    Task<bool> UpdateEducationAsync(UpdateEducationDetailCommand command);
+    Task<bool> DeleteEducationAsync(Guid id);
+    Task<bool> DeleteExperienceAsync(Guid id);
 
-    Task<List<UserExperienceResponse>> GetExperiencesByUser(string username=null);
+    Task<List<UserExperienceResponse>?> GetExperiencesByUser(string? username=null);
     Task<List<UserExperienceResponse>> GetAllExperiences();
 
-    Task<HttpResponseMessage> CreateExperienceAsync(CreateExperienceDetailCommand command);
+    Task<bool> CreateExperienceAsync(CreateExperienceDetailCommand command);
 
-    Task<HttpResponseMessage> UpdateExperienceAsync(UpdateExperienceDetailCommand command);
+    Task<bool> UpdateExperienceAsync(UpdateExperienceDetailCommand command);
 
-    Task<UserSkillsResponse> GetUserSkills(string userName = null);
+    Task<UserSkillsResponse> GetUserSkills(string? userName = null);
     Task<UserSkillsResponse> GetAllSkills();
-    Task<HttpResponseMessage> RemoveSkillAsync(string skill);
+    Task<bool> RemoveSkillAsync(string skill);
 
-    Task<UserSkillsResponse> AddSkills(AddSkillsCommand command);
+    Task<UserSkillsResponse?> AddSkills(AddSkillsCommand command);
 
     Task<bool> SendConfirmationCode(string phoneNumber);
-    Task<SmsVerificationCodeStatus> CheckConfirmationCode(string phoneNumber, int? code);
+    Task<bool> CheckConfirmationCode(string phoneNumber, int? code);
 }

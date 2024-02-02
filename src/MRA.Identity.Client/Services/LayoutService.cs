@@ -95,7 +95,7 @@ public class LayoutService(
         OnMajorUpdateOccured();
     }
 
-    public string Lang = configuration["FeatureManagement:DefaultLanguage"];
+    public string Lang =configuration["FeatureManagement:DefaultLanguage"];
 
     public async Task ChangeLanguage(string lang)
     {

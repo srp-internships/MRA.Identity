@@ -1,6 +1,8 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
+using MRA.BlazorComponents.Configuration;
+using MRA.BlazorComponents.HttpClient.Services;
+using MRA.BlazorComponents.Snackbar.Extensions;
 using MRA.Identity.Application.Contract.Claim.Commands;
 using MRA.Identity.Application.Contract.Claim.Responses;
 using MRA.Identity.Application.Contract.Educations.Responses;
@@ -20,15 +22,15 @@ public partial class UserRoles
     [Parameter] public string Username { get; set; }
     private List<UserRolesResponse> Roles { get; set; }
     private List<UserClaimsResponse> UserClaims { get; set; }
-    [Inject] private HttpClient HttpClient { get; set; }
+    [Inject] private IHttpClientService HttpClient { get; set; }
     [Inject] private ISnackbar Snackbar { get; set; }
+    [Inject] private IConfiguration Configuration { get; set; }
     [Inject] public NavigationManager NavigationManager { get; set; }
-    [Inject] public AuthenticationStateProvider AuthStateProvider { get; set; }
     [Inject] private IUserProfileService UserProfileService { get; set; }
     private string NewRoleName { get; set; }
 
-    private UserProfileResponse _personalData = new UserProfileResponse();
-    private UserSkillsResponse _userSkills = new UserSkillsResponse();
+    private UserProfileResponse _personalData = new();
+    private UserSkillsResponse _userSkills = new();
 
     private List<UserExperienceResponse> _experiences = new();
     private List<UserEducationResponse> _educations = new();
@@ -45,58 +47,52 @@ public partial class UserRoles
         _userSkills = await UserProfileService.GetUserSkills(Username);
         _experiences = await UserProfileService.GetExperiencesByUser(Username);
         _educations = await UserProfileService.GetEducationsByUser(Username);
-        _user = await (await HttpClient.GetAsync($"User/{Username}")).Content.ReadFromJsonAsync<UserResponse>();
+        _user = (await HttpClient.GetFromJsonAsync<UserResponse>(Configuration.GetIdentityUrl($"User/{Username}")))
+            .Result;
     }
 
     private async Task ReloadUserClaimsAsync()
     {
         _claimType = "";
         _claimValue = "";
-        var userClaimsResponse = await HttpClient.GetAsync($"Claims?username={Username}");
-        if (!userClaimsResponse.IsSuccessStatusCode)
+        var userClaimsResponse =
+            await HttpClient.GetFromJsonAsync<List<UserClaimsResponse>>(
+                Configuration.GetIdentityUrl($"Claims?username={Username}"));
+        if (userClaimsResponse.HttpStatusCode != HttpStatusCode.OK)
         {
             NavigationManager.NavigateTo("/notfound");
             return;
         }
 
-        UserClaims = await userClaimsResponse.Content.ReadFromJsonAsync<List<UserClaimsResponse>>();
+        UserClaims = userClaimsResponse.Result;
     }
 
     private async Task ReloadDataAsync()
     {
-        await AuthStateProvider.GetAuthenticationStateAsync();
-        var userRolesResponse = await HttpClient.GetAsync($"UserRoles?userName={Username}");
-        if (!userRolesResponse.IsSuccessStatusCode)
+        var userRolesResponse =
+            await HttpClient.GetFromJsonAsync<List<UserRolesResponse>>(
+                Configuration.GetIdentityUrl($"UserRoles?userName={Username}"));
+        if (userRolesResponse.HttpStatusCode != HttpStatusCode.OK)
         {
             NavigationManager.NavigateTo("/notfound");
             return;
         }
 
-        Roles = await userRolesResponse.Content.ReadFromJsonAsync<List<UserRolesResponse>>();
+        Roles = userRolesResponse.Result;
     }
 
     private async Task OnDeleteClick(string contextSlug)
     {
         if (!string.IsNullOrWhiteSpace(contextSlug))
         {
-            await AuthStateProvider.GetAuthenticationStateAsync();
-            try
-            {
-                var deleteResult = await HttpClient.DeleteAsync($"UserRoles/{contextSlug}");
-                if (!deleteResult.IsSuccessStatusCode)
-                {
-                    Snackbar.Add(ContentService["ErrorDelete"], Severity.Error);
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-                Snackbar.Add(ContentService["ServerIsNotResponding"], Severity.Error);
-                return;
-            }
+            var deleteResult = await HttpClient.DeleteAsync(Configuration.GetIdentityUrl($"UserRoles/{contextSlug}"));
+            Snackbar.ShowIfError(deleteResult, ContentService["Profile:Servernotrespondingtry"]);
 
-            await ReloadDataAsync();
-            StateHasChanged();
+            if (deleteResult.HttpStatusCode == HttpStatusCode.OK)
+            {
+                await ReloadDataAsync();
+                StateHasChanged();
+            }
         }
     }
 
@@ -106,21 +102,9 @@ public partial class UserRoles
         {
             var userRoleCommand = new CreateUserRolesCommand { RoleName = NewRoleName, UserName = Username };
 
-            await AuthStateProvider.GetAuthenticationStateAsync();
-            try
-            {
-                var userRoleResponse = await HttpClient.PostAsJsonAsync("UserRoles", userRoleCommand);
-                if (!userRoleResponse.IsSuccessStatusCode)
-                {
-                    Snackbar.Add(ContentService["DuplicateRole"]);
-                    return;
-                }
-            }
-            catch (Exception)
-            {
-                Snackbar.Add(ContentService["ServerIsNotResponding"], Severity.Error);
-                return;
-            }
+            var userRoleResponse =
+                await HttpClient.PostAsJsonAsync(Configuration.GetIdentityUrl("UserRoles"), userRoleCommand);
+            Snackbar.ShowIfError(userRoleResponse, ContentService["Profile:Servernotrespondingtry"]);
 
             await ReloadDataAsync();
             StateHasChanged();
@@ -132,45 +116,23 @@ public partial class UserRoles
         if (!string.IsNullOrWhiteSpace(_claimType) && !string.IsNullOrWhiteSpace(_claimValue))
         {
             var command =
-                new CreateClaimCommand() { ClaimType = _claimType, ClaimValue = _claimValue, UserId = _user.Id };
-            await AuthStateProvider.GetAuthenticationStateAsync();
-            try
-            {
-                _loader = true;
-                await HttpClient.PostAsJsonAsync("Claims", command);
-                await ReloadUserClaimsAsync();
-                _claimType = "";
-                _claimValue = "";
-                StateHasChanged();
-            }
-            catch (Exception)
-            {
-                Snackbar.Add(ContentService["ServerIsNotResponding"], Severity.Error);
-            }
-            finally
-            {
-                _loader = false;
-            }
+                new CreateClaimCommand { ClaimType = _claimType, ClaimValue = _claimValue, UserId = _user.Id };
+
+            _loader = true;
+            Snackbar.ShowIfError(await HttpClient.PostAsJsonAsync(Configuration.GetIdentityUrl("Claims"), command),
+                ContentService["Profile:Servernotrespondingtry"]);
+            await ReloadUserClaimsAsync();
+            _claimType = "";
+            _claimValue = "";
+            _loader = false;
+            StateHasChanged();
         }
     }
 
     private async Task OnDeleteClaimClick(string slug)
     {
-        await AuthStateProvider.GetAuthenticationStateAsync();
-        try
-        {
-            var deleteResult = await HttpClient.DeleteAsync($"Claims/{slug}");
-            if (!deleteResult.IsSuccessStatusCode)
-            {
-                Snackbar.Add(ContentService["ErrorDelete"], Severity.Error);
-                return;
-            }
-        }
-        catch (Exception)
-        {
-            Snackbar.Add(ContentService["ServerIsNotResponding"], Severity.Error);
-            return;
-        }
+        var deleteResult = await HttpClient.DeleteAsync(Configuration.GetIdentityUrl($"Claims/{slug}"));
+        Snackbar.ShowIfError(deleteResult, ContentService["Profile:Servernotrespondingtry"]);
 
         await ReloadUserClaimsAsync();
         StateHasChanged();

@@ -1,27 +1,29 @@
-﻿using System.Net.Http.Json;
-using Microsoft.AspNetCore.Components;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
+using MRA.BlazorComponents.Configuration;
+using MRA.BlazorComponents.HttpClient.Services;
 using MRA.Identity.Application.Contract.User.Responses;
 using MudBlazor;
 
 namespace MRA.Identity.Client.Pages.UserManagerPages;
+
 public sealed partial class UserManager
 {
-    [Inject] private HttpClient Client { get; set; }
-    [Inject] private AuthenticationStateProvider AuthStateProvider { get; set; }
-    
+    [Inject] private IHttpClientService Client { get; set; }
+    [Inject] private IConfiguration Configuration { get; set; }
+
     private string _searchString = "";
-  
+
     private IEnumerable<UserResponse> _pagedData;
     private MudTable<UserResponse> _table;
 
     private int _totalItems;
-    
-    
+
+
     private async Task<TableData<UserResponse>> ServerReload(TableState state)
     {
-        await AuthStateProvider.GetAuthenticationStateAsync();
-        IEnumerable<UserResponse> data = await Client.GetFromJsonAsync<List<UserResponse>>("user");
+        IEnumerable<UserResponse> data =
+            (await Client.GetFromJsonAsync<List<UserResponse>>(Configuration.GetIdentityUrl("user"))).Result;
         await Task.Delay(100);
         data = data.Where(element =>
         {
@@ -33,6 +35,7 @@ public sealed partial class UserManager
                 return true;
             return false;
         }).ToArray();
+
         _totalItems = data.Count();
         switch (state.SortLabel)
         {
@@ -57,9 +60,9 @@ public sealed partial class UserManager
         }
 
         _pagedData = data.Skip(state.Page * state.PageSize).Take(state.PageSize).ToArray();
-        return new TableData<UserResponse>() {TotalItems = _totalItems, Items = _pagedData};
+        return new TableData<UserResponse> { TotalItems = _totalItems, Items = _pagedData };
     }
-    
+
     private void OnSearch(string text)
     {
         _searchString = text;

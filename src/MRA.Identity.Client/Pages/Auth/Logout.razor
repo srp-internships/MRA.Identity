@@ -1,35 +1,37 @@
 ﻿@page "/logout"
-@using MRA.Identity.Client.Services.HttpClients
 @using Microsoft.AspNetCore.WebUtilities
-@inject IAltairCABlazorCookieUtil cookieUtil
-@inject NavigationManager navigationManager
-@inject IConfiguration configuration
-@inject IHttpClientFactory factory;
+@inject IAltairCABlazorCookieUtil CookieUtil
+@inject NavigationManager NavigationManager
+@inject IConfiguration Configuration
+@inject IHttpClientFactory Factory;
 
 
 @code {
     protected override async Task OnInitializedAsync()
     {
-        await cookieUtil.RemoveAsync("authToken");
-        var addressesToLogout = configuration.GetSection("Platforms").Get<string[]>();
+        await CookieUtil.RemoveAsync("authToken");
+        var addressesToLogout = Configuration.GetSection("Platforms").Get<string[]>();
 
         try
         {
-            await Task.WhenAll(addressesToLogout.Select(s =>
+            await Task.WhenAll(addressesToLogout.Select(async s =>
             {
-                using var client = factory.CreateClient();
+                using var client = Factory.CreateClient();
                 var request = new HttpRequestMessage(HttpMethod.Get, $"{s}/logout");
                 request.SetBrowserRequestMode(BrowserRequestMode.NoCors);
                 request.SetBrowserRequestCache(BrowserRequestCache.NoStore);
-                return client.SendAsync(request);
+                return await client.SendAsync(request);
             }));
         }
-        catch { }
+        catch
+        {
+            // ignored
+        }
 
-        var currentUri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
+        var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("callback", out var callBackUrl))
-            navigationManager.NavigateTo(callBackUrl);
+            NavigationManager.NavigateTo(callBackUrl);
         else
-            navigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/");
     }
 }

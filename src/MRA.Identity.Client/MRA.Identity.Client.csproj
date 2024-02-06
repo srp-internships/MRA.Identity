@@ -1,36 +1,36 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="Pages\General\**" />
-    <Content Remove="Pages\General\**" />
-    <EmbeddedResource Remove="Pages\General\**" />
-    <None Remove="Pages\General\**" />
-  </ItemGroup>
+    <ItemGroup>
+        <Compile Remove="Pages\General\**"/>
+        <Content Remove="Pages\General\**"/>
+        <EmbeddedResource Remove="Pages\General\**"/>
+        <None Remove="Pages\General\**"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="AltairCA.Blazor.WebAssembly.Cookie" Version="1.0.1" />
-    <PackageReference Include="Blazored.FluentValidation" Version="2.1.0" />
-    <PackageReference Include="Blazored.LocalStorage" Version="4.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.1" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.1" />
-    <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
-    <PackageReference Include="Microsoft.FeatureManagement" Version="3.1.1" />
-    <PackageReference Include="MRA.BlazorComponents" Version="1.0.1" />
-    <PackageReference Include="MudBlazor" Version="6.12.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="AltairCA.Blazor.WebAssembly.Cookie" Version="1.0.1"/>
+        <PackageReference Include="Blazored.FluentValidation" Version="2.1.0"/>
+        <PackageReference Include="Blazored.LocalStorage" Version="4.4.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.1" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.1"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0"/>
+        <PackageReference Include="Microsoft.FeatureManagement" Version="3.1.1"/>
+        <PackageReference Include="MRA.BlazorComponents" Version="1.0.4"/>
+        <PackageReference Include="MudBlazor" Version="6.12.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.2.0"/>
+    </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\MRA.Identity.Application.Contract\MRA.Identity.Application.Contract.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\MRA.Identity.Application.Contract\MRA.Identity.Application.Contract.csproj"/>
+    </ItemGroup>
 
     <ItemGroup>
         <Compile Update="Resources\Languages\English.Designer.cs">
@@ -49,7 +49,7 @@
             <DependentUpon>Tajik.resx</DependentUpon>
         </Compile>
     </ItemGroup>
-    
+
     <ItemGroup>
         <EmbeddedResource Update="Resources\Languages\English.resx">
             <Generator>ResXFileCodeGenerator</Generator>
@@ -64,5 +64,4 @@
             <LastGenOutput>Tajik.Designer.cs</LastGenOutput>
         </EmbeddedResource>
     </ItemGroup>
-
 </Project>

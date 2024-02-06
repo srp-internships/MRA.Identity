@@ -23,8 +23,6 @@
             UserId = userIdValue;
         }
 
-        Console.WriteLine(Token);
-        Console.WriteLine(UserId);
         await AuthService.SendVerificationEmailToken(Token, UserId);
         NavigationManager.NavigateTo("/");
     }

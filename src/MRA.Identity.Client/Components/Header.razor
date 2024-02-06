@@ -9,12 +9,12 @@
 @using Size = MudBlazor.Size
 @using AltairCA.Blazor.WebAssembly.Cookie
 @using MRA.Identity.Client.Services.Profile
+@using MRA.BlazorComponents.DynamicPages.Components
 @inject LayoutService LayoutService
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject IFeatureManager FeatureManager
 @inject IDialogService DialogService
-
 
 <MudToolBar Class="toolbar-fixed-blur">
     <MudHidden Breakpoint="Breakpoint.MdAndUp">
@@ -82,6 +82,7 @@
                 <b>@ContentService["Header:Jobs"] </b>
             </MudText>
         </MudButton>
+        <DynamicHeaderButtons/>
 
     </MudHidden>
     <MudSpacer/>
@@ -120,7 +121,7 @@
         </CascadingAuthenticationState>
         <MudNavLink Match="NavLinkMatch.All" Href="@Configuration["Platforms:Academy"]" Target="_blank">@ContentService["Header:Academy"]</MudNavLink>
         <MudNavLink Match="NavLinkMatch.All" Href="@Configuration["Platforms:Jobs"]" Target="_blank">@ContentService["Header:Jobs"]</MudNavLink>
-
+        <DynamicHeaderNavLinks/>
     </MudNavMenu>
     @if (_betaVersion)
     {

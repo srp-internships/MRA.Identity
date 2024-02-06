@@ -9,27 +9,20 @@ namespace MRA.Identity.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(ApplicationPolicies.Administrator)]
-public class UserController : ControllerBase
+[Authorize(ApplicationPolicies.Reviewer)]
+public class UserController(ISender mediator) : ControllerBase
 {
-    private readonly ISender _mediator;
-
-    public UserController(ISender mediator)
-    {
-        _mediator = mediator;
-    }
-
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var users = await _mediator.Send(new GetAllUsersQuery());
+        var users = await mediator.Send(new GetAllUsersQuery());
         return Ok(users);
     }
 
     [HttpGet("{key}")]
     public async Task<IActionResult> Get([FromRoute] string key)
     {
-        var userResponse = await _mediator.Send(new GetUserByKeyQuery{Key = key});
+        var userResponse = await mediator.Send(new GetUserByKeyQuery{Key = key});
         return Ok(userResponse);
     }
 
@@ -38,7 +31,7 @@ public class UserController : ControllerBase
     public async Task<IActionResult> CheckUserDetails([FromRoute] string userName, [FromRoute] string phoneNumber,
         [FromRoute] string email)
     {
-        var result = await _mediator.Send(new CheckUserDetailsQuery()
+        var result = await mediator.Send(new CheckUserDetailsQuery()
             { UserName = userName, PhoneNumber = phoneNumber, Email = email });
         return Ok(result);
     }

@@ -64,9 +64,10 @@ public class AuthService(
                 callbackUrl = param;
             if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
                 page = param;
-
+            
             await cookieUtil.SetValueAsync("authToken", result.Result, secure: true);
 
+            
             if (callbackUrl.IsNullOrEmpty())
                 navigationManager.NavigateTo("/");
             else

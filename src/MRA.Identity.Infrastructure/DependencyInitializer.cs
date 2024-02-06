@@ -108,6 +108,10 @@ public static class DependencyInitializer
 
             auth.AddPolicy(ApplicationPolicies.Administrator, op => op
                 .RequireRole(ApplicationClaimValues.SuperAdministrator, ApplicationClaimValues.Administrator));
+
+            auth.AddPolicy(ApplicationPolicies.Reviewer, op => op
+                .RequireRole(ApplicationClaimValues.Reviewer, ApplicationClaimValues.Administrator,
+                    ApplicationClaimValues.SuperAdministrator));
         });
 
         var corsAllowedHosts = configurations.GetSection("MraIdentity-CORS").Get<string[]>();

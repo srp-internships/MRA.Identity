@@ -50,7 +50,6 @@ public class AuthController : ControllerBase
 
 
     [HttpPost("VerifyEmail")]
-    [Authorize]
     public async Task<IActionResult> ResendVerificationCode()
     {
         await _mediator.Send(new UserEmailCommand());

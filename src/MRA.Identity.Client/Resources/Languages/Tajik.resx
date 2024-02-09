@@ -171,6 +171,9 @@
   <data name="SignIn:LinkSignUp" xml:space="preserve">
     <value>Бақайдгирӣ</value>
   </data>
+  <data name="SignIn:Wrong Password" xml:space="preserve">
+    <value>Номи корбар ё парол нодуруст</value>
+  </data>
   <data name="SignUp:LabelSignUp" xml:space="preserve">
     <value>Бақайдгирӣ</value>
   </data>

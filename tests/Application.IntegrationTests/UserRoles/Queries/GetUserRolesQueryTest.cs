@@ -2,12 +2,6 @@ namespace MRA.Jobs.Application.IntegrationTests.UserRoles.Queries;
 
 public class GetUserRolesQueryTest : BaseTest
 {
-    [SetUp]
-    public async Task SetUp()
-    {
-        
-    }
-
     [Test]
     [TestCase("TestUser", HttpStatusCode.OK)]
     [TestCase("alex09991", HttpStatusCode.NotFound)]

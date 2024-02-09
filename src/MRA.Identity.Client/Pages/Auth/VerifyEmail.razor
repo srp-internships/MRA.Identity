@@ -3,11 +3,17 @@
 @inject NavigationManager NavigationManager
 @inject IAuthService AuthService
 
+@if (!string.IsNullOrEmpty(_result))
+{
+    <div class="result">
+        @((MarkupString)_result)
+    </div>
+}
 @code {
-
-
     [Parameter] public string Token { get; set; }
     [Parameter] public string UserId { get; set; }
+
+    private string _result;
 
     protected override async Task OnInitializedAsync()
     {
@@ -23,8 +29,11 @@
             UserId = userIdValue;
         }
 
-        await AuthService.SendVerificationEmailToken(Token, UserId);
-        NavigationManager.NavigateTo("/");
+        var response = await AuthService.SendVerificationEmailToken(Token, UserId);
+        if (response.Success)
+        {
+            _result = "<h1>Thank you!</h1><p>Your email address has been successfully confirmed.</p>";
+        }
+        StateHasChanged();
     }
-
 }

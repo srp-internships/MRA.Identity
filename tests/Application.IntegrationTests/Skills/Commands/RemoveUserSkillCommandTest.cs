@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-using MRA.Identity.Application.Contract.Skills.Command;
-using MRA.Identity.Domain.Entities;
-using System.Net.Http.Json;
+﻿using MRA.Identity.Application.Contract.Skills.Command;
 
 namespace MRA.Jobs.Application.IntegrationTests.Skills.Commands;
 public class RemoveUserSkillCommandTest : BaseTest

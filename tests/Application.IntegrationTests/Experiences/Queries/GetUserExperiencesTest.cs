@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace MRA.Jobs.Application.IntegrationTests.Experiences.Queries;
+﻿namespace MRA.Jobs.Application.IntegrationTests.Experiences.Queries;
 
 public class GetUserExperiencesTest : BaseTest
 {

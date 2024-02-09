@@ -1,10 +1,6 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using FluentAssertions;
-using MRA.Identity.Application.Contract.Claim.Commands;
-using MRA.Identity.Domain.Entities;
+﻿using MRA.Identity.Application.Contract.Claim.Commands;
 
-namespace MRA.Jobs.Application.IntegrationTests;
+namespace MRA.Jobs.Application.IntegrationTests.Claims;
 
 public class ClaimsTests : BaseTest
 {

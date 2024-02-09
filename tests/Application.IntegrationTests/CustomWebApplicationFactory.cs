@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using MRA.Configurations.Common.Interfaces.Services;
+using MRA.Jobs.Application.IntegrationTests.Services;
 
 namespace MRA.Jobs.Application.IntegrationTests;
 

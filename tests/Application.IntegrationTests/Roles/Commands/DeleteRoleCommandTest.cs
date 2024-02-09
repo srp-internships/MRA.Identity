@@ -1,7 +1,4 @@
-﻿using System.Net;
-using MRA.Identity.Domain.Entities;
-
-namespace MRA.Jobs.Application.IntegrationTests.Roles.Commands;
+﻿namespace MRA.Jobs.Application.IntegrationTests.Roles.Commands;
 public class DeleteRoleCommandTest : BaseTest
 {
     [Test]

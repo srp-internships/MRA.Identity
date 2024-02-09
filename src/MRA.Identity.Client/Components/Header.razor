@@ -82,7 +82,7 @@
                 <b>@ContentService["Header:Jobs"] </b>
             </MudText>
         </MudButton>
-        <DynamicHeaderButtons/>
+        <DynamicHeaderButtons Application = "Identity"/>
 
     </MudHidden>
     <MudSpacer/>
@@ -121,7 +121,7 @@
         </CascadingAuthenticationState>
         <MudNavLink Match="NavLinkMatch.All" Href="@Configuration["Platforms:Academy"]" Target="_blank">@ContentService["Header:Academy"]</MudNavLink>
         <MudNavLink Match="NavLinkMatch.All" Href="@Configuration["Platforms:Jobs"]" Target="_blank">@ContentService["Header:Jobs"]</MudNavLink>
-        <DynamicHeaderNavLinks/>
+        <DynamicHeaderNavLinks Application = "Identity"/>
     </MudNavMenu>
     @if (_betaVersion)
     {

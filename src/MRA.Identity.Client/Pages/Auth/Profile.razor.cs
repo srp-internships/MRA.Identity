@@ -204,6 +204,7 @@ public partial class Profile
         if (result)
         {
             _profile = await UserProfileService.Get();
+            StateHasChanged();
         }
     }
 

@@ -1,9 +1,7 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using MRA.Identity.Application.Contract.User.Commands.LoginUser;
+﻿using MRA.Identity.Application.Contract.User.Commands.LoginUser;
 using MRA.Identity.Application.Contract.User.Responses;
 
-namespace MRA.Jobs.Application.IntegrationTests;
+namespace MRA.Jobs.Application.IntegrationTests.Users.Command;
 
 [TestFixture]
 public class LoginTest : BaseTest
@@ -12,7 +10,7 @@ public class LoginTest : BaseTest
     public async Task Login_RequestWithCorrectLoginData_ReturnsOk()
     {
         // Arrange
-        var request = new LoginUserCommand {Username = "@Alex33", Password = "password@#12P"};
+        var request = new LoginUserCommand {Username = "@Alex33", Password = "password@#12P123"};
 
         // Act
         var response = await _client.PostAsJsonAsync("api/Auth/login", request);

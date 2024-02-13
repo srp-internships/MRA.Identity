@@ -1,8 +1,7 @@
-﻿using System.Net.Http.Json;
-using MRA.Identity.Application.Contract.Profile;
+﻿using MRA.Identity.Application.Contract.Profile;
 using MRA.Identity.Application.Contract.Profile.Commands.UpdateProfile;
 
-namespace MRA.Jobs.Application.IntegrationTests.UserProfile;
+namespace MRA.Jobs.Application.IntegrationTests.UserProfile.Commands;
 public class UpdateUserProfileTest : BaseTest
 {
     [Test]

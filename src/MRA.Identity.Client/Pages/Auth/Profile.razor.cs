@@ -9,10 +9,8 @@ using MRA.Identity.Application.Contract.Profile.Commands.UpdateProfile;
 using MRA.Identity.Application.Contract.Profile.Responses;
 using MRA.Identity.Application.Contract.Skills.Command;
 using MRA.Identity.Application.Contract.Skills.Responses;
-using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Client.Services.Auth;
 using MudBlazor;
-using System.Net;
 using Microsoft.IdentityModel.Tokens;
 using MRA.Identity.Client.Components.Dialogs;
 using Blazored.FluentValidation;
@@ -91,10 +89,6 @@ public partial class Profile
 
 
         var profile = await UserProfileService.Get();
-        if (profile == null)
-        {
-            return;
-        }
 
         _profile = profile;
 
@@ -116,30 +110,6 @@ public partial class Profile
 
         StateHasChanged();
     }
-
-    // private void ServerNotResponding()
-    // {
-    //     Snackbar.Add(ContentService["Profile:Servernotrespondingtry"], Severity.Error);
-    // }
-
-    // private async Task BadRequestResponse(HttpResponseMessage response)
-    // {
-    //     var customProblemDetails = await response.Content.ReadFromJsonAsync<CustomProblemDetails>();
-    //     if (customProblemDetails.Detail != null)
-    //     {
-    //         Snackbar.Add(customProblemDetails.Detail, Severity.Error);
-    //     }
-    //     else
-    //     {
-    //         var errorResponseString = await response.Content.ReadAsStringAsync();
-    //         var errorResponse = JsonConvert.DeserializeObject<ErrorResponse>(errorResponseString);
-    //         foreach (var error in errorResponse.Errors)
-    //         {
-    //             var errorMessage = string.Join(", ", error.Value);
-    //             Snackbar.Add(errorMessage, Severity.Error);
-    //         }
-    //     }
-    // }
 
     private async Task ConfirmDelete<T>(IList<T> collection, T item)
     {
@@ -221,8 +191,8 @@ public partial class Profile
 
     private async Task GetEducations()
     {
-        _educations = await UserProfileService.GetEducationsByUser() ?? default;
-        _allEducations = await UserProfileService.GetAllEducations() ?? default;
+        _educations = await UserProfileService.GetEducationsByUser();
+        _allEducations = await UserProfileService.GetAllEducations();
     }
 
     private async Task<IEnumerable<string>> SearchEducation(string value)
@@ -309,7 +279,7 @@ public partial class Profile
     private List<UserExperienceResponse> _experiences = new();
     private bool _addExperience;
     private CreateExperienceDetailCommand _createExperience = new();
-    private UpdateExperienceDetailCommand? _experienceUpdate = null;
+    private UpdateExperienceDetailCommand _experienceUpdate;
     private List<UserExperienceResponse> _allExperiences = new();
     private Guid _editingCardExperienceId;
 

@@ -1,6 +1,6 @@
 ﻿using MRA.Configurations.Common.Interfaces.Services;
 
-namespace MRA.Jobs.Application.IntegrationTests;
+namespace MRA.Jobs.Application.IntegrationTests.Services;
 
 public static class TestSmsSandbox
 {

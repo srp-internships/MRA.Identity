@@ -1,11 +1,7 @@
-using System.Net;
-using System.Net.Http.Json;
-using FluentAssertions;
 using MRA.Identity.Application.Contract.User.Commands.RegisterUser;
-using MRA.Identity.Domain.Entities;
 using MRA.Configurations.Common.Constants;
 
-namespace MRA.Jobs.Application.IntegrationTests;
+namespace MRA.Jobs.Application.IntegrationTests.Users.Command;
 
 [TestFixture]
 public class RegistrationTests : BaseTest

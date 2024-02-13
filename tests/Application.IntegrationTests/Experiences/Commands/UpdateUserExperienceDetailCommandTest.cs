@@ -1,8 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using Microsoft.AspNetCore.Mvc;
-using MRA.Identity.Application.Contract.Experiences.Commands.Update;
-using MRA.Identity.Domain.Entities;
+﻿using MRA.Identity.Application.Contract.Experiences.Commands.Update;
 
 namespace MRA.Jobs.Application.IntegrationTests.Experiences.Commands;
 

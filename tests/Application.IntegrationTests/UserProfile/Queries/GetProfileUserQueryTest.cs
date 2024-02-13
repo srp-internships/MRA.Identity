@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace MRA.Jobs.Application.IntegrationTests.UserProfile;
+﻿namespace MRA.Jobs.Application.IntegrationTests.UserProfile.Queries;
 
 public class GetProfileUserQueryTest : BaseTest
 {

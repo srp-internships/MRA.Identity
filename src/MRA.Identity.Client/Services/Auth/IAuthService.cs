@@ -18,5 +18,5 @@ public interface IAuthService
     Task<bool> ResetPassword(ResetPasswordCommand command);
     Task<UserDetailsResponse> CheckUserDetails(CheckUserDetailsQuery checkUserDetailsQuery);
     Task ResendVerificationEmail();
-    Task SendVerificationEmailToken(string token, string userId);
+    Task<ApiResponse> SendVerificationEmailToken(string token, string userId);
 }

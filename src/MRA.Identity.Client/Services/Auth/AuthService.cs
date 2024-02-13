@@ -17,6 +17,7 @@ using MRA.BlazorComponents.Configuration;
 using MRA.BlazorComponents.HttpClient.Services;
 using MRA.BlazorComponents.Snackbar.Extensions;
 using MudBlazor;
+using MRA.BlazorComponents.HttpClient.Responses;
 
 namespace MRA.Identity.Client.Services.Auth;
 
@@ -141,10 +142,14 @@ public class AuthService(
         }
     }
 
-    public async Task SendVerificationEmailToken(string token, string userId)
+    public async Task<ApiResponse> SendVerificationEmailToken(string token, string userId)
     {
-        snackbar.ShowIfError(await httpClient.GetAsync(
-                configuration.GetIdentityUrl($"Auth/verify?token={WebUtility.UrlEncode(token)}&userid={userId}")),
-            contentService["Profile:Servernotrespondingtry"]);
+        var response = await httpClient.GetAsync(
+                 configuration.GetIdentityUrl($"Auth/verify?token={WebUtility.UrlEncode(token)}&userid={userId}"));
+        if (response.HttpStatusCode == HttpStatusCode.OK)
+            return response;
+        snackbar.ShowIfError(response,contentService["Profile:Servernotrespondingtry"]);
+        return null;
+
     }
 }

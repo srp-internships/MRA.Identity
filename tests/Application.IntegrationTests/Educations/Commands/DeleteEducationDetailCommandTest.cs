@@ -1,6 +1,4 @@
-﻿using MRA.Identity.Domain.Entities;
-
-namespace MRA.Jobs.Application.IntegrationTests.Educations.Commands;
+﻿namespace MRA.Jobs.Application.IntegrationTests.Educations.Commands;
 public class DeleteEducationDetailCommandTest : BaseTest
 {
     [Test]

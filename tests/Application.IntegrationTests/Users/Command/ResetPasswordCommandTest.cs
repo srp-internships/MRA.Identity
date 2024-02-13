@@ -1,7 +1,5 @@
-﻿using System.Net.Http.Json;
-using MRA.Identity.Application.Contract.User.Commands.ResetPassword;
+﻿using MRA.Identity.Application.Contract.User.Commands.ResetPassword;
 using MRA.Identity.Application.Contract.User.Queries;
-using MRA.Identity.Domain.Entities;
 
 namespace MRA.Jobs.Application.IntegrationTests.Users.Command;
 public class ResetPasswordCommandTest : BaseTest

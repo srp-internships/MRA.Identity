@@ -17,6 +17,7 @@ using MRA.BlazorComponents.Configuration;
 using MRA.BlazorComponents.HttpClient.Services;
 using MRA.BlazorComponents.Snackbar.Extensions;
 using MudBlazor;
+using MRA.BlazorComponents.HttpClient.Responses;
 
 namespace MRA.Identity.Client.Services.Auth;
 
@@ -55,6 +56,12 @@ public class AuthService(
             await httpClient.PostAsJsonAsync<JwtTokenResponse>(configuration.GetIdentityUrl("Auth/login"), command);
         snackbar.ShowIfError(result, contentService["Profile:Servernotrespondingtry"]);
 
+        if (result.HttpStatusCode == HttpStatusCode.Unauthorized)
+        {
+            snackbar.Add(contentService["SignIn:Wrong Password"], Severity.Error);
+            return false;
+        }
+
         if (result.Success)
         {
             string callbackUrl = string.Empty;
@@ -64,10 +71,10 @@ public class AuthService(
                 callbackUrl = param;
             if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
                 page = param;
-            
+
             await cookieUtil.SetValueAsync("authToken", result.Result, secure: true);
 
-            
+
             if (callbackUrl.IsNullOrEmpty())
                 navigationManager.NavigateTo("/");
             else
@@ -135,10 +142,14 @@ public class AuthService(
         }
     }
 
-    public async Task SendVerificationEmailToken(string token, string userId)
+    public async Task<ApiResponse> SendVerificationEmailToken(string token, string userId)
     {
-        snackbar.ShowIfError(await httpClient.GetAsync(
-                configuration.GetIdentityUrl($"Auth/verify?token={WebUtility.UrlEncode(token)}&userid={userId}")),
-            contentService["Profile:Servernotrespondingtry"]);
+        var response = await httpClient.GetAsync(
+                 configuration.GetIdentityUrl($"Auth/verify?token={WebUtility.UrlEncode(token)}&userid={userId}"));
+        if (response.HttpStatusCode == HttpStatusCode.OK)
+            return response;
+        snackbar.ShowIfError(response,contentService["Profile:Servernotrespondingtry"]);
+        return null;
+
     }
 }

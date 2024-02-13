@@ -80,7 +80,6 @@ public class DataBaseSeedTests : BaseTest
     
     #endregion
     
-    
     #region MraOnlinePlatformAdmin
 
     private async Task<ApplicationUser> GetMraOnlinePlatformAdmin() =>

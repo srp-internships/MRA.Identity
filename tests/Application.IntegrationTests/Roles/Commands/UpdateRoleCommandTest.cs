@@ -1,6 +1,4 @@
-﻿using System.Net.Http.Json;
-using MRA.Identity.Application.Contract.ApplicationRoles.Commands;
-using MRA.Identity.Domain.Entities;
+﻿using MRA.Identity.Application.Contract.ApplicationRoles.Commands;
 
 namespace MRA.Jobs.Application.IntegrationTests.Roles.Commands;
 public class UpdateRoleCommandTest : BaseTest

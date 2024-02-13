@@ -1,8 +1,6 @@
-﻿using System.Net;
+﻿namespace MRA.Jobs.Application.IntegrationTests.UserProfile.Commands;
 
-namespace MRA.Jobs.Application.IntegrationTests.UserProfile;
-
-public class GeneratePdfCV_Test : BaseTest
+public class GeneratePdfCvTest : BaseTest
 {
     [Test]
     public async Task GeneratePdfCv_ShouldReturnFile_Success()

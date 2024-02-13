@@ -1,12 +1,9 @@
-﻿using System.Net.Http.Json;
-using FluentAssertions;
-using MRA.Identity.Application.Contract.User.Commands.LoginUser;
+﻿using MRA.Identity.Application.Contract.User.Commands.LoginUser;
 using MRA.Identity.Application.Contract.User.Commands.RegisterUser;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Responses;
-using MRA.Identity.Domain.Entities;
 
-namespace MRA.Jobs.Application.IntegrationTests;
+namespace MRA.Jobs.Application.IntegrationTests.AccessToken;
 
 [TestFixture]
 public class GetAccessTokenIntegrationTests : BaseTest

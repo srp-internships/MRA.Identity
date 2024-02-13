@@ -171,6 +171,9 @@
   <data name="SignIn:LinkSignUp" xml:space="preserve">
     <value>Sign Up</value>
   </data>
+  <data name="SignIn:Wrong Password" xml:space="preserve">
+    <value>Wrong username or password</value>
+  </data>
   <data name="SignUp:LabelSignUp" xml:space="preserve">
     <value>Sign Up</value>
   </data>

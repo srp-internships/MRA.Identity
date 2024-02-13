@@ -1,7 +1,4 @@
-﻿using System.Net.Http.Json;
-using FluentAssertions;
-using MRA.Identity.Application.Contract.UserRoles.Commands;
-using MRA.Identity.Domain.Entities;
+﻿using MRA.Identity.Application.Contract.UserRoles.Commands;
 using MRA.Configurations.Common.Constants;
 
 namespace MRA.Jobs.Application.IntegrationTests.UserRoles.Commands;

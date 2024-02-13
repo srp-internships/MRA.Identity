@@ -1,6 +1,4 @@
-﻿using MRA.Identity.Domain.Entities;
-
-namespace MRA.Jobs.Application.IntegrationTests.Experiences.Commands;
+﻿namespace MRA.Jobs.Application.IntegrationTests.Experiences.Commands;
 public class DeleteExperienceDetailCommandTest : BaseTest
 {
     [Test]

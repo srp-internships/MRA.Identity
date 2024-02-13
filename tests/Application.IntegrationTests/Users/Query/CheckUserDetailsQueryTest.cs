@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
+﻿using MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
 using MRA.Identity.Application.Contract.User.Responses;
 
 namespace MRA.Jobs.Application.IntegrationTests.Users.Query;

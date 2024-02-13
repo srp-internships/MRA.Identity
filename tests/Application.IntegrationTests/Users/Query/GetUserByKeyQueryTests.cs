@@ -1,8 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using Microsoft.IdentityModel.Tokens;
-using MRA.Identity.Application.Contract.User.Responses;
-using MRA.Identity.Domain.Entities;
+﻿using MRA.Identity.Application.Contract.User.Responses;
 using MRA.Identity.Infrastructure.Identity;
 
 namespace MRA.Jobs.Application.IntegrationTests.Users.Query;

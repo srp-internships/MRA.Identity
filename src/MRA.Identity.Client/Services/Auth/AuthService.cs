@@ -55,6 +55,12 @@ public class AuthService(
             await httpClient.PostAsJsonAsync<JwtTokenResponse>(configuration.GetIdentityUrl("Auth/login"), command);
         snackbar.ShowIfError(result, contentService["Profile:Servernotrespondingtry"]);
 
+        if (result.HttpStatusCode == HttpStatusCode.Unauthorized)
+        {
+            snackbar.Add(contentService["SignIn:Wrong Password"], Severity.Error);
+            return false;
+        }
+
         if (result.Success)
         {
             string callbackUrl = string.Empty;
@@ -64,10 +70,10 @@ public class AuthService(
                 callbackUrl = param;
             if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
                 page = param;
-            
+
             await cookieUtil.SetValueAsync("authToken", result.Result, secure: true);
 
-            
+
             if (callbackUrl.IsNullOrEmpty())
                 navigationManager.NavigateTo("/");
             else

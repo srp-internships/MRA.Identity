@@ -13,6 +13,7 @@ using MRA.Identity.Application.Contract.User.Responses;
 using MRA.Identity.Client.Services.ContentService;
 using MRA.Identity.Client.Services.Profile;
 using System.Net;
+using Blazored.LocalStorage;
 using MRA.BlazorComponents.Configuration;
 using MRA.BlazorComponents.HttpClient.Services;
 using MRA.BlazorComponents.Snackbar.Extensions;
@@ -24,7 +25,7 @@ namespace MRA.Identity.Client.Services.Auth;
 public class AuthService(
     IHttpClientService httpClient,
     NavigationManager navigationManager,
-    IAltairCABlazorCookieUtil cookieUtil,
+   ILocalStorageService localStorageService,
     IUserProfileService userProfileService,
     IConfiguration configuration,
     IContentService contentService,
@@ -72,7 +73,7 @@ public class AuthService(
             if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
                 page = param;
 
-            await cookieUtil.SetValueAsync("authToken", result.Result, secure: true);
+            await localStorageService.SetItemAsync("authToken", result.Result);
 
 
             if (callbackUrl.IsNullOrEmpty())

@@ -1,4 +1,5 @@
 ﻿using AltairCA.Blazor.WebAssembly.Cookie;
+using Blazored.LocalStorage;
 using MRA.BlazorComponents.Configuration;
 using MRA.BlazorComponents.HttpClient.Services;
 using MRA.Identity.Application.Contract.User.Queries;
@@ -7,13 +8,13 @@ using MRA.Identity.Application.Contract.User.Responses;
 namespace MRA.Identity.Client.Services.Auth;
 
 public class TokenParserService(
-    IAltairCABlazorCookieUtil cookieUtil,
+   ILocalStorageService localStorageService,
     IHttpClientService httpClientService,
     IConfiguration configuration) : ITokenParserService
 {
     public async Task<JwtTokenResponse> GetTokenAsync()
     {
-        var token = await cookieUtil.GetValueAsync<JwtTokenResponse>("authToken");
+        var token = await localStorageService.GetItemAsync<JwtTokenResponse>("authToken");
         if (token == null)
         {
             return null;
@@ -33,7 +34,7 @@ public class TokenParserService(
                 return null;
 
             token = refreshResponse.Result;
-            await cookieUtil.SetValueAsync("authToken", token, secure: true);
+            await localStorageService.SetItemAsync("authToken", token);
         }
 
         return token;

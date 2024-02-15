@@ -82,7 +82,7 @@
                 <b>@ContentService["Header:Jobs"] </b>
             </MudText>
         </MudButton>
-        <DynamicHeaderButtons Application = "Identity"/>
+        <DynamicHeaderButtons Application="Identity"/>
 
     </MudHidden>
     <MudSpacer/>
@@ -121,7 +121,7 @@
         </CascadingAuthenticationState>
         <MudNavLink Match="NavLinkMatch.All" Href="@Configuration["Platforms:Academy"]" Target="_blank">@ContentService["Header:Academy"]</MudNavLink>
         <MudNavLink Match="NavLinkMatch.All" Href="@($"{Configuration["Platforms:Jobs"]}{token}")" Target="_blank">@ContentService["Header:Jobs"]</MudNavLink>
-        <DynamicHeaderNavLinks Application = "Identity"/>
+        <DynamicHeaderNavLinks Application="Identity"/>
     </MudNavMenu>
     @if (_betaVersion)
     {
@@ -132,7 +132,7 @@
 @code {
 
     bool _open = false;
-    private string token="";
+    private string token = "";
     private bool _betaVersion;
 
     void ToggleDrawer()

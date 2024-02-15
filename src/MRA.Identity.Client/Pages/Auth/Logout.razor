@@ -1,6 +1,6 @@
 ﻿@page "/logout"
 @using Microsoft.AspNetCore.WebUtilities
-@inject IAltairCABlazorCookieUtil CookieUtil
+@inject ILocalStorageService LocalStorageService
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject IHttpClientFactory Factory;
@@ -9,7 +9,7 @@
 @code {
     protected override async Task OnInitializedAsync()
     {
-        await CookieUtil.RemoveAsync("authToken");
+        await LocalStorageService.RemoveItemAsync("authToken");
         var addressesToLogout = Configuration.GetSection("Platforms").Get<string[]>();
 
         try

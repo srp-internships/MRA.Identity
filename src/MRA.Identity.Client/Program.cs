@@ -1,4 +1,3 @@
-using AltairCA.Blazor.WebAssembly.Cookie.Framework;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;

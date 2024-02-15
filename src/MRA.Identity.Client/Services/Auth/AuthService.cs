@@ -1,6 +1,4 @@
-﻿using AltairCA.Blazor.WebAssembly.Cookie;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using MRA.Identity.Application.Contract.User.Commands.ChangePassword;

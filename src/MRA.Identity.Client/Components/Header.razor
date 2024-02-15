@@ -14,6 +14,7 @@
 @inject IConfiguration Configuration
 @inject IFeatureManager FeatureManager
 @inject IDialogService DialogService
+@inject ILocalStorageService LocalStorage
 
 <MudToolBar Class="toolbar-fixed-blur">
     <MudHidden Breakpoint="Breakpoint.MdAndUp">
@@ -76,7 +77,7 @@
             </MudText>
         </MudButton>
 
-        <MudButton Href="@Configuration["Platforms:Jobs"]" Color="Color.Inherit" Variant="Variant.Text">
+        <MudButton Href="@($"{Configuration["Platforms:Jobs"]}{token}")" Color="Color.Inherit" Variant="Variant.Text">
             <MudText>
                 <b>@ContentService["Header:Jobs"] </b>
             </MudText>
@@ -119,7 +120,7 @@
             </AuthorizeView>
         </CascadingAuthenticationState>
         <MudNavLink Match="NavLinkMatch.All" Href="@Configuration["Platforms:Academy"]" Target="_blank">@ContentService["Header:Academy"]</MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All" Href="@Configuration["Platforms:Jobs"]" Target="_blank">@ContentService["Header:Jobs"]</MudNavLink>
+        <MudNavLink Match="NavLinkMatch.All" Href="@($"{Configuration["Platforms:Jobs"]}{token}")" Target="_blank">@ContentService["Header:Jobs"]</MudNavLink>
         <DynamicHeaderNavLinks Application = "Identity"/>
     </MudNavMenu>
     @if (_betaVersion)
@@ -131,7 +132,7 @@
 @code {
 
     bool _open = false;
-
+    private string token="";
     private bool _betaVersion;
 
     void ToggleDrawer()
@@ -144,7 +145,9 @@
     protected override async Task OnInitializedAsync()
     {
         _betaVersion = await FeatureManager.IsEnabledAsync(FeatureFlags.BetaVersion);
-
+        var authToken = await LocalStorage.GetItemAsync<JwtTokenResponse>("authToken");
+        if (authToken != null)
+            token = $"?atoken={authToken.AccessToken}&rtoken={authToken.RefreshToken}&vdate={authToken.AccessTokenValidateTo}";
         StateHasChanged();
         NavigationManager.LocationChanged += HandleLocationChanged;
         await base.OnInitializedAsync();

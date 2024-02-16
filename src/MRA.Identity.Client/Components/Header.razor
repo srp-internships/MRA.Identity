@@ -52,13 +52,15 @@
         </MudHidden>
     </a>
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
-        <MudButton Href="/" Color="Color.Inherit" Variant="Variant.Text" Class="@GetActiveClass(DocPages.Profile)">
-            <MudText>
-                <b>@ContentService["Profile:MyProfile"]</b>
-            </MudText>
-        </MudButton>
         <CascadingAuthenticationState>
-            <AuthorizeView Roles="ApplicationAdmin">
+            <AuthorizeView>
+                <MudButton Href="/" Color="Color.Inherit" Variant="Variant.Text" Class="@GetActiveClass(DocPages.Profile)">
+                    <MudText>
+                        <b>@ContentService["Profile:MyProfile"]</b>
+                    </MudText>
+                </MudButton>
+            </AuthorizeView>
+            <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
                 <MudButton Target="_blank" Color="Color.Inherit" Variant="Variant.Text" OnClick="OpenDialog">
                     <MudText>
                         <b>@ContentService["Header:SendMessage"] </b>

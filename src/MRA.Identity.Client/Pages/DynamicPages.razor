@@ -1,5 +1,6 @@
 @page "/Pages/{PageName}"
 @using MRA.BlazorComponents.DynamicPages.Components
+<Header></Header>
 @if (!string.IsNullOrEmpty(PageName))
 {
     <PageView PageName="@PageName"/>

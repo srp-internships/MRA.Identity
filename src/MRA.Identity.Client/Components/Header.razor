@@ -59,7 +59,7 @@
                     </MudText>
                 </MudButton>
             </AuthorizeView>
-            <AuthorizeView Roles="ApplicationAdmin">
+            <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
                 <MudButton Target="_blank" Color="Color.Inherit" Variant="Variant.Text" OnClick="OpenDialog">
                     <MudText>
                         <b>@ContentService["Header:SendMessage"] </b>

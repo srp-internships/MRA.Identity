@@ -2,7 +2,7 @@ using MRA.Identity.Application.Contract.EmailTemplates.Commands;
 
 namespace MRA.Jobs.Application.IntegrationTests.EmailTemplates.Commands;
 
-public class CreateEmailTemplateCommandTests : BaseTest
+public class CreateEmailTemplateCommandTests : EmailTemplateContext
 {
     [Test]
     public async Task _ValidRequest_ReturnsOkSaveIntoDb()

@@ -9,7 +9,7 @@ public class GetTemplateQueryTests : EmailTemplateContext
     {
         await AddTemplateAsync("10", "10", "10");
         var templateResponse =
-            await _client.GetFromJsonAsync<EmailTemplateResponse>("api/emailTemplates/getTemplate");
+            await _client.GetFromJsonAsync<EmailTemplateResponse>("api/emailTemplates/getTemplate?slug=10");
         Assert.That(templateResponse != null);
         Assert.That(templateResponse?.Subject == "10");
         Assert.That(templateResponse?.Slug == "10");

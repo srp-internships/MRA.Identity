@@ -39,9 +39,8 @@ public class CreateEmailTemplateCommandTests : EmailTemplateContext
             Subject = templateEntity.Slug,
             Text = templateEntity.Text
         };
-
         var response = await _client.PostAsJsonAsync("api/emailTemplates", request);
-        Assert.That(response.StatusCode == HttpStatusCode.BadRequest);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));
 
         var emailTemplates = await GetWhere<EmailTemplate>(s => s.Subject == templateEntity.Subject);
         Assert.That(emailTemplates.Count == 1); //not added if duplicate subject

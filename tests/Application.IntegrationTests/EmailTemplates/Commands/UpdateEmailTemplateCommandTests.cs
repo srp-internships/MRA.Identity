@@ -4,16 +4,6 @@ namespace MRA.Jobs.Application.IntegrationTests.EmailTemplates.Commands;
 
 public class UpdateEmailTemplateCommandTests : EmailTemplateContext
 {
-    private async Task AddTemplateAsync(string subject, string slug, string text)
-    {
-        await AddEntity(new EmailTemplate
-        {
-            Subject = subject,
-            Text = text,
-            Slug = slug
-        });
-    }
-
     [Test]
     public async Task _ValidRequest_ReturnsOkSaveIntoDb()
     {
@@ -47,7 +37,7 @@ public class UpdateEmailTemplateCommandTests : EmailTemplateContext
             Text = "this is a text of this email2",
             Slug = "this is a slug number 1000001"
         };
-        await AddTemplateAsync(request.Subject, request.Slug+"act", request.Text);
+        await AddTemplateAsync(request.Subject, request.Slug + "act", request.Text);
         request.Text += "fsdasdfsa";
         request.Subject += "fsdas subject dfsa";
 

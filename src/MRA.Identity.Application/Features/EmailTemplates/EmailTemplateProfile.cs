@@ -11,5 +11,6 @@ public class EmailTemplateProfile : Profile
     {
         CreateMap<CreateEmailTemplateCommand, EmailTemplate>();
         CreateMap<EmailTemplate, EmailTemplateResponse>();
+        CreateMap<UpdateEmailTemplateCommand, EmailTemplate>();
     }
 }

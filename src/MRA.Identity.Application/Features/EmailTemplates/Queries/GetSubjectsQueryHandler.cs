@@ -7,15 +7,15 @@ using MRA.Identity.Application.Contract.EmailTemplates.Responses;
 namespace MRA.Identity.Application.Features.EmailTemplates.Queries;
 
 public class GetSubjectsQueryHandler(IApplicationDbContext context)
-    : IRequestHandler<GetEmailTemplateSubjectsQuery, List<EmailTemplateSubjectResponse>>
+    : IRequestHandler<GetEmailTemplateNamesQuery, List<EmailTemplateNamesResponse>>
 {
-    public Task<List<EmailTemplateSubjectResponse>> Handle(GetEmailTemplateSubjectsQuery request,
+    public Task<List<EmailTemplateNamesResponse>> Handle(GetEmailTemplateNamesQuery request,
         CancellationToken cancellationToken)
     {
-        return context.EmailTemplates.Select(s => new EmailTemplateSubjectResponse
+        return context.EmailTemplates.Select(s => new EmailTemplateNamesResponse
         {
             Slug = s.Slug,
-            Subject = s.Subject
+            Name = s.Name
         }).ToListAsync(cancellationToken);
     }
 }

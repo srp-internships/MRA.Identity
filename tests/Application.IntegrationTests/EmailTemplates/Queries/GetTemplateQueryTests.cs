@@ -7,12 +7,13 @@ public class GetTemplateQueryTests : EmailTemplateContext
     [Test]
     public async Task _Request_ReturnsOk()
     {
-        await AddTemplateAsync("10", "10", "10");
+        await AddTemplateAsync("name9", "10", "10", "10");
         var templateResponse =
-            await _client.GetFromJsonAsync<EmailTemplateResponse>("api/emailTemplates/getTemplate?slug=10");
+            await _client.GetFromJsonAsync<EmailTemplateResponse>("api/emailTemplates/10");
         Assert.That(templateResponse != null);
         Assert.That(templateResponse?.Subject == "10");
         Assert.That(templateResponse?.Slug == "10");
+        Assert.That(templateResponse?.Name == "name9");
         Assert.That(templateResponse?.Text == "10");
     }
 
@@ -22,7 +23,7 @@ public class GetTemplateQueryTests : EmailTemplateContext
     {
         var templateResponse =
             await _client.GetAsync(
-                "api/emailTemplates/getTemplate?slug=fhaiduhuiakdjfahkeuiakjsfhlwe");
+                "api/emailTemplates/getTemplate/fhaiduhuiakdjfahkeuiakjsfhlwe");
         Assert.That(templateResponse.StatusCode == HttpStatusCode.NotFound);
     }
 }

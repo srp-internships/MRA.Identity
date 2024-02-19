@@ -17,10 +17,10 @@ public class CreateEmailTemplateCommandHandler(
 {
     public async Task<string> Handle(CreateEmailTemplateCommand request, CancellationToken cancellationToken)
     {
-        var slug = slugService.GenerateSlug(request.Subject);
+        var slug = slugService.GenerateSlug(request.Name);
         if (await context.EmailTemplates.AnyAsync(e => e.Slug == slug, cancellationToken))
         {
-            throw new ValidationException($"The template with subject {request.Subject} already exist");
+            throw new ValidationException($"The template with name {request.Name} already exist");
         }
 
         var emailTemplate = mapper.Map<EmailTemplate>(request);

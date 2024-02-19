@@ -6,10 +6,10 @@ public class DeleteEmailTemplateCommandTests : EmailTemplateContext
     public async Task _ValidRequest_ReturnsOkSaveIntoDb()
     {
         var slug = "this is a slug number 10000009";
-        await AddTemplateAsync("this is not a random sasdfubject ten", slug,
+        await AddTemplateAsync("name1", "this is not a random sasdfubject ten", slug,
             "this is a text of this emaisfafdsfasdfasdfdfaal");
 
-        var response = await _client.DeleteAsync("api/emailTemplates?slug=" + slug);
+        var response = await _client.DeleteAsync("api/emailTemplates/" + slug);
         response.EnsureSuccessStatusCode();
 
         var dbValue = await GetEntity<EmailTemplate>(s => s.Slug == slug);
@@ -21,9 +21,9 @@ public class DeleteEmailTemplateCommandTests : EmailTemplateContext
     public async Task _NotExistRequest_ReturnsNotFoundSaveIntoDb()
     {
         var slug = "this is a slug number 10000078";
-        await AddTemplateAsync("request.Subject", slug + "act", "request.Text");
+        await AddTemplateAsync("name2", "request.Subject", slug + "act", "request.Text");
 
-        var response = await _client.DeleteAsync("api/emailTemplates?slug=" + slug);
+        var response = await _client.DeleteAsync("api/emailTemplates/" + slug);
         Assert.That(response.StatusCode == HttpStatusCode.NotFound);
     }
 }

@@ -8,7 +8,7 @@ namespace MRA.Identity.Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+[Authorize(ApplicationPolicies.Administrator)]
 public class EmailTemplatesController(ISender mediator)
     : ControllerBase
 {
@@ -19,8 +19,8 @@ public class EmailTemplatesController(ISender mediator)
         return Ok(slug);
     }
 
-    [HttpDelete]
-    public async Task<IActionResult> Delete([FromQuery] string slug)
+    [HttpDelete("{slug}")]
+    public async Task<IActionResult> Delete(string slug)
     {
         await mediator.Send(new DeleteEmailTemplateCommand { Slug = slug });
         return Ok();
@@ -33,8 +33,8 @@ public class EmailTemplatesController(ISender mediator)
         return Ok(slug);
     }
 
-    [HttpGet("getTemplate")]
-    public async Task<IActionResult> GetTemplate([FromQuery] string slug)
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> GetTemplate(string slug)
     {
         var emailTemplateResponse = await mediator.Send(new GetEmailTemplateQuery { Slug = slug });
         return Ok(emailTemplateResponse);
@@ -43,7 +43,7 @@ public class EmailTemplatesController(ISender mediator)
     [HttpGet("getSubjects")]
     public async Task<IActionResult> GetSubjects()
     {
-        var emailTemplateSubjectResponses = await mediator.Send(new GetEmailTemplateSubjectsQuery());
+        var emailTemplateSubjectResponses = await mediator.Send(new GetEmailTemplateNamesQuery());
         return Ok(emailTemplateSubjectResponses);
     }
 }

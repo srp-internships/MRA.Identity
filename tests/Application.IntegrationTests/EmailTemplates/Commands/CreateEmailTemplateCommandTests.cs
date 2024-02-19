@@ -10,7 +10,8 @@ public class CreateEmailTemplateCommandTests : EmailTemplateContext
         var request = new CreateEmailTemplateCommand
         {
             Subject = "this is not a random subject",
-            Text = "this is a text of this email"
+            Text = "this is a text of this email",
+            Name = "name100"
         };
         var response = await _client.PostAsJsonAsync("api/emailTemplates", request);
         response.EnsureSuccessStatusCode();
@@ -24,20 +25,22 @@ public class CreateEmailTemplateCommandTests : EmailTemplateContext
     }
 
     [Test]
-    public async Task _ValidDuplicateSubject_ReturnsBadRequestDontSaveIntoDb()
+    public async Task _ValidDuplicateName_ReturnsBadRequestDontSaveIntoDb()
     {
         var templateEntity = new EmailTemplate
         {
-            Subject = "it will be duplicate",
+            Subject = "it will be duplicate not",
             Text = "does not matter",
-            Slug = "slug-really"
+            Slug = "name200",
+            Name = "name200"
         };
         await AddEntity(templateEntity);
 
         var request = new CreateEmailTemplateCommand
         {
             Subject = templateEntity.Slug,
-            Text = templateEntity.Text
+            Text = templateEntity.Text,
+            Name = "name200"
         };
         var response = await _client.PostAsJsonAsync("api/emailTemplates", request);
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest));

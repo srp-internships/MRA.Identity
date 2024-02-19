@@ -40,7 +40,7 @@ public class EmailTemplatesController(ISender mediator)
         return Ok(emailTemplateResponse);
     }
 
-    [HttpGet("getSubjects")]
+    [HttpGet]
     public async Task<IActionResult> GetSubjects()
     {
         var emailTemplateSubjectResponses = await mediator.Send(new GetEmailTemplateNamesQuery());

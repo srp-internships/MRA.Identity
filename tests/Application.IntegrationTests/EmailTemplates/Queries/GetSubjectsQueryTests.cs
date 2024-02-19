@@ -13,7 +13,7 @@ public class GetSubjectsQueryTests : EmailTemplateContext
         await AddTemplateAsync("name6", "4", "4", "4");
         await AddTemplateAsync("name7", "5", "5", "5");
         var subjectsResponse =
-            await _client.GetFromJsonAsync<List<EmailTemplateNamesResponse>>("api/emailTemplates/getSubjects");
+            await _client.GetFromJsonAsync<List<EmailTemplateNamesResponse>>("api/emailTemplates");
         Assert.That(subjectsResponse.FirstOrDefault(s => s.Slug == "1" && s.Name == "name3"), Is.Not.Null);
         Assert.That(subjectsResponse.FirstOrDefault(s => s.Slug == "2" && s.Name == "name4"), Is.Not.Null);
         Assert.That(subjectsResponse.FirstOrDefault(s => s.Slug == "3" && s.Name == "name5"), Is.Not.Null);

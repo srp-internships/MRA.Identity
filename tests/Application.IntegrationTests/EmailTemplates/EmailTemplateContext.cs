@@ -1,6 +1,6 @@
 namespace MRA.Jobs.Application.IntegrationTests.EmailTemplates;
 
-public class EmailTemplateContext : BaseTest
+public abstract class EmailTemplateContext : BaseTest
 {
     [SetUp]
     public async Task SetUp()

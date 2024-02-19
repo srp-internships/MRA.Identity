@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MRA.Identity.Application.Common.Exceptions;
 using MRA.Identity.Application.Common.Interfaces.DbContexts;
+using MRA.Identity.Application.Common.Interfaces.Services;
 using MRA.Identity.Application.Contract.EmailTemplates.Commands;
 using MRA.Identity.Domain.Entities;
 
@@ -10,12 +11,13 @@ namespace MRA.Identity.Application.Features.EmailTemplates.Commands;
 
 public class CreateEmailTemplateCommandHandler(
     IMapper mapper,
-    IApplicationDbContext context)
+    IApplicationDbContext context,
+    ISlugService slugService)
     : IRequestHandler<CreateEmailTemplateCommand, string>
 {
     public async Task<string> Handle(CreateEmailTemplateCommand request, CancellationToken cancellationToken)
     {
-        var slug = request.Subject;
+        var slug = slugService.GenerateSlug(request.Subject);
         if (await context.EmailTemplates.AnyAsync(e => e.Slug == slug, cancellationToken))
         {
             throw new ValidationException($"The template with subject {request.Subject} already exist");

@@ -18,6 +18,8 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="8.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
+        <PackageReference Include="NickBuhro.Translit" Version="1.4.5" />
+        <PackageReference Include="Slugify.Core" Version="4.0.1" />
     </ItemGroup>
 
 </Project>

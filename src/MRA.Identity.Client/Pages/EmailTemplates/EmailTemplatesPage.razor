@@ -1,0 +1,34 @@
+@page "/EmailTemplates"
+@using MRA.Identity.Application.Contract.EmailTemplates.Responses
+<CascadingAuthenticationState>
+    <AuthorizeView Roles="ApplicationAdmin, SuperAdmin" Context="_">
+        <Header></Header>
+        <MudTable T="EmailTemplateNamesResponse" Hover="true" SortLabel="SortBy" Items="@NamesResponses">
+            <HeaderContent>
+                <MudTh>
+                    <MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<EmailTemplateNamesResponse, object>(x => x.Name)">Name</MudTableSortLabel>
+                </MudTh>
+                <MudTh>
+                    <MudText>Edit</MudText>
+                </MudTh>
+                <MudTh>
+                    <MudText>Delete</MudText>
+                </MudTh>
+                <MudTh>
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Create" Color="Color.Tertiary" Href="/CreateEmailTemplate">Create</MudButton>
+                </MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd DataLabel="Name">@context.Name</MudTd>
+                <MudTd DataLabel="Edit">
+                    <MudButton Href="@($"/EditEmailTemplate/{context.Slug}")" StartIcon="@Icons.Material.Filled.Edit" Variant="Variant.Filled">
+                        Edit
+                    </MudButton>
+                </MudTd>
+                <MudTd DataLabel="Delete">
+                    <MudButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => DeleteConfirm(context.Slug))">Delete</MudButton>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </AuthorizeView>
+</CascadingAuthenticationState>

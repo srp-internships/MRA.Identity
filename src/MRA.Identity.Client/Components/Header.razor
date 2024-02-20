@@ -70,6 +70,11 @@
                         <b>User manager</b>
                     </MudText>
                 </MudButton>
+                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/EmailTemplates" Class="@GetActiveClass(DocPages.UserManager)">
+                    <MudText>
+                        <b>Email templates</b>
+                    </MudText>
+                </MudButton>
             </AuthorizeView>
         </CascadingAuthenticationState>
         <MudButton Href="@Configuration["Platforms:Academy"]" Target="_blank" Color="Color.Inherit" Variant="Variant.Text" Class="@GetActiveClass(DocPages.Academy)">

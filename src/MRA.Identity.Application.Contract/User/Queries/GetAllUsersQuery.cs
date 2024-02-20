@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using MRA.Identity.Application.Contract.Common;
 using MRA.Identity.Application.Contract.User.Responses;
 
 namespace MRA.Identity.Application.Contract.User.Queries;
-public class GetAllUsersQuery : IRequest<List<UserResponse>>
+public class GetAllUsersQuery : PagedListQuery<UserResponse>
 {
+    public string Skills { get; set; }
 }

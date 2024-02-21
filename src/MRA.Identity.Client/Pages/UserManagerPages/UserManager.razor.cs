@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using MRA.BlazorComponents.Configuration;
+using MRA.BlazorComponents.Dialogs;
 using MRA.BlazorComponents.HttpClient.Services;
 using MRA.Identity.Application.Contract.User.Responses;
 using MudBlazor;
@@ -10,7 +11,8 @@ namespace MRA.Identity.Client.Pages.UserManagerPages;
 public sealed partial class UserManager
 {
     [Inject] private IHttpClientService Client { get; set; }
-    [Inject] private IConfiguration Configuration { get; set; }
+    [Inject] private IConfiguration Configuration { get; set; }  
+    [Inject] private IDialogService DialogService { get; set; }
 
     private string _searchString = "";
 
@@ -62,7 +64,13 @@ public sealed partial class UserManager
         _pagedData = data.Skip(state.Page * state.PageSize).Take(state.PageSize).ToArray();
         return new TableData<UserResponse> { TotalItems = _totalItems, Items = _pagedData };
     }
-
+      public void OpenDialog(string defaultPhoneNumber)
+    {
+        var parameters = new DialogParameters();
+        parameters.Add("DefaultPhoneNumber", defaultPhoneNumber);
+        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraExtraLarge, FullWidth = true };
+        DialogService.Show<DialogMessageSender>("Send message", parameters, options);
+    }
     private void OnSearch(string text)
     {
         _searchString = text;

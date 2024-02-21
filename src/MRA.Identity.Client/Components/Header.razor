@@ -60,11 +60,12 @@
                 </MudButton>
             </AuthorizeView>
             <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
-                <MudButton Target="_blank" Color="Color.Inherit" Variant="Variant.Text" OnClick="OpenDialog">
+                <MudButton Target="_blank" Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenDialog("921234567"))">
                     <MudText>
-                        <b>@ContentService["Header:SendMessage"] </b>
+                        <b>@ContentService["Header:SendMessage"]</b>
                     </MudText>
                 </MudButton>
+
                 <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/UserManager" Class="@GetActiveClass(DocPages.UserManager)">
                     <MudText>
                         <b>User manager</b>
@@ -108,11 +109,12 @@
         <MudNavLink Match="NavLinkMatch.All" Href="/" Target="_blank">@ContentService["Profile:MyProfile"]</MudNavLink>
         <CascadingAuthenticationState>
             <AuthorizeView Roles="ApplicationAdmin">
-                <MudNavLink OnClick="OpenDialog">
-                    <MudText>
-                        <b>@ContentService["Header:SendMessage"] </b>
+                    <MudNavLink OnClick="@(() => OpenDialog("921234567"))">
+                        <MudText>
+                            <b>@ContentService["Header:SendMessage"]</b>
                     </MudText>
                 </MudNavLink>
+
                 <MudNavLink Href="/UserManager">
                     <MudText>
                         <b>User manager</b>
@@ -168,10 +170,11 @@
         NavigationManager.LocationChanged -= HandleLocationChanged;
     }
 
-    public void OpenDialog()
+    public void OpenDialog(string defaultPhoneNumber)
     {
+        var parameters = new DialogParameters();
+        parameters.Add("DefaultPhoneNumber", defaultPhoneNumber);
         var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraExtraLarge, FullWidth = true };
-        DialogService.Show<DialogMessageSender>("Send message", options);
+        DialogService.Show<DialogMessageSender>("Send message", parameters, options);
     }
-
 }

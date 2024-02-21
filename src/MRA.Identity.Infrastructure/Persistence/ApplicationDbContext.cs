@@ -22,6 +22,7 @@ public sealed class ApplicationDbContext : IdentityDbContext<ApplicationUser, Ap
     public DbSet<ExperienceDetail> Experiences { get; set; }
 
     public DbSet<Message> Messages { get; set; }
+    public DbSet<EmailTemplate> EmailTemplates { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

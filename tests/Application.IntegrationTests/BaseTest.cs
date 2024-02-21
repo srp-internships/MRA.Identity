@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MRA.Identity.Application.Common.Interfaces.Services;
 using MRA.Identity.Domain.Entities;
+using MRA.Identity.Infrastructure.Identity;
 using MRA.Identity.Infrastructure.Persistence;
 
 namespace MRA.Jobs.Application.IntegrationTests;
@@ -146,6 +147,26 @@ public abstract class BaseTest
         var claims = new List<Claim>
         {
             new Claim($"{prefics}role", "Reviewer"),
+            new Claim($"{prefics}Id", reviewer.Id.ToString()),
+            new Claim($"{prefics}username", reviewer.UserName),
+            new Claim($"{prefics}email", reviewer.Email),
+            new Claim($"{prefics}application", "MraJobs")
+        };
+        var token = tokenService.CreateTokenByClaims(claims, out _);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+
+    protected async Task AddAdminAuthorizationAsync()
+    {
+        using var scope = _factory.Services.GetService<IServiceScopeFactory>().CreateScope();
+        var tokenService = scope.ServiceProvider.GetRequiredService<IJwtTokenService>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var reviewer = await userManager.Users.FirstOrDefaultAsync(s => s.UserName == "@Reviewer");
+        var prefics = "http://schemas.microsoft.com/ws/2008/06/identity/claims/";
+        Reviewer = reviewer;
+        var claims = new List<Claim>
+        {
+            new Claim($"{prefics}role", ApplicationClaimValues.Administrator),
             new Claim($"{prefics}Id", reviewer.Id.ToString()),
             new Claim($"{prefics}username", reviewer.UserName),
             new Claim($"{prefics}email", reviewer.Email),

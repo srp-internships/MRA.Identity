@@ -26,7 +26,7 @@ public class GetAllUsersQueryHandler(
         
         if (!request.Skills.IsNullOrEmpty())
         {
-            var skills = request.Skills.Split(',').Select(s => s.Trim()).Distinct().AsEnumerable();
+            var skills = request.Skills.Split(',').Select(s => s.Trim()).Distinct();
             users = users.Where(u =>
                 skills.Intersect(u.UserSkills.Select(s => s.Skill.Name)).Count() == skills.Count());
         }

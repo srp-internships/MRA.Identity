@@ -13,9 +13,9 @@ namespace MRA.Identity.Api.Controllers;
 public class UserController(ISender mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] GetAllUsersQuery query)
+    public async Task<IActionResult> Get([FromQuery] GetAllUsersQueryByFilters queryByFilters)
     {
-        var users = await mediator.Send(query);
+        var users = await mediator.Send(queryByFilters);
         return Ok(users);
     }
 

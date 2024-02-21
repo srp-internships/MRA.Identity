@@ -15,18 +15,18 @@ public class GetAllUsersQueryHandler(
     UserManager<ApplicationUser> userManager,
     IMapper mapper,
     IApplicationSieveProcessor sieveProcessor)
-    : IRequestHandler<GetAllUsersQuery, PagedList<UserResponse>>
+    : IRequestHandler<GetAllUsersQueryByFilters, PagedList<UserResponse>>
 {
-    public async Task<PagedList<UserResponse>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+    public async Task<PagedList<UserResponse>> Handle(GetAllUsersQueryByFilters request, CancellationToken cancellationToken)
     {
         var users = userManager.Users
             .Include(u => u.UserSkills)
             .ThenInclude(s => s.Skill)
             .AsNoTracking();
-
+        
         if (!request.Skills.IsNullOrEmpty())
         {
-            var skills = request.Skills.Split(',').Select(tag => tag.Trim()).Distinct().AsEnumerable();
+            var skills = request.Skills.Split(',').Select(s => s.Trim()).Distinct().AsEnumerable();
             users = users.Where(u =>
                 skills.Intersect(u.UserSkills.Select(s => s.Skill.Name)).Count() == skills.Count());
         }

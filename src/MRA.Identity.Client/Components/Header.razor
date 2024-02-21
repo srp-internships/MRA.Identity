@@ -1,5 +1,4 @@
-﻿@using MRA.BlazorComponents.Dialogs
-@using MRA.Identity.Client.Components.Dialogs
+﻿@using MRA.Identity.Client.Components.Dialogs
 @using MudBlazor
 @using Anchor = MudBlazor.Anchor
 @using Breakpoint = MudBlazor.Breakpoint
@@ -13,7 +12,6 @@
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject IFeatureManager FeatureManager
-@inject IDialogService DialogService
 
 <MudToolBar Class="toolbar-fixed-blur">
     <MudHidden Breakpoint="Breakpoint.MdAndUp">
@@ -60,12 +58,6 @@
                 </MudButton>
             </AuthorizeView>
             <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
-                <MudButton Target="_blank" Color="Color.Inherit" Variant="Variant.Text" OnClick="@(() => OpenDialog("921234567"))">
-                    <MudText>
-                        <b>@ContentService["Header:SendMessage"]</b>
-                    </MudText>
-                </MudButton>
-
                 <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/UserManager" Class="@GetActiveClass(DocPages.UserManager)">
                     <MudText>
                         <b>User manager</b>
@@ -109,12 +101,6 @@
         <MudNavLink Match="NavLinkMatch.All" Href="/" Target="_blank">@ContentService["Profile:MyProfile"]</MudNavLink>
         <CascadingAuthenticationState>
             <AuthorizeView Roles="ApplicationAdmin">
-                    <MudNavLink OnClick="@(() => OpenDialog("921234567"))">
-                        <MudText>
-                            <b>@ContentService["Header:SendMessage"]</b>
-                    </MudText>
-                </MudNavLink>
-
                 <MudNavLink Href="/UserManager">
                     <MudText>
                         <b>User manager</b>
@@ -133,7 +119,6 @@
 </MudDrawer>
 
 @code {
-
     bool _open = false;
 
     private bool _betaVersion;
@@ -170,11 +155,4 @@
         NavigationManager.LocationChanged -= HandleLocationChanged;
     }
 
-    public void OpenDialog(string defaultPhoneNumber)
-    {
-        var parameters = new DialogParameters();
-        parameters.Add("DefaultPhoneNumber", defaultPhoneNumber);
-        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraExtraLarge, FullWidth = true };
-        DialogService.Show<DialogMessageSender>("Send message", parameters, options);
-    }
 }

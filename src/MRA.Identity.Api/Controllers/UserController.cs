@@ -13,14 +13,14 @@ namespace MRA.Identity.Api.Controllers;
 public class UserController(ISender mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get([FromQuery] GetAllUsersQuery query)
     {
-        var users = await mediator.Send(new GetAllUsersQuery());
+        var users = await mediator.Send(query);
         return Ok(users);
     }
 
     [HttpGet("{key}")]
-    public async Task<IActionResult> Get([FromRoute] string key)
+    public async Task<IActionResult> GetByKey([FromRoute] string key)
     {
         var userResponse = await mediator.Send(new GetUserByKeyQuery{Key = key});
         return Ok(userResponse);

@@ -8,6 +8,7 @@ using FluentValidation.AspNetCore;
 using MRA.Configurations.Initializer.Azure.Insight;
 using MRA.Configurations.Initializer.Azure.KeyVault;
 using MRA.Configurations.Initializer.Azure.AppConfig;
+using Sieve.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssembly(typeof(RemoveUserSkillCommand).Assembly);
-
+builder.Services.Configure<SieveOptions>(builder.Configuration.GetSection("MraIdentity-Sieve"));
 
 WebApplication app = builder.Build();
 

@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Authorization;
 using MRA.BlazorComponents.Configuration;
 using MRA.BlazorComponents.Dialogs;
 using MRA.BlazorComponents.HttpClient.Services;
@@ -64,7 +63,7 @@ public sealed partial class UserManager
         _pagedData = data.Skip(state.Page * state.PageSize).Take(state.PageSize).ToArray();
         return new TableData<UserResponse> { TotalItems = _totalItems, Items = _pagedData };
     }
-      public void OpenDialog(string defaultPhoneNumber)
+    public void OpenDialog(string defaultPhoneNumber)
     {
         var parameters = new DialogParameters();
         parameters.Add("DefaultPhoneNumber", defaultPhoneNumber);

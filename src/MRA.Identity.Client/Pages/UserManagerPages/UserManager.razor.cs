@@ -17,7 +17,6 @@ namespace MRA.Identity.Client.Pages.UserManagerPages;
 public sealed partial class UserManager
 {
     [Inject] private IHttpClientService Client { get; set; }
-    [Inject] private IConfiguration Configuration { get; set; }
     [Inject] private IUserProfileService UserProfileService { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }
     [Inject] private IConfiguration Configuration { get; set; }  

@@ -86,6 +86,10 @@ public sealed partial class UserManager
             var searchTerms = _searchString.Replace(",", "|").Split(" ").Select(s => s.Trim());
             _query.Filters = $"(UserName|FirstName|LastName)@={string.Join("|", searchTerms)}";
         }
+        else
+        {
+            _query.Filters = "";
+        }
 
         if (Options != null)
         {

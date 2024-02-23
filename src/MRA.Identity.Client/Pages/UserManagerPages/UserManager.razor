@@ -66,6 +66,9 @@
                             <MudTh>
                                 @ContentService["ResetPassword:PhoneNumber"]
                             </MudTh>
+                            <MudTh>
+                                 @ContentService["Header:SendMessage"]
+                            </MudTh>
                             <MudTh>@ContentService["UserManager:Roles"]</MudTh>
                         </HeaderContent>
                         <RowTemplate>
@@ -98,6 +101,14 @@
                             </MudTd>
                             <MudTd>@context.PhoneNumber</MudTd>
                             <MudTd>
+                                @if (context.PhoneNumberConfirmed)
+                                {
+                                    <MudButton Variant="Variant.Filled" OnClick="@(() => OpenDialog(context.PhoneNumber))">
+                                        <MudIcon Icon="@Icons.Material.Filled.Message" />
+                                    </MudButton>
+                                }
+                            </MudTd>
+                            <MudTd>
                                 @{
                                     var userRolesLink = $"/UserRoles/{context.UserName}";
                                 }
@@ -107,6 +118,7 @@
                                     </MudButton>
                                 </MudStack>
                             </MudTd>
+
                         </RowTemplate>
                         <NoRecordsContent>
                             <MudText>@ContentService["UserManager:Nomatchingrecords"]</MudText>

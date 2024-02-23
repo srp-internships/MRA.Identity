@@ -6,29 +6,30 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <Compile Remove="Pages\General\**"/>
-        <Content Remove="Pages\General\**"/>
-        <EmbeddedResource Remove="Pages\General\**"/>
-        <None Remove="Pages\General\**"/>
+        <Compile Remove="Pages\General\**" />
+        <Content Remove="Pages\General\**" />
+        <EmbeddedResource Remove="Pages\General\**" />
+        <None Remove="Pages\General\**" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Blazored.FluentValidation" Version="2.1.0"/>
+        <PackageReference Include="Blazored.FluentValidation" Version="2.1.0" />
         <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
-        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.1"/>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1"/>
-        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.1" PrivateAssets="all"/>
-        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.1"/>
-        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0"/>
-        <PackageReference Include="Microsoft.FeatureManagement" Version="3.1.1"/>
-        <PackageReference Include="MRA.BlazorComponents" Version="1.0.7" />
-        <PackageReference Include="MudBlazor" Version="6.12.0"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.2.0"/>
+        <PackageReference Include="Blazored.TextEditor" Version="1.1.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="8.0.1" />
+        <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="8.0.1" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
+        <PackageReference Include="Microsoft.FeatureManagement" Version="3.1.1" />
+        <PackageReference Include="MRA.BlazorComponents" Version="1.0.10" />
+        <PackageReference Include="MudBlazor" Version="6.12.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+        <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.2.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\MRA.Identity.Application.Contract\MRA.Identity.Application.Contract.csproj"/>
+        <ProjectReference Include="..\MRA.Identity.Application.Contract\MRA.Identity.Application.Contract.csproj" />
     </ItemGroup>
 
     <ItemGroup>

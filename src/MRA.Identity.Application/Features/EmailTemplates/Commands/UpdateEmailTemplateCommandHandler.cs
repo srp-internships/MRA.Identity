@@ -23,7 +23,8 @@ public class UpdateEmailTemplateCommandHandler(
             throw new NotFoundException($"The emailTemplate with slug {request.Slug} not found");
         }
 
-        if (await context.EmailTemplates.AnyAsync(s => s.Name == request.Name, cancellationToken))
+        if (await context.EmailTemplates.AnyAsync(s => s.Name == request.Name && s.Slug != request.Slug,
+                cancellationToken))
         {
             throw new ValidationException("Duplicate name after update");
         }

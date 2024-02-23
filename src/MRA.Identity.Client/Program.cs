@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.FeatureManagement;
 using MRA.BlazorComponents;
+using MRA.BlazorComponents.Dialogs;
 using MRA.BlazorComponents.DynamicPages;
 using MRA.BlazorComponents.HttpClient;
 using MRA.Identity.Client;
 using MRA.Identity.Client.Services;
 using MRA.Identity.Client.Services.Auth;
 using MRA.Identity.Client.Services.ContentService;
-using MRA.Identity.Client.Services.Message;
 using MRA.Identity.Client.Services.Profile;
 using MRA.Identity.Client.Services.UserPreferences;
 using MudBlazor.Services;
@@ -23,11 +23,10 @@ builder.Services.AddFeatureManagement();
 //Mra.BlazorComponents
 builder.Services.AddHttpClientService();
 builder.Services.AddMraPages();
+builder.Services.AddDialogs(); 
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 //Mra.BlazorComponents
 
-
-builder.Services.AddScoped<IMessageService, MessageService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<LayoutService>();

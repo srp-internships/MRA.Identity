@@ -19,7 +19,7 @@ public sealed partial class UserManager
     [Inject] private IHttpClientService Client { get; set; }
     [Inject] private IUserProfileService UserProfileService { get; set; }
     [Inject] private NavigationManager NavigationManager { get; set; }
-    [Inject] private IConfiguration Configuration { get; set; }  
+    [Inject] private IConfiguration Configuration { get; set; }
     [Inject] private IDialogService DialogService { get; set; }
 
     private string _searchString = "";
@@ -104,17 +104,21 @@ public sealed partial class UserManager
         queryParam["PageSize"] = _query.PageSize.ToString();
         if (!_query.Filters.IsNullOrEmpty()) queryParam["Filters"] = _query.Filters;
 
-        var result =
-            (await Client.GetFromJsonAsync<PagedList<UserResponse>>(Configuration.GetIdentityUrl($"user?{queryParam}")))
-            .Result;
         UpdateUri();
 
+        var response =
+            await Client.GetFromJsonAsync<PagedList<UserResponse>>(Configuration.GetIdentityUrl($"user?{queryParam}"));
+        if (!response.Success) return new TableData<UserResponse>();
+        
+        var result = response.Result;
         return new TableData<UserResponse>()
         {
             TotalItems = result.TotalCount,
             Items = result.Items
         };
+
     }
+
     public void OpenDialog(string defaultPhoneNumber)
     {
         var parameters = new DialogParameters();
@@ -122,6 +126,7 @@ public sealed partial class UserManager
         var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraExtraLarge, FullWidth = true };
         DialogService.Show<DialogMessageSender>("Send message", parameters, options);
     }
+
     private void OnSearch(string text)
     {
         _searchString = text;

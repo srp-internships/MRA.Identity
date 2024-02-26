@@ -9,8 +9,7 @@ namespace MRA.Identity.Client.Pages.UserManagerPages;
 public sealed partial class UserManager
 {
     [Inject] private IHttpClientService Client { get; set; }
-    [Inject] private IConfiguration Configuration { get; set; }  
-    [Inject] private IDialogService DialogService { get; set; }
+    [Inject] private IConfiguration Configuration { get; set; } 
 
     private string _searchString = "";
 

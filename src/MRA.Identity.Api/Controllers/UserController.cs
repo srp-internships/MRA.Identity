@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
-using MRA.Identity.Application.Contract.User.Responses;
+using MRA.Identity.Application.Contract.UserEmail.Commands;
 
 namespace MRA.Identity.Api.Controllers;
 
@@ -13,16 +13,16 @@ namespace MRA.Identity.Api.Controllers;
 public class UserController(ISender mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get([FromQuery] GetAllUsersQueryByFilters queryByFilters)
     {
-        var users = await mediator.Send(new GetAllUsersQuery());
+        var users = await mediator.Send(queryByFilters);
         return Ok(users);
     }
 
     [HttpGet("{key}")]
-    public async Task<IActionResult> Get([FromRoute] string key)
+    public async Task<IActionResult> GetByKey([FromRoute] string key)
     {
-        var userResponse = await mediator.Send(new GetUserByKeyQuery{Key = key});
+        var userResponse = await mediator.Send(new GetUserByKeyQuery { Key = key });
         return Ok(userResponse);
     }
 
@@ -34,5 +34,12 @@ public class UserController(ISender mediator) : ControllerBase
         var result = await mediator.Send(new CheckUserDetailsQuery()
             { UserName = userName, PhoneNumber = phoneNumber, Email = email });
         return Ok(result);
+    }
+
+    [HttpPost("sendEmail")]
+    public async Task<IActionResult> SendEmail([FromBody] SendEmailCommand command)
+    {
+        await mediator.Send(command);
+        return Ok();
     }
 }

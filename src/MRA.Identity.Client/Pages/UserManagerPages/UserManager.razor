@@ -1,4 +1,5 @@
 ﻿@page "/UserManager"
+@using MRA.BlazorComponents.Dialogs
 
 <Header/>
 <CascadingAuthenticationState>
@@ -71,7 +72,7 @@
                             <MudTd>
                                 @if (context.PhoneNumberConfirmed)
                                 {
-                                    <MRA.BlazorComponents.Dialogs.ButtonMessageSender DefaultPhoneNumber=context.PhoneNumber></MRA.BlazorComponents.Dialogs.ButtonMessageSender>
+                                    <ButtonMessageSender DefaultPhoneNumber=context.PhoneNumber></ButtonMessageSender>
                                 }
                             </MudTd>
                             <MudTd>

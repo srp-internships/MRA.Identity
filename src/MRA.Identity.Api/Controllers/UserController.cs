@@ -18,6 +18,13 @@ public class UserController(ISender mediator) : ControllerBase
         var users = await mediator.Send(queryByFilters);
         return Ok(users);
     }
+    
+    [HttpGet("GetListUsers")]
+    public async Task<IActionResult> GetListUsers([FromQuery] GetListUsersQuery query)
+    {
+        var users = await mediator.Send(query);
+        return Ok(users);
+    }
 
     [HttpGet("{key}")]
     public async Task<IActionResult> GetByKey([FromRoute] string key)

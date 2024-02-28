@@ -71,7 +71,7 @@
                                 @ContentService["Header:SendMessage"]
                             </MudTh>
                             <MudTh>
-                                 @ContentService["Header:SendEmail"]
+                                @ContentService["Header:SendEmail"]
                             </MudTh>
                             <MudTh>@ContentService["UserManager:Roles"]</MudTh>
                         </HeaderContent>
@@ -109,6 +109,9 @@
                                 {
                                     <ButtonMessageSender DefaultPhoneNumber=@context.PhoneNumber></ButtonMessageSender>
                                 }
+                            </MudTd>
+                            <MudTd>
+                                <SendEmailButton Title="Send email" Email="@context.Email"></SendEmailButton>
                             </MudTd>
                             <MudTd>
                                 @{

@@ -19,7 +19,7 @@ public class UserController(ISender mediator) : ControllerBase
         return Ok(users);
     }
     
-    [HttpGet("GetListUsers")]
+    [HttpGet("GetListUsers/ByFilter")]
     public async Task<IActionResult> GetListUsers([FromQuery] GetListUsersQuery query)
     {
         var users = await mediator.Send(query);

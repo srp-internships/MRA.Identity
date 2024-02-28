@@ -1,7 +1,7 @@
 ﻿@page "/UserManager"
 @using MRA.BlazorComponents.Dialogs
-
-<Header/>
+@using MRA.BlazorComponents.SendEmail.Components
+<Header></Header>
 <CascadingAuthenticationState>
     <AuthorizeView Roles="ApplicationAdmin" Context="_">
         <Authorized>
@@ -23,7 +23,7 @@
                                 <MudItem lg="6">
                                     <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))"
                                                MultiSelection="true" @bind-Value="SelectedSkills" SelectAll="true"
-                                               Variant="Variant.Outlined" Style="margin-top: 0px;" Margin="Margin.Dense"
+                                               Variant="Variant.Outlined" Style="margin-top: 0;" Margin="Margin.Dense"
                                                @bind-SelectedValues="Options" T="string" Label="Filter by skills"
                                                AnchorOrigin="Origin.BottomCenter">
                                         @if (_allSkills != null)
@@ -68,7 +68,10 @@
                                 @ContentService["ResetPassword:PhoneNumber"]
                             </MudTh>
                             <MudTh>
-                                 @ContentService["Header:SendMessage"]
+                                @ContentService["Header:SendMessage"]
+                            </MudTh>
+                            <MudTh>
+                                 @ContentService["Header:SendEmail"]
                             </MudTh>
                             <MudTh>@ContentService["UserManager:Roles"]</MudTh>
                         </HeaderContent>

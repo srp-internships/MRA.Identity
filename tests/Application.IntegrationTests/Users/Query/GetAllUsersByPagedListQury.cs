@@ -3,7 +3,7 @@ using MRA.Identity.Application.Contract.User.Responses;
 
 namespace MRA.Jobs.Application.IntegrationTests.Users.Query;
 
-public class GetAllUsersQueryByFiltersTest : BaseTest
+public class GetAllUsersByPagedListQury : BaseTest
 {
     [SetUp]
     public async Task SetUp()
@@ -29,7 +29,7 @@ public class GetAllUsersQueryByFiltersTest : BaseTest
     [TestCase("UserSkillTest2")]
     [TestCase("UserSkillTest1,UserSkillTest2")]
     [Ignore("")]
-    public async Task GetAllUsersQuery_FilterBySkills_returnListUsers(string skills)
+    public async Task GetAllUsersQuery_FilterBySkills_returnPagedListUsers(string skills)
     {
         await AddAdminAuthorizationAsync();
         var url = $"api/User?Skills={skills}";

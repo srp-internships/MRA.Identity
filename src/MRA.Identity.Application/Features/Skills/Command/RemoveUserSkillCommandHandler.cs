@@ -9,44 +9,40 @@ using MRA.Identity.Application.Contract.Skills.Responses;
 using MRA.Identity.Domain.Entities;
 
 namespace MRA.Identity.Application.Features.Skills.Command;
-public class RemoveUserSkillCommandHandler : IRequestHandler<RemoveUserSkillCommand, UserSkillsResponse>
-{
-    private readonly IApplicationDbContext _context;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserHttpContextAccessor _userHttpContextAccessor;
 
-    public RemoveUserSkillCommandHandler(IApplicationDbContext context,
-        UserManager<ApplicationUser> userManager,
-        IUserHttpContextAccessor userHttpContextAccessor)
-    {
-        _context = context;
-        _userManager = userManager;
-        _userHttpContextAccessor = userHttpContextAccessor;
-    }
+public class RemoveUserSkillCommandHandler(
+    IApplicationDbContext context,
+    UserManager<ApplicationUser> userManager,
+    IUserHttpContextAccessor userHttpContextAccessor)
+    : IRequestHandler<RemoveUserSkillCommand, UserSkillsResponse>
+{
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
+
     public async Task<UserSkillsResponse> Handle(RemoveUserSkillCommand request, CancellationToken cancellationToken)
     {
-        var userName = _userHttpContextAccessor.GetUserName();
-        var user = await _context.Users.Include(u => u.UserSkills)
-            .ThenInclude(us => us.Skill)
-            .FirstOrDefaultAsync(u => u.UserName.Equals(_userHttpContextAccessor.GetUserName()),
-            cancellationToken);
-
+        var userName = userHttpContextAccessor.GetUserName();
+        var user = await context.Users
+            .FirstOrDefaultAsync(u => u.UserName.Equals(userHttpContextAccessor.GetUserName()),
+                cancellationToken);
         _ = user ?? throw new NotFoundException("user is not found");
 
-        var specificSkill = user.UserSkills
+        var userSkills = await context.UserSkills.Include(u => u.Skill).Where(us => us.UserId == user.Id)
+            .ToListAsync(cancellationToken);
+
+
+        var specificSkill = userSkills
             .FirstOrDefault(us => us.Skill.Name == request.Skill);
         _ = specificSkill ?? throw new NotFoundException($"Skill '{request.Skill}' not found for this user");
 
-        user.UserSkills.Remove(specificSkill);
+        userSkills.Remove(specificSkill);
 
-        await _context.SaveChangesAsync();
+        await context.SaveChangesAsync(cancellationToken);
 
         var response = new UserSkillsResponse
         {
-            Skills = user.UserSkills.Select(us => us.Skill.Name).ToList()
+            Skills = userSkills.Select(us => us.Skill.Name).ToList()
         };
 
         return response;
     }
-
 }

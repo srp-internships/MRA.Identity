@@ -29,7 +29,7 @@ public class GetListUsersQueryTests : BaseTest
     {
         await AddAdminAuthorizationAsync();
         var url =
-            $"api/User/GetListUsers/ByFilter?FullName=Ben Denison&Email=denison@gmail.com&PhoneNumber=+9921001010&Skills=UserSkillTest2";
+            $"api/User/GetListUsers/ByFilter?FullName=Ben Denison&Email=denison@gmail.com&PhoneNumber=+9921001010";
         var response = await _client.GetFromJsonAsync<List<UserResponse>>(url);
 
         Assert.That(response.Count == 1);

@@ -4,7 +4,7 @@
 @using MRA.BlazorComponents.SendEmail.Components
 <Header></Header>
 <CascadingAuthenticationState>
-    <AuthorizeView Roles="ApplicationAdmin" Context="_">
+    <AuthorizeView Roles="Reviewer, ApplicationAdmin, SuperAdmin" Context="_">
         <Authorized>
             <MudGrid>
                 <MudItem xs="12">
@@ -73,8 +73,8 @@
                                     @ContentService["Header:SendMessage"]
                                 </MudTh>
                                 <MudTh>
-                                                                @ContentService["Header:SendEmail"]
-                                                            </MudTh>
+                                    @ContentService["Header:SendEmail"]
+                                </MudTh>
                                 <MudTh>More</MudTh>
                             </HeaderContent>
                             <RowTemplate>
@@ -112,9 +112,9 @@
                                         <ButtonMessageSender DefaultPhoneNumber=@context.PhoneNumber></ButtonMessageSender>
                                     }
                                 </MudTd>
-                                  <MudTd>
-                                                                <SendEmailButton Title="Send email" Email="@context.Email"></SendEmailButton>
-                                                            </MudTd>
+                                <MudTd>
+                                    <SendEmailButton Title="Send email" Email="@context.Email"></SendEmailButton>
+                                </MudTd>
                                 <MudTd>
                                     @{
                                         var userRolesLink = $"/UserProfile/{context.UserName}";

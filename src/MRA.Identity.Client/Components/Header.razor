@@ -59,6 +59,13 @@
                     </MudText>
                 </MudButton>
             </AuthorizeView>
+            <AuthorizeView Roles="Reviewer">
+                 <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/Candidates" Class="@GetActiveClass(DocPages.UserManager)">
+                                    <MudText>
+                                        <b>Candidates</b>
+                                    </MudText>
+                                </MudButton>
+            </AuthorizeView>
             <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
                 <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/UserManager" Class="@GetActiveClass(DocPages.UserManager)">
                     <MudText>

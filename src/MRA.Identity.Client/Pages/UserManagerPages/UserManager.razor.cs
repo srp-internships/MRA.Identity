@@ -21,6 +21,7 @@ public sealed partial class UserManager
     [Inject] private IConfiguration Configuration { get; set; }
     [Inject] private IDialogService DialogService { get; set; }
 
+    private bool _isLoaded = false;
     private string _searchString = "";
 
     private GetAllUsersQueryByFilters _query = new();
@@ -54,28 +55,20 @@ public sealed partial class UserManager
 
         if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("Skills", out var skills))
         {
-            _query.Skills = skills;
+            Options = skills.ToList();
         }
 
         if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("filters", out var filters))
         {
-            _query.Filters = filters;
-        }
-
-        if (!_query.Skills.IsNullOrEmpty()) Options = _query.Skills.Split(", ").ToList();
-
-        if (!_query.Filters.IsNullOrEmpty())
-        {
-            var filterParts = _query.Filters.Split("@=");
+            var filterParts =filters.ToString().Split("@=");
             if (filterParts.Length > 1)
             {
                 _searchString = filterParts[1].Replace("|", " ");
             }
         }
-
-        Console.WriteLine(@$"filter: {_query.PageSize} , {_query.Page}, {_query.Filters}");
-
-        await _table.ReloadServerData();
+        StateHasChanged();
+        _isLoaded = true;
+        StateHasChanged();
     }
 
     private async Task<TableData<UserResponse>> ServerReload(TableState state)
@@ -116,10 +109,6 @@ public sealed partial class UserManager
             Items = result.Items
         };
 
-    }
-    private void OnSearch(string text)
-    {
-        _searchString = text;
     }
 
     private string GetMultiSelectionText(List<string> selectedValues)

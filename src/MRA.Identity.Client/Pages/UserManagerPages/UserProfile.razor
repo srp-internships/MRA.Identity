@@ -2,7 +2,7 @@
 <Header/>
 <CascadingAuthenticationState>
     <AuthorizeView Roles="Reviewer, ApplicationAdmin, SuperAdmin">
-        <Authorized  Context="authContext1">
+        <Authorized Context="authContext1">
 
             <MudTabs Elevation="2" Rounded="true" ApplyEffectsToContainer="true" PanelClass="pa-6">
                 <MudTabPanel Icon="@Icons.Material.Filled.Person" Text="Personal information">
@@ -191,7 +191,10 @@
                     </MudGrid>
                 </MudTabPanel>
                 <MudTabPanel Icon="@Icons.Material.Filled.List" Text="Applications">
-                    <MudText>Content Two</MudText>
+                    <MudLink Target="_blank"
+                             Href=@($"{Configuration["Platforms:Jobs"]}Dashboard/Applications?page=1&pageSize=10&FullName={_user.FullName}&PhoneNumber={_user.PhoneNumber}&Email={_user.Email}")>
+                        go to applications
+                    </MudLink>
                 </MudTabPanel>
                 <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
                     <Authorized Context="authContext2">

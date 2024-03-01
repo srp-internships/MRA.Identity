@@ -24,7 +24,7 @@ public sealed partial class UserManager
     private bool _isLoaded = false;
     private string _searchString = "";
 
-    private GetAllUsersQueryByFilters _query = new();
+    private GetAllUsersByFilters _query = new();
     private MudTable<UserResponse> _table;
     private UserSkillsResponse _allSkills;
     private string SelectedSkills { get; set; } = "";

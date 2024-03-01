@@ -1,48 +1,87 @@
 ﻿@page "/UserManager"
-
-<Header/>
+@using MRA.BlazorComponents.Dialogs
+@using MRA.BlazorComponents.SendEmail.Components
+<Header></Header>
 <CascadingAuthenticationState>
     <AuthorizeView Roles="ApplicationAdmin" Context="_">
         <Authorized>
             <MudGrid>
                 <MudItem xs="12">
-                    <MudTable ServerData="@(new Func<TableState, Task<TableData<UserResponse>>>(ServerReload))" Hover="true"
-                              @ref="_table" Breakpoint="Breakpoint.None">
-                        <ToolBarContent>
-                            <MudText Typo="Typo.h5">
-                                <b>@ContentService["UserManager:Users"]</b>
-                            </MudText>
-                            <MudSpacer/>
-                            <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Placeholder=@ContentService["UserManager:Searchname"]
-                                          Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium"
-                                          Class="mt-0" Immediate="true">
-                            </MudTextField>
-                        </ToolBarContent>
+                    <MudStack Row="true" Style="margin-top:15px; ">
+                        <MudText Typo="Typo.h5">
+                            <b>@ContentService["UserManager:Users"]</b>
+                        </MudText>
+                        <MudSpacer/>
+                        <MudItem lg="6">
+                            <MudGrid>
+                                <MudItem lg="4">
+                                    <MudTextField T="string" ValueChanged="@(s => OnSearch(s))" Label="Search"
+                                                  IconSize="Size.Medium" Margin="Margin.Dense"
+                                                  Class="mt-0" Immediate="true" Variant="Variant.Outlined">
+                                    </MudTextField>
+                                </MudItem>
+                                <MudItem lg="6">
+                                    <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))"
+                                               MultiSelection="true" @bind-Value="SelectedSkills" SelectAll="true"
+                                               Variant="Variant.Outlined" Style="margin-top: 0;" Margin="Margin.Dense"
+                                               @bind-SelectedValues="Options" T="string" Label="Filter by skills"
+                                               AnchorOrigin="Origin.BottomCenter">
+                                        @if (_allSkills != null)
+                                        {
+                                            @foreach (var skill in _allSkills.Skills)
+                                            {
+                                                <MudSelectItem T="string" Value="@skill">@skill</MudSelectItem>
+                                            }
+                                        }
+                                    </MudSelect>
+                                </MudItem>
+                                <MudItem>
+                                    <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary"
+                                                        Function="@(async () => await _table.ReloadServerData())"
+                                                        Style="margin-top: 1px;">
+                                        <MudIcon Icon="@Icons.Material.Filled.Search"/>
+                                    </ProgressTaskButton>
+                                </MudItem>
+                            </MudGrid>
+                        </MudItem>
+                    </MudStack>
+                </MudItem>
 
+                <MudItem xs="12">
+                    <MudTable ServerData="@(new Func<TableState, Task<TableData<UserResponse>>>(ServerReload))" Hover="true"
+                              @ref="_table" Breakpoint="Breakpoint.Xs">
                         <HeaderContent>
                             <MudTh>
-                                <MudTableSortLabel SortLabel="UserName_field" T="UserResponse">@ContentService["SignUp:UserName"]</MudTableSortLabel>
+                                @ContentService["SignUp:UserName"]
                             </MudTh>
                             <MudTh>
-                                <MudTableSortLabel SortLabel="FullName_field" T="UserResponse">@ContentService["UserManager:FullName"]</MudTableSortLabel>
+                                @ContentService["UserManager:FullName"]
                             </MudTh>
                             <MudTh>
-                                <MudTableSortLabel SortLabel="EmailConfirmed_field" T="UserResponse"></MudTableSortLabel>
                             </MudTh>
                             <MudTh>
-                                <MudTableSortLabel SortLabel="Email_field" T="UserResponse">@ContentService["SignUp:Email"]</MudTableSortLabel>
+                                @ContentService["SignUp:Email"]
                             </MudTh>
                             <MudTh>
-                                <MudTableSortLabel SortLabel="PhoneNumberConfirmed_field" T="UserResponse"></MudTableSortLabel>
                             </MudTh>
                             <MudTh>
-                                <MudTableSortLabel SortLabel="PhoneNumber_field" T="UserResponse">@ContentService["ResetPassword:PhoneNumber"]</MudTableSortLabel>
+                                @ContentService["ResetPassword:PhoneNumber"]
+                            </MudTh>
+                            <MudTh>
+                                @ContentService["Header:SendMessage"]
+                            </MudTh>
+                            <MudTh>
+                                @ContentService["Header:SendEmail"]
                             </MudTh>
                             <MudTh>@ContentService["UserManager:Roles"]</MudTh>
                         </HeaderContent>
                         <RowTemplate>
-                            <MudTd>@context.UserName</MudTd>
-                            <MudTd>@context.FullName</MudTd>
+                            <MudTd>
+                                <MudText>@context.UserName</MudText>
+                            </MudTd>
+                            <MudTd>
+                                <MudText>@context.FullName</MudText>
+                            </MudTd>
                             <MudTd>
                                 @if (context.EmailConfirmed)
                                 {
@@ -66,6 +105,15 @@
                             </MudTd>
                             <MudTd>@context.PhoneNumber</MudTd>
                             <MudTd>
+                                @if (context.PhoneNumberConfirmed)
+                                {
+                                    <ButtonMessageSender DefaultPhoneNumber=@context.PhoneNumber></ButtonMessageSender>
+                                }
+                            </MudTd>
+                            <MudTd>
+                                <SendEmailButton Title="Send email" Email="@context.Email"></SendEmailButton>
+                            </MudTd>
+                            <MudTd>
                                 @{
                                     var userRolesLink = $"/UserRoles/{context.UserName}";
                                 }
@@ -75,6 +123,7 @@
                                     </MudButton>
                                 </MudStack>
                             </MudTd>
+
                         </RowTemplate>
                         <NoRecordsContent>
                             <MudText>@ContentService["UserManager:Nomatchingrecords"]</MudText>

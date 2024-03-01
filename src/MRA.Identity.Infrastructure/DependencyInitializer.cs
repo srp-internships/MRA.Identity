@@ -16,8 +16,8 @@ using MRA.Identity.Infrastructure.Persistence;
 using MRA.Configurations.Initializer.Azure.EmailService;
 using MRA.Configurations.Initializer.Services;
 using MRA.Configurations.Initializer.OsonSms.SmsService;
-using Microsoft.Extensions.Logging;
 using MRA.Configurations.Common.Constants;
+using MRA.Identity.Infrastructure.Services;
 
 namespace MRA.Identity.Infrastructure;
 
@@ -25,6 +25,7 @@ public static class DependencyInitializer
 {
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configurations)
     {
+        services.AddTransient<ISlugService, SlugService>();
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             string dbConnectionString = configurations.GetConnectionString("DefaultConnection");

@@ -234,6 +234,29 @@ namespace MRA.Identity.Infrastructure.Migrations
                     b.ToTable("Educations");
                 });
 
+            modelBuilder.Entity("MRA.Identity.Domain.Entities.EmailTemplate", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Subject")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Text")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailTemplates");
+                });
+
             modelBuilder.Entity("MRA.Identity.Domain.Entities.ExperienceDetail", b =>
                 {
                     b.Property<Guid>("Id")

@@ -8,52 +8,44 @@ using MRA.Identity.Application.Contract.Skills.Responses;
 using MRA.Identity.Domain.Entities;
 
 namespace MRA.Identity.Application.Features.Skills.Command;
-public class AddSkillsCommandHandler : IRequestHandler<AddSkillsCommand, UserSkillsResponse>
+
+public class AddSkillsCommandHandler(
+    IApplicationDbContext context,
+    IUserHttpContextAccessor userHttpContextAccessor)
+    : IRequestHandler<AddSkillsCommand, UserSkillsResponse>
 {
-    private readonly IApplicationDbContext _context;
-    private readonly IUserHttpContextAccessor _userHttpContextAccessor;
-
-    public AddSkillsCommandHandler(IApplicationDbContext context,
-        IUserHttpContextAccessor userHttpContextAccessor)
-    {
-        _context = context;
-        _userHttpContextAccessor = userHttpContextAccessor;
-
-    }
     public async Task<UserSkillsResponse> Handle(AddSkillsCommand request, CancellationToken cancellationToken)
     {
-        var user = await _context.Users.Include(u => u.UserSkills)
-            .ThenInclude(us => us.Skill)
-            .FirstOrDefaultAsync(u => u.UserName.Equals(_userHttpContextAccessor.GetUserName()),
-            cancellationToken);
+        var user = await context.Users
+            .FirstOrDefaultAsync(u => u.UserName.Equals(userHttpContextAccessor.GetUserName()),
+                cancellationToken);
         _ = user ?? throw new NotFoundException("user is not found");
-
+       
+        var userSkills = await context.UserSkills.Where(us => us.UserId == user.Id).ToListAsync(cancellationToken);
 
         foreach (var skillName in request.Skills)
         {
-            var existingSkill = await _context.Skills.FirstOrDefaultAsync(s => s.Name == skillName, cancellationToken);
+            var existingSkill = await context.Skills.FirstOrDefaultAsync(s => s.Name == skillName, cancellationToken);
 
             if (existingSkill == null)
             {
                 existingSkill = new Skill { Name = skillName };
-                _context.Skills.Add(existingSkill);
+                context.Skills.Add(existingSkill);
             }
 
-            if (!user.UserSkills.Any(us => us.SkillId == existingSkill.Id))
+            if (userSkills.All(us => us.SkillId != existingSkill.Id))
             {
-                user.UserSkills.Add(new UserSkill { Skill = existingSkill });
+                userSkills.Add(new UserSkill { Skill = existingSkill });
             }
         }
 
-        await _context.SaveChangesAsync(cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
 
         var response = new UserSkillsResponse
         {
-            Skills = user.UserSkills.Select(us => us.Skill.Name).ToList()
+            Skills = userSkills.Select(us => us.Skill.Name).ToList()
         };
 
         return response;
     }
-
 }
-

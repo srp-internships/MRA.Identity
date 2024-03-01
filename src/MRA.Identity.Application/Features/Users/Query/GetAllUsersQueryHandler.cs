@@ -15,9 +15,9 @@ public class GetAllUsersQueryHandler(
     UserManager<ApplicationUser> userManager,
     IMapper mapper,
     IApplicationSieveProcessor sieveProcessor)
-    : IRequestHandler<GetAllUsersQueryByFilters, PagedList<UserResponse>>
+    : IRequestHandler<GetAllUsersByFilters, PagedList<UserResponse>>
 {
-    public async Task<PagedList<UserResponse>> Handle(GetAllUsersQueryByFilters request, CancellationToken cancellationToken)
+    public async Task<PagedList<UserResponse>> Handle(GetAllUsersByFilters request, CancellationToken cancellationToken)
     {
         var users = userManager.Users
             .Include(u => u.UserSkills)

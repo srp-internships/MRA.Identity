@@ -1,9 +1,10 @@
 ﻿@page "/UserManager"
+@page "/Users"
 @using MRA.BlazorComponents.Dialogs
 
 <Header/>
 <CascadingAuthenticationState>
-    <AuthorizeView Roles="ApplicationAdmin" Context="_">
+    <AuthorizeView Roles="ApplicationAdmin, Reviewer" Context="_">
         <Authorized>
             <MudGrid>
                 <MudItem xs="12">
@@ -70,7 +71,7 @@
                             <MudTh>
                                  @ContentService["Header:SendMessage"]
                             </MudTh>
-                            <MudTh>@ContentService["UserManager:Roles"]</MudTh>
+                            <MudTh>More</MudTh>
                         </HeaderContent>
                         <RowTemplate>
                             <MudTd>
@@ -109,7 +110,7 @@
                             </MudTd>
                             <MudTd>
                                 @{
-                                    var userRolesLink = $"/UserRoles/{context.UserName}";
+                                    var userRolesLink = $"/UserProfile/{context.UserName}";
                                 }
                                 <MudStack Row="true">
                                     <MudButton Variant="Variant.Filled" href="@userRolesLink">

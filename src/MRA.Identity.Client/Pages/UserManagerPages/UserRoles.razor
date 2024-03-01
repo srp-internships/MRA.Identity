@@ -229,6 +229,49 @@ else
                             </MudGrid>
                         }
                     </MudCardContent>
+                </MudCard>             <MudCard>
+                    <MudCardHeader>
+                        <CardHeaderContent>
+                            <MudText Typo="Typo.h6">
+                                Educations
+                            </MudText>
+                        </CardHeaderContent>
+                    </MudCardHeader>
+                    <MudCardContent>
+                        @if (_educations == null)
+                        {
+                            <MudSkeleton Animation="Animation.Wave" Width="40%"/>
+                            <MudSkeleton Animation="Animation.Wave" Width="60%"/>
+                            <MudSkeleton Animation="Animation.Wave" Width="30%"/>
+                            <MudSkeleton Animation="Animation.Wave" Width="50%"/>
+                            <MudSkeleton Animation="Animation.Wave" Width="80%"/>
+                            <MudSkeleton Animation="Animation.Wave" Width="60%"/>
+                        }
+                        else
+                        {
+                            <MudGrid>
+                                @foreach (var education in _educations)
+                                {
+                                    <MudItem xs="12" sm="12" md="6" lg="4">
+                                        <MudText>
+                                            <b>@education.Speciality</b>
+                                        </MudText>
+                                        <MudText>@education.University</MudText>
+                                        <MudText>
+                                            @if (education.UntilNow)
+                                            {
+                                                @:@education.StartDate?.ToString("MM/dd/yyyy") - Until Now
+                                            }
+                                            else
+                                            {
+                                                @:@education.StartDate?.ToString("MM/dd/yyyy") - @education.EndDate?.ToString("MM/dd/yyyy")
+                                            }
+                                        </MudText>
+                                    </MudItem>
+                                }
+                            </MudGrid>
+                        }
+                    </MudCardContent>
                 </MudCard>
             </MudItem>
         </MudGrid>

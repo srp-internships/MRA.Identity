@@ -10,6 +10,9 @@
         <Content Remove="Pages\General\**" />
         <EmbeddedResource Remove="Pages\General\**" />
         <None Remove="Pages\General\**" />
+        <Compile Update="Pages\UserManagerPages\UserProfile.cs">
+          <DependentUpon>UserProfile.razor</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>

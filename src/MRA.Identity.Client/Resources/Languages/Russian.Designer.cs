@@ -105,6 +105,15 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Отправить email.
+        /// </summary>
+        internal static string Header_SendEmail {
+            get {
+                return ResourceManager.GetString("Header:SendEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Отправить сообщение.
         /// </summary>
         internal static string Header_SendMessage {

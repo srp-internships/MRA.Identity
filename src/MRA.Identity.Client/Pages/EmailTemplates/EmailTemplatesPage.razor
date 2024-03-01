@@ -26,7 +26,7 @@
                     </MudButton>
                 </MudTd>
                 <MudTd DataLabel="Delete">
-                    <ProgressTaskButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" OnClick="@(() => DeleteConfirm(context.Slug))">Delete</ProgressTaskButton>
+                    <ProgressTaskButton Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Delete" Color="Color.Error" Function="@(() => DeleteConfirm(context.Slug))">Delete</ProgressTaskButton>
                 </MudTd>
             </RowTemplate>
         </MudTable>

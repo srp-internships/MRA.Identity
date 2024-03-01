@@ -60,16 +60,18 @@ public sealed partial class UserManager
 
         if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("filters", out var filters))
         {
-            var filterParts =filters.ToString().Split("@=");
+            var filterParts = filters.ToString().Split("@=");
             if (filterParts.Length > 1)
             {
                 _searchString = filterParts[1].Replace("|", " ");
             }
         }
+
         StateHasChanged();
         _isLoaded = true;
         StateHasChanged();
     }
+
 
     private async Task<TableData<UserResponse>> ServerReload(TableState state)
     {
@@ -101,14 +103,13 @@ public sealed partial class UserManager
         var response =
             await Client.GetFromJsonAsync<PagedList<UserResponse>>(Configuration.GetIdentityUrl($"user?{queryParam}"));
         if (!response.Success) return new TableData<UserResponse>();
-        
+
         var result = response.Result;
         return new TableData<UserResponse>()
         {
             TotalItems = result.TotalCount,
             Items = result.Items
         };
-
     }
 
     private string GetMultiSelectionText(List<string> selectedValues)

@@ -810,6 +810,9 @@
   <data name="Header:SendMessage" xml:space="preserve">
     <value>Send message</value>
   </data>
+  <data name="Header:SendEmail" xml:space="preserve">
+    <value>Send email</value>
+  </data>
   <data name="Message:Comment" xml:space="preserve">
     <value>Comment</value>
   </data>

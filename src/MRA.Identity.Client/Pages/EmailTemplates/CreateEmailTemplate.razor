@@ -68,7 +68,7 @@
                 </MudCardContent>
             </MudForm>
             <MudCardActions>
-                <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())">Create</ProgressTaskButton>
+                <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Function="@(async () => await Submit())">Create</ProgressTaskButton>
             </MudCardActions>
         </MudCard>
     </AuthorizeView>

@@ -126,6 +126,9 @@
   <data name="Header:SendMessage" xml:space="preserve">
     <value>Отправить сообщение</value>
   </data>
+  <data name="Header:SendEmail" xml:space="preserve">
+    <value>Отправить email</value>
+  </data>
   <data name="Header:Jobs" xml:space="preserve">
     <value>Вакансии</value>
   </data>

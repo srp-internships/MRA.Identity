@@ -1,10 +1,10 @@
 ﻿@page "/UserManager"
 @page "/Candidates"
 @using MRA.BlazorComponents.Dialogs
-
-<Header/>
+@using MRA.BlazorComponents.SendEmail.Components
+<Header></Header>
 <CascadingAuthenticationState>
-    <AuthorizeView Roles="ApplicationAdmin, Reviewer" Context="_">
+    <AuthorizeView Roles="ApplicationAdmin" Context="_">
         <Authorized>
             <MudGrid>
                 <MudItem xs="12">
@@ -72,6 +72,9 @@
                                 <MudTh>
                                     @ContentService["Header:SendMessage"]
                                 </MudTh>
+                                <MudTh>
+                                                                @ContentService["Header:SendEmail"]
+                                                            </MudTh>
                                 <MudTh>More</MudTh>
                             </HeaderContent>
                             <RowTemplate>
@@ -109,6 +112,9 @@
                                         <ButtonMessageSender DefaultPhoneNumber=@context.PhoneNumber></ButtonMessageSender>
                                     }
                                 </MudTd>
+                                  <MudTd>
+                                                                <SendEmailButton Title="Send email" Email="@context.Email"></SendEmailButton>
+                                                            </MudTd>
                                 <MudTd>
                                     @{
                                         var userRolesLink = $"/UserProfile/{context.UserName}";

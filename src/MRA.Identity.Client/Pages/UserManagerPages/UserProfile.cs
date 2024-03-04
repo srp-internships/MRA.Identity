@@ -1,4 +1,4 @@
-﻿using System.Net;
+using System.Net;
 using Microsoft.AspNetCore.Components;
 using MRA.BlazorComponents.Configuration;
 using MRA.BlazorComponents.HttpClient.Services;
@@ -17,7 +17,7 @@ using MudBlazor;
 
 namespace MRA.Identity.Client.Pages.UserManagerPages;
 
-public partial class UserRoles
+public partial class UserProfile
 {
     [Parameter] public string Username { get; set; }
     private List<UserRolesResponse> Roles { get; set; }
@@ -58,13 +58,8 @@ public partial class UserRoles
         var userClaimsResponse =
             await HttpClient.GetFromJsonAsync<List<UserClaimsResponse>>(
                 Configuration.GetIdentityUrl($"Claims?username={Username}"));
-        if (userClaimsResponse.HttpStatusCode != HttpStatusCode.OK)
-        {
-            NavigationManager.NavigateTo("/notfound");
-            return;
-        }
-
-        UserClaims = userClaimsResponse.Result;
+        if (userClaimsResponse.HttpStatusCode == HttpStatusCode.OK)
+            UserClaims = userClaimsResponse.Result;
     }
 
     private async Task ReloadDataAsync()
@@ -72,13 +67,8 @@ public partial class UserRoles
         var userRolesResponse =
             await HttpClient.GetFromJsonAsync<List<UserRolesResponse>>(
                 Configuration.GetIdentityUrl($"UserRoles?userName={Username}"));
-        if (userRolesResponse.HttpStatusCode != HttpStatusCode.OK)
-        {
-            NavigationManager.NavigateTo("/notfound");
-            return;
-        }
-
-        Roles = userRolesResponse.Result;
+        if (userRolesResponse.HttpStatusCode == HttpStatusCode.OK)
+            Roles = userRolesResponse.Result;
     }
 
     private async Task OnDeleteClick(string contextSlug)
@@ -86,7 +76,7 @@ public partial class UserRoles
         if (!string.IsNullOrWhiteSpace(contextSlug))
         {
             var deleteResult = await HttpClient.DeleteAsync(Configuration.GetIdentityUrl($"UserRoles/{contextSlug}"));
-            Snackbar.ShowIfError(deleteResult, ContentService["Profile:Servernotrespondingtry"]);
+            Snackbar.ShowIfError(deleteResult, ContentService["Profile:ServerIsNotResponding"]);
 
             if (deleteResult.HttpStatusCode == HttpStatusCode.OK)
             {
@@ -104,7 +94,7 @@ public partial class UserRoles
 
             var userRoleResponse =
                 await HttpClient.PostAsJsonAsync(Configuration.GetIdentityUrl("UserRoles"), userRoleCommand);
-            Snackbar.ShowIfError(userRoleResponse, ContentService["Profile:Servernotrespondingtry"]);
+            Snackbar.ShowIfError(userRoleResponse, ContentService["Profile:ServerIsNotResponding"]);
 
             await ReloadDataAsync();
             StateHasChanged();
@@ -120,7 +110,7 @@ public partial class UserRoles
 
             _loader = true;
             Snackbar.ShowIfError(await HttpClient.PostAsJsonAsync(Configuration.GetIdentityUrl("Claims"), command),
-                ContentService["Profile:Servernotrespondingtry"]);
+                ContentService["Profile:ServerIsNotResponding"]);
             await ReloadUserClaimsAsync();
             _claimType = "";
             _claimValue = "";
@@ -132,7 +122,7 @@ public partial class UserRoles
     private async Task OnDeleteClaimClick(string slug)
     {
         var deleteResult = await HttpClient.DeleteAsync(Configuration.GetIdentityUrl($"Claims/{slug}"));
-        Snackbar.ShowIfError(deleteResult, ContentService["Profile:Servernotrespondingtry"]);
+        Snackbar.ShowIfError(deleteResult, ContentService["Profile:ServerIsNotResponding"]);
 
         await ReloadUserClaimsAsync();
         StateHasChanged();

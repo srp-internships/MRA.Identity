@@ -52,7 +52,7 @@ public class UserProfileService(
     public async Task<List<UserEducationResponse>?> GetEducationsByUser(string? username = null)
     {
         var uri = "Profile/GetEducationsByUser";
-        if (username.IsNullOrEmpty())
+        if (!username.IsNullOrEmpty())
             uri = $"Profile/GetEducationsByUser?username={username}";
 
         var result = await httpClient.GetFromJsonAsync<List<UserEducationResponse>>(configuration.GetIdentityUrl(uri));
@@ -101,7 +101,7 @@ public class UserProfileService(
     public async Task<List<UserExperienceResponse>?> GetExperiencesByUser(string? username = null)
     {
         var uri = "Profile/GetExperiencesByUser";
-        if (username.IsNullOrEmpty())
+        if (!username.IsNullOrEmpty())
             uri = $"Profile/GetExperiencesByUser?username={username}";
 
         var result = await httpClient.GetFromJsonAsync<List<UserExperienceResponse>>(configuration.GetIdentityUrl(uri));

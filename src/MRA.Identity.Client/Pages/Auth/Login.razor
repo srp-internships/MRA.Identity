@@ -45,7 +45,7 @@
                     </MudText>
                 </MudCardContent>
                 <MudCardActions>
-                    <ProgressTaskButton Function="OnValidSubmit" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" FullWidth="true">
+                    <ProgressTaskButton OnClick="@OnValidSubmit" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" FullWidth="true">
                         <MudText>@ContentService["SignIn:SignIn"]</MudText>
                     </ProgressTaskButton>
                 </MudCardActions>

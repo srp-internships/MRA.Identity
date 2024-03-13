@@ -263,7 +263,7 @@ else
                                             <MudDatePicker Label="@ContentService["Profile:StartDate"]" @bind-Date="@_educationUpdate.StartDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _educationUpdate.StartDate)"/>
                                             @if (_educationUpdate.UntilNow == false)
                                             {
-                                                <MudDatePicker Label="@ContentService["VacanciesList:End date"]" @bind-Date="@_educationUpdate.EndDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _educationUpdate.EndDate)"/>
+                                                <MudDatePicker Label="@ContentService["Profile:EndDate"]" @bind-Date="@_educationUpdate.EndDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _educationUpdate.EndDate)"/>
                                             }
                                             <MudCheckBox @bind-Checked="@_educationUpdate.UntilNow" Label="@ContentService["Profile:Present"]" Color="Color.Primary"></MudCheckBox>
                                         </MudCardContent>
@@ -346,7 +346,7 @@ else
                                     <MudDatePicker Label="@ContentService["Profile:StartDate"]" @bind-Date="_createEducation.StartDate" Style="margin-bottom: 10px;" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _createEducation.StartDate)"/>
                                     @if (_createEducation.UntilNow == false)
                                     {
-                                        <MudDatePicker Label="@ContentService["VacanciesList:End date"]" @bind-Date="_createEducation.EndDate" Style="margin-bottom: 10px;" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _createEducation.EndDate)"/>
+                                        <MudDatePicker Label="@ContentService["Profile:EndDate"]" @bind-Date="_createEducation.EndDate" Style="margin-bottom: 10px;" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _createEducation.EndDate)"/>
                                     }
                                     <MudCheckBox @bind-Checked="@_createEducation.UntilNow" Label="@ContentService["Profile:Present"]" Color="Color.Primary"></MudCheckBox>
                                 </MudCardContent>
@@ -418,7 +418,7 @@ else
                                             <MudDatePicker Label="@ContentService["Profile:StartDate"]" @bind-Date="_experienceUpdate.StartDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Normal" For="(() => _experienceUpdate.StartDate)"/>
                                             @if (_experienceUpdate.IsCurrentJob == false)
                                             {
-                                                <MudDatePicker Label="@ContentService["VacanciesList:End date"]" @bind-Date="_experienceUpdate.EndDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Normal" For="(() => _experienceUpdate.EndDate)"/>
+                                                <MudDatePicker Label="@ContentService["Profile:EndDate"]" @bind-Date="_experienceUpdate.EndDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Normal" For="(() => _experienceUpdate.EndDate)"/>
                                             }
                                             <MudCheckBox @bind-Value="@_experienceUpdate.IsCurrentJob" Label="@ContentService["Profile:Present"]" Color="Color.Primary"></MudCheckBox>
                                             <MudAutocomplete @bind-Value="@_experienceUpdate.Address" Label="@ContentService["Home:Address"]" Variant="Variant.Outlined"

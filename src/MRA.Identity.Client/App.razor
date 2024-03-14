@@ -1,9 +1,10 @@
 ﻿@using System.Runtime.InteropServices
 @using FluentValidation
+@using Microsoft.IdentityModel.Tokens
 <Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
-        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
-        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)"/>
+        <FocusOnNavigate RouteData="@routeData" Selector="h1"/>
     </Found>
     <NotFound>
         <PageTitle>Not found</PageTitle>
@@ -14,12 +15,22 @@
 </Router>
 
 @code {
-    
+
     [Inject] ILocalStorageService LocalStorageService { get; set; }
-    
+    [Inject] IConfiguration Configuration { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await ContentService.InitializeCultureAsync();
-        ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo(await LocalStorageService.GetItemAsStringAsync("ApplicationCulturesNames"));
+        var lang = await LocalStorageService.GetItemAsStringAsync("ApplicationCulturesNames");
+        if (lang.IsNullOrEmpty()) lang = Configuration["FeatureManagement:DefaultLanguage"];
+        ValidatorOptions.Global.LanguageManager.Culture = lang switch
+        {
+            "Ru" => new CultureInfo(ApplicationCulturesNames.Ru),
+            "En" => new CultureInfo(ApplicationCulturesNames.En),
+            "Tj" => new CultureInfo(ApplicationCulturesNames.Tj),
+            _ => ValidatorOptions.Global.LanguageManager.Culture
+        };
     }
+
 }

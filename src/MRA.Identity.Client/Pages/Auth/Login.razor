@@ -35,7 +35,7 @@
                 </MudCardHeader>
                 <MudCardContent>
                     <MudTextField Label="@ContentService["SignIn:UserName"]"
-                                  @bind-Value="_loginCommand.Username" For="@(() => _loginCommand.Username)"/>
+                                  @bind-Value="_loginCommand.Username" For="@(() => _loginCommand.Username)" ErrorText=""/>
 
                     <MudTextField Label="@ContentService["SignIn:Password"]"
                                   @bind-Value="_loginCommand.Password" For="@(() => _loginCommand.Password)" InputType="InputType.Password"/>

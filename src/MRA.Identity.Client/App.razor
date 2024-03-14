@@ -1,4 +1,6 @@
-﻿<Router AppAssembly="@typeof(App).Assembly">
+﻿@using System.Runtime.InteropServices
+@using FluentValidation
+<Router AppAssembly="@typeof(App).Assembly">
     <Found Context="routeData">
         <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />
@@ -12,8 +14,12 @@
 </Router>
 
 @code {
+    
+    [Inject] ILocalStorageService LocalStorageService { get; set; }
+    
     protected override async Task OnInitializedAsync()
     {
         await ContentService.InitializeCultureAsync();
+        ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo(await LocalStorageService.GetItemAsStringAsync("ApplicationCulturesNames"));
     }
 }

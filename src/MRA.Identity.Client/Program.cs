@@ -23,7 +23,7 @@ builder.Services.AddFeatureManagement();
 //Mra.BlazorComponents
 builder.Services.AddHttpClientService();
 builder.Services.AddMraPages();
-builder.Services.AddDialogs(); 
+builder.Services.AddDialogs();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 //Mra.BlazorComponents
 
@@ -36,7 +36,6 @@ builder.Services.AddScoped<ITokenParserService, TokenParserService>();
 builder.Services.AddLocalization();
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
-
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 

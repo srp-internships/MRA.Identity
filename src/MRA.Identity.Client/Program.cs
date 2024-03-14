@@ -1,13 +1,16 @@
 using Blazored.LocalStorage;
+using FluentValidation;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Localization;
 using Microsoft.FeatureManagement;
 using MRA.BlazorComponents;
 using MRA.BlazorComponents.Dialogs;
 using MRA.BlazorComponents.DynamicPages;
 using MRA.BlazorComponents.HttpClient;
 using MRA.Identity.Client;
+using MRA.Identity.Client.Resources.Languages;
 using MRA.Identity.Client.Services;
 using MRA.Identity.Client.Services.Auth;
 using MRA.Identity.Client.Services.ContentService;
@@ -38,6 +41,5 @@ builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddAuthorizationCore();
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
-
 
 await builder.Build().RunAsync();

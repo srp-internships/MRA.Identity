@@ -33,8 +33,10 @@
 
     private void SetValidatorOptionsCulture(string lang)
     {
-        ValidatorOptions.Global.LanguageManager = new CustomLanguageManager();
+        // ValidatorOptions.Global.LanguageManager = new CustomLanguageManager();
         ValidatorOptions.Global.LanguageManager.Culture = GetCultureInfo(lang);
+        ValidatorOptions.Global.DisplayNameResolver = (type, member, expression) =>
+            member is not null ? ContentService[$"FltValidator:{member.Name}"] : null;
     }
 
     private CultureInfo GetCultureInfo(string lang)

@@ -46,8 +46,8 @@ public class RegisterUserCommandHandler(
         ApplicationUser user = new()
         {
             Id = Guid.NewGuid(),
-            UserName = request.Username,
-            NormalizedUserName = request.Username.ToLower(),
+            UserName = request.Username.Trim(),
+            NormalizedUserName = request.Username.Trim().ToLower(),
             Email = request.Email,
             NormalizedEmail = request.Email.ToLower(),
             EmailConfirmed = false,
@@ -68,7 +68,7 @@ public class RegisterUserCommandHandler(
         }
 
         await emailVerification.SendVerificationEmailAsync(user);
-        
+
         await context.SaveChangesAsync(cancellationToken);
         await CreateClaimAsync(user.UserName, user.Id, user.Email, cancellationToken);
         return user.Id;

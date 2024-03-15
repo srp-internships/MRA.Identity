@@ -506,9 +506,9 @@
     <data name="FltValidator:Slug" xml:space="preserve">
   <value>Слаг</value>
 </data>
-    <data name="FltValidator:UserName" xml:space="preserve">
+    <!-- <data name="FltValidator:UserName" xml:space="preserve">
   <value>Имя пользователя</value>
-</data>
+</data> -->
     <data name="FltValidator:Gender" xml:space="preserve">
   <value>Пол</value>
 </data>
@@ -602,5 +602,27 @@
     <data name="FltValidator:Comment" xml:space="preserve">
   <value>Комментарий</value>
 </data>
+ <data name="FltValidator:Username" xml:space="preserve">
+  <value>Имя пользователя</value>
+</data>
+ <data name="FltValidator:Email" xml:space="preserve">
+  <value>Электронная почта</value>
+</data>
+<data name="FltValidator:PhoneNumber" xml:space="preserve">
+  <value>Намер телефона</value>
+</data>
+<data name="FltValidator:Password" xml:space="preserve">
+  <value>Пароль</value>
+</data>
+<data name="FltValidator:CurrentPassword" xml:space="preserve">
+  <value>Текущий пароль</value>
+</data>
+<data name="FltValidator:NewPassword" xml:space="preserve">
+  <value>Новый пароль</value>
+</data>
+<data name="FltValidator:ConfirmPassword" xml:space="preserve">
+  <value>Подтверждение пароля</value>
+</data>
+
 
 </root>

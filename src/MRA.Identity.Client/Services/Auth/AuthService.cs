@@ -6,7 +6,7 @@ using MRA.Identity.Application.Contract.User.Commands.LoginUser;
 using MRA.Identity.Application.Contract.User.Commands.RegisterUser;
 using MRA.Identity.Application.Contract.User.Commands.ResetPassword;
 using MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
-using MRA.Identity.Application.Contract.User.Queries.GetUserNameByPhoneNymber;
+using MRA.Identity.Application.Contract.User.Queries.GetUserNameByPhoneNumber;
 using MRA.Identity.Application.Contract.User.Responses;
 using MRA.Identity.Client.Services.ContentService;
 using MRA.Identity.Client.Services.Profile;

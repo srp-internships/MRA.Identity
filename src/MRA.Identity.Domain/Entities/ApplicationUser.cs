@@ -22,7 +22,7 @@ public class ApplicationUser : IdentityUser<Guid>
 
     public string AboutMyself { get; set; }
 
-    public List<EducationDetail> Educations { get; set; }
-    public List<ExperienceDetail> Experiences { get; set; }
-    public List<UserSkill> UserSkills { get; set; }
+    public ICollection<EducationDetail> Educations { get; set; }
+    public ICollection<ExperienceDetail> Experiences { get; set; }
+    public IEnumerable<UserSkill> UserSkills { get; set; }
 }

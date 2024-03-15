@@ -126,7 +126,7 @@ else
                                                     @ContentService["Profile:EmailisnotConfirmed"]
                                                 </MudText>
                                             </MudStack>
-                                            <ProgressTaskButton Variant="Variant.Filled" Function="SendEmailConfirms">
+                                            <ProgressTaskButton Variant="Variant.Filled" OnClick="@SendEmailConfirms">
                                                 <MudText>@ContentService["Profile:Sendverificationemail"]</MudText>
                                             </ProgressTaskButton>
                                         </MudStack>
@@ -160,7 +160,7 @@ else
                                         if (!_codeSent)
                                         {
                                             <ProgressTaskButton Variant="Variant.Text" Color="Color.Info"
-                                                                Function="SendCode">
+                                                                OnClick="@SendCode">
                                                 <MudText> @ContentService["ResetPassword:Sendconfirmationcode"]</MudText>
                                             </ProgressTaskButton>
                                         }
@@ -184,7 +184,7 @@ else
                                             <MudTextField Label="@ContentService["Profile:Confirmationcode"]" MaxLength="4" Required Style="width:200px" @bind-Value="@_confirmationCode" Variant="Variant.Outlined" Margin="Margin.Dense" Clearable="true"/>
                                         </MudItem>
                                         <MudItem class="m-1">
-                                            <ProgressTaskButton Function="@Verify" Variant="Variant.Filled" Color="Color.Info" Style="width: 100px">
+                                            <ProgressTaskButton OnClick="@Verify" Variant="Variant.Filled" Color="Color.Info" Style="width: 100px">
                                                 <MudText>@ContentService["Profile:Confirm"]</MudText>
                                             </ProgressTaskButton>
                                         </MudItem>
@@ -263,15 +263,15 @@ else
                                             <MudDatePicker Label="@ContentService["Profile:StartDate"]" @bind-Date="@_educationUpdate.StartDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _educationUpdate.StartDate)"/>
                                             @if (_educationUpdate.UntilNow == false)
                                             {
-                                                <MudDatePicker Label="@ContentService["VacanciesList:End date"]" @bind-Date="@_educationUpdate.EndDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _educationUpdate.EndDate)"/>
+                                                <MudDatePicker Label="@ContentService["Profile:EndDate"]" @bind-Date="@_educationUpdate.EndDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _educationUpdate.EndDate)"/>
                                             }
                                             <MudCheckBox @bind-Checked="@_educationUpdate.UntilNow" Label="@ContentService["Profile:Present"]" Color="Color.Primary"></MudCheckBox>
                                         </MudCardContent>
                                         <MudCardActions>
-                                            <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" Function="UpdateEducationHandle" Style="margin: 5px">
+                                            <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@UpdateEducationHandle" Style="margin: 5px">
                                                 <MudText>@ContentService["Profile:Update"]</MudText>
                                             </ProgressTaskButton>
-                                            <ProgressTaskButton Variant="Variant.Filled"  Function="CancelButtonClicked_UpdateEducation" Style="margin: 5px">
+                                            <ProgressTaskButton Variant="Variant.Filled" OnClick="@CancelButtonClicked_UpdateEducation" Style="margin: 5px">
                                                 <MudText> @ContentService["Profile:Cancel"]</MudText>
                                             </ProgressTaskButton>
                                         </MudCardActions>
@@ -317,7 +317,7 @@ else
 
                     @if (_addEducation == false)
                     {
-                        <ProgressTaskButton Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Function="@(() => _addEducation = true)">
+                        <ProgressTaskButton Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" OnClick="@(() => _addEducation = true)">
                             <MudText>
                                 @ContentService["Profile:AddNewEducation"]
                             </MudText>
@@ -346,15 +346,15 @@ else
                                     <MudDatePicker Label="@ContentService["Profile:StartDate"]" @bind-Date="_createEducation.StartDate" Style="margin-bottom: 10px;" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _createEducation.StartDate)"/>
                                     @if (_createEducation.UntilNow == false)
                                     {
-                                        <MudDatePicker Label="@ContentService["VacanciesList:End date"]" @bind-Date="_createEducation.EndDate" Style="margin-bottom: 10px;" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _createEducation.EndDate)"/>
+                                        <MudDatePicker Label="@ContentService["Profile:EndDate"]" @bind-Date="_createEducation.EndDate" Style="margin-bottom: 10px;" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Dense" For="(() => _createEducation.EndDate)"/>
                                     }
                                     <MudCheckBox @bind-Checked="@_createEducation.UntilNow" Label="@ContentService["Profile:Present"]" Color="Color.Primary"></MudCheckBox>
                                 </MudCardContent>
                                 <MudCardActions>
-                                    <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" Function="CreateEducationHandle" Style="margin: 5px">
+                                    <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@CreateEducationHandle" Style="margin: 5px">
                                         <MudText>@ContentService["Profile:Save"]</MudText>
                                     </ProgressTaskButton>
-                                    <ProgressTaskButton Variant="Variant.Filled" Function="CancelButtonClicked_CreateEducation" Style="margin: 5px">
+                                    <ProgressTaskButton Variant="Variant.Filled" OnClick="@CancelButtonClicked_CreateEducation" Style="margin: 5px">
                                         <MudText>@ContentService["Profile:Cancel"]</MudText>
                                     </ProgressTaskButton>
                                 </MudCardActions>
@@ -418,7 +418,7 @@ else
                                             <MudDatePicker Label="@ContentService["Profile:StartDate"]" @bind-Date="_experienceUpdate.StartDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Normal" For="(() => _experienceUpdate.StartDate)"/>
                                             @if (_experienceUpdate.IsCurrentJob == false)
                                             {
-                                                <MudDatePicker Label="@ContentService["VacanciesList:End date"]" @bind-Date="_experienceUpdate.EndDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Normal" For="(() => _experienceUpdate.EndDate)"/>
+                                                <MudDatePicker Label="@ContentService["Profile:EndDate"]" @bind-Date="_experienceUpdate.EndDate" DateFormat="dd.MM.yyyy" Variant="Variant.Outlined" Margin="Margin.Normal" For="(() => _experienceUpdate.EndDate)"/>
                                             }
                                             <MudCheckBox @bind-Value="@_experienceUpdate.IsCurrentJob" Label="@ContentService["Profile:Present"]" Color="Color.Primary"></MudCheckBox>
                                             <MudAutocomplete @bind-Value="@_experienceUpdate.Address" Label="@ContentService["Home:Address"]" Variant="Variant.Outlined"
@@ -427,10 +427,10 @@ else
 
                                         </MudCardContent>
                                         <MudCardActions>
-                                            <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" Function="UpdateExperienceHandle" Style="margin: 5px">
+                                            <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@UpdateExperienceHandle" Style="margin: 5px">
                                                 <MudText>@ContentService["Profile:Update"]</MudText>
                                             </ProgressTaskButton>
-                                            <ProgressTaskButton Variant="Variant.Filled" Function="CancelButtonClicked_UpdateExperience" Style="margin: 5px">
+                                            <ProgressTaskButton Variant="Variant.Filled" OnClick="@CancelButtonClicked_UpdateExperience" Style="margin: 5px">
                                                 @ContentService["Profile:Cancel"]
                                             </ProgressTaskButton>
                                         </MudCardActions>
@@ -485,7 +485,8 @@ else
 
                     @if (_addExperience == false)
                     {
-                        <ProgressTaskButton Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" Function="@(() => _addExperience = true)">
+                        <ProgressTaskButton Color="Color.Primary" Variant="Variant.Filled" StartIcon="@Icons.Material.Filled.Add" 
+                                            OnClick="@(() => _addExperience = true)">
                             <MudText> @ContentService["Profile:AddNewExperience"]</MudText>
                         </ProgressTaskButton>
                     }
@@ -522,7 +523,7 @@ else
                                     <MudTextField T="string" @bind-Value="@_createExperience.Description" Label="@ContentService["Profile:Description"]" Lines="5" Variant="Variant.Outlined" For="(() => _createExperience.Description)"></MudTextField>
                                 </MudCardContent>
                                 <MudCardActions>
-                                    <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" Function="CreateExperienceHandle" Style="margin: 5px">
+                                    <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" OnClick="@CreateExperienceHandle" Style="margin: 5px">
                                         <MudText>@ContentService["Profile:Save"]</MudText>
                                     </ProgressTaskButton>
                                     <MudButton Variant="Variant.Filled" OnClick="CancelButtonClicked_CreateExperience" Style="margin: 5px">
@@ -534,7 +535,7 @@ else
                     }
 
                 </MudItem>
-                <!--------------------->  
+                <!--------------------->
             </MudGrid>
             break;
         case 3:
@@ -554,7 +555,7 @@ else
 
                             </MudStack>
                             <ProgressTaskButton Color="Color.Primary" StartIcon="@Icons.Material.Filled.Add"
-                                                Function="OnBlur" Variant="Variant.Filled">
+                                                OnClick="@OnBlur" Variant="Variant.Filled">
                                 <MudText>@ContentService["Profile:AddSkill"]</MudText>
                             </ProgressTaskButton>
                             <br/>

@@ -222,6 +222,15 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Send email.
+        /// </summary>
+        internal static string Header_SendEmail {
+            get {
+                return ResourceManager.GetString("Header:SendEmail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Send message.
         /// </summary>
         internal static string Header_SendMessage {

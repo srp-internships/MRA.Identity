@@ -10,6 +10,9 @@
         <Content Remove="Pages\General\**" />
         <EmbeddedResource Remove="Pages\General\**" />
         <None Remove="Pages\General\**" />
+        <Compile Update="Pages\UserManagerPages\UserProfile.cs">
+          <DependentUpon>UserProfile.razor</DependentUpon>
+        </Compile>
     </ItemGroup>
 
     <ItemGroup>
@@ -22,7 +25,7 @@
         <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="8.0.1" />
         <PackageReference Include="Microsoft.Extensions.Http" Version="8.0.0" />
         <PackageReference Include="Microsoft.FeatureManagement" Version="3.1.1" />
-        <PackageReference Include="MRA.BlazorComponents" Version="1.0.13" />
+        <PackageReference Include="MRA.BlazorComponents" Version="1.7.0" />
         <PackageReference Include="MudBlazor" Version="6.12.0" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
         <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.2.0" />

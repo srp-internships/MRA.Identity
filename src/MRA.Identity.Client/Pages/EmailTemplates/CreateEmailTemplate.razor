@@ -63,7 +63,8 @@
                     </BlazoredTextEditor>
                     <MudInput @bind-Value="@_imageLinkToInsertToEditor"/>
                     <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary"
-                                        Function="InsertImage"> Insert image
+                                        OnClick="@InsertImage">
+                        Insert image
                     </ProgressTaskButton>
                 </MudCardContent>
             </MudForm>

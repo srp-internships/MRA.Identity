@@ -13,28 +13,4 @@
         <PackageReference Include="Sieve" Version="2.5.5" />
     </ItemGroup>
 
-    <ItemGroup>
-      <EmbeddedResource Update="Resources\Russian.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>English.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-      <EmbeddedResource Update="Resources\English.resx">
-        <Generator>ResXFileCodeGenerator</Generator>
-        <LastGenOutput>Russian.Designer.cs</LastGenOutput>
-      </EmbeddedResource>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Compile Update="Resources\Russian.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>Russian.resx</DependentUpon>
-      </Compile>
-      <Compile Update="Resources\English.Designer.cs">
-        <DesignTime>True</DesignTime>
-        <AutoGen>True</AutoGen>
-        <DependentUpon>English.resx</DependentUpon>
-      </Compile>
-    </ItemGroup>
-
 </Project>

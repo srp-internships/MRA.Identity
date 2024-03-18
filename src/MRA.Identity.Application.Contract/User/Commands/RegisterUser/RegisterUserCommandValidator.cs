@@ -1,6 +1,4 @@
 ﻿using FluentValidation;
-using Microsoft.Extensions.Localization;
-using MRA.Identity.Application.Contract.Resources;
 
 namespace MRA.Identity.Application.Contract.User.Commands.RegisterUser
 {

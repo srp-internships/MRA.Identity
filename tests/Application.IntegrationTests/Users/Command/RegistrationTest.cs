@@ -7,11 +7,11 @@ namespace MRA.Jobs.Application.IntegrationTests.Users.Command;
 public class RegistrationTests : BaseTest
 {
     [Test]
-    [TestCase("Alex99","alex99@example.com", "+992123451789")]
-    [TestCase(" Jason ","jason@example.com", "+992223451789")]
-    [TestCase("Piter ","piter@example.com", "+992323451789")]
-
-    public async Task Register_ValidRequestWithCorrectRegisterData_ReturnsOkAndSavesUserIntoDb(string userName, string email, string phoneNumber)
+    [TestCase("Alex99", "alex99@example.com", "+992123451789")]
+    [TestCase(" Jason ", "jason@example.com", "+992223451789")]
+    [TestCase("Piter ", "piter@example.com", "+992323451789")]
+    public async Task Register_ValidRequestWithCorrectRegisterData_ReturnsOkAndSavesUserIntoDb(string userName,
+        string email, string phoneNumber)
     {
         // Arrange
         var request = new RegisterUserCommand
@@ -30,12 +30,13 @@ public class RegistrationTests : BaseTest
         request.VerificationCode = (await GetEntity<ConfirmationCode>(x => x.PhoneNumber == request.PhoneNumber)).Code;
         // Assert
         var response = await _client.PostAsJsonAsync("api/Auth/register", request);
+       var ct= response.Content;
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
         // Assert
         var registeredUser =
             await GetEntity<ApplicationUser>(u => u.Email == request.Email && u.UserName == request.Username);
-        Assert.That(registeredUser,Is.Not.Null, "Registered user not found");
+        Assert.That(registeredUser, Is.Not.Null, "Registered user not found");
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
     }
 
@@ -103,7 +104,7 @@ public class RegistrationTests : BaseTest
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.BadRequest),
             await response.Content.ReadAsStringAsync());
     }
-   
+
 
     [Test]
     public async Task Register_WhenCall_CreateRequiredClaims()
@@ -135,10 +136,10 @@ public class RegistrationTests : BaseTest
         var user = await GetEntity<ApplicationUser>(s => s.UserName == request.Username);
 
         var userClaims = await GetWhere<ApplicationUserClaim>(s => s.UserId == user.Id);
-        
 
-        Assert.That(userClaims.Exists(s=>s.ClaimType==ClaimTypes.Id && s.ClaimValue==user.Id.ToString()));
-        Assert.That(userClaims.Exists(s=>s.ClaimType==ClaimTypes.Email && s.ClaimValue==request.Email));
-        Assert.That(userClaims.Exists(s=>s.ClaimType==ClaimTypes.Username && s.ClaimValue==request.Username));
+
+        Assert.That(userClaims.Exists(s => s.ClaimType == ClaimTypes.Id && s.ClaimValue == user.Id.ToString()));
+        Assert.That(userClaims.Exists(s => s.ClaimType == ClaimTypes.Email && s.ClaimValue == request.Email));
+        Assert.That(userClaims.Exists(s => s.ClaimType == ClaimTypes.Username && s.ClaimValue == request.Username));
     }
 }

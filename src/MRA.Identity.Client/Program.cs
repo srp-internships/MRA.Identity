@@ -9,6 +9,7 @@ using MRA.BlazorComponents;
 using MRA.BlazorComponents.Dialogs;
 using MRA.BlazorComponents.DynamicPages;
 using MRA.BlazorComponents.HttpClient;
+using MRA.Identity.Application.Contract;
 using MRA.Identity.Client;
 using MRA.Identity.Client.Resources.Languages;
 using MRA.Identity.Client.Services;

@@ -13,4 +13,19 @@
         <PackageReference Include="Sieve" Version="2.5.5" />
     </ItemGroup>
 
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\Validators\RegisterUserCommandValidator.ru.resx">
+        <Generator>ResXFileCodeGenerator</Generator>
+        <LastGenOutput>RegisterUserCommandValidator.ru.Designer.cs</LastGenOutput>
+      </EmbeddedResource>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Resources\Validators\RegisterUserCommandValidator.ru.Designer.cs">
+        <DesignTime>True</DesignTime>
+        <AutoGen>True</AutoGen>
+        <DependentUpon>RegisterUserCommandValidator.ru.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

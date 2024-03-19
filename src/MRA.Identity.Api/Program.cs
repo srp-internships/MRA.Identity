@@ -1,4 +1,4 @@
-using System.Reflection;
+using System.Globalization;
 using MRA.Identity.Application;
 using MRA.Identity.Infrastructure;
 using MRA.Identity.Infrastructure.Persistence;
@@ -64,6 +64,8 @@ builder.Services.AddLocalization(opt => opt.ResourcesPath="Resources");
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssembly(typeof(RemoveUserSkillCommand).Assembly);
 builder.Services.Configure<SieveOptions>(builder.Configuration.GetSection("MraIdentity-Sieve"));
+builder.Services.AddFluentValidatorCustomMessages();
+ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("ru-RU");
 WebApplication app = builder.Build();
 
 app.UseSwagger();

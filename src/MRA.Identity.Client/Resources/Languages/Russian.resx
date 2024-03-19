@@ -542,9 +542,7 @@
     <data name="FltValidator:Code" xml:space="preserve">
   <value>Код</value>
 </data>
-    <data name="FltValidator:PhoneNumber" xml:space="preserve">
-  <value>Номер телефона</value>
-</data>
+ 
     <data name="FltValidator:University" xml:space="preserve">
   <value>Университет</value>
 </data>
@@ -602,25 +600,25 @@
     <data name="FltValidator:Comment" xml:space="preserve">
   <value>Комментарий</value>
 </data>
- <data name="FltValidator:Username" xml:space="preserve">
+    <data name="FltValidator:Username" xml:space="preserve">
   <value>Имя пользователя</value>
 </data>
- <data name="FltValidator:Email" xml:space="preserve">
+    <data name="FltValidator:Email" xml:space="preserve">
   <value>Электронная почта</value>
 </data>
-<data name="FltValidator:PhoneNumber" xml:space="preserve">
+    <data name="FltValidator:PhoneNumber" xml:space="preserve">
   <value>Намер телефона</value>
 </data>
-<data name="FltValidator:Password" xml:space="preserve">
+    <data name="FltValidator:Password" xml:space="preserve">
   <value>Пароль</value>
 </data>
-<data name="FltValidator:CurrentPassword" xml:space="preserve">
+    <data name="FltValidator:CurrentPassword" xml:space="preserve">
   <value>Текущий пароль</value>
 </data>
-<data name="FltValidator:NewPassword" xml:space="preserve">
+    <data name="FltValidator:NewPassword" xml:space="preserve">
   <value>Новый пароль</value>
 </data>
-<data name="FltValidator:ConfirmPassword" xml:space="preserve">
+    <data name="FltValidator:ConfirmPassword" xml:space="preserve">
   <value>Подтверждение пароля</value>
 </data>
 

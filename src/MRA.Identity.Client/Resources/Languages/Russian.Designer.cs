@@ -105,6 +105,24 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Подтверждение пароля.
+        /// </summary>
+        internal static string FltValidator_ConfirmPassword {
+            get {
+                return ResourceManager.GetString("FltValidator:ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Текущий пароль.
+        /// </summary>
+        internal static string FltValidator_CurrentPassword {
+            get {
+                return ResourceManager.GetString("FltValidator:CurrentPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Дата.
         /// </summary>
         internal static string FltValidator_Date {
@@ -137,6 +155,15 @@ namespace MRA.Identity.Client.Resources.Languages {
         internal static string FltValidator_Educations {
             get {
                 return ResourceManager.GetString("FltValidator:Educations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Электронная почта.
+        /// </summary>
+        internal static string FltValidator_Email {
+            get {
+                return ResourceManager.GetString("FltValidator:Email", resourceCulture);
             }
         }
         
@@ -222,7 +249,25 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Номер телефона.
+        ///   Looks up a localized string similar to Новый пароль.
+        /// </summary>
+        internal static string FltValidator_NewPassword {
+            get {
+                return ResourceManager.GetString("FltValidator:NewPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Пароль.
+        /// </summary>
+        internal static string FltValidator_Password {
+            get {
+                return ResourceManager.GetString("FltValidator:Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Намер телефона.
         /// </summary>
         internal static string FltValidator_PhoneNumber {
             get {
@@ -341,9 +386,9 @@ namespace MRA.Identity.Client.Resources.Languages {
         /// <summary>
         ///   Looks up a localized string similar to Имя пользователя.
         /// </summary>
-        internal static string FltValidator_UserName {
+        internal static string FltValidator_Username {
             get {
-                return ResourceManager.GetString("FltValidator:UserName", resourceCulture);
+                return ResourceManager.GetString("FltValidator:Username", resourceCulture);
             }
         }
         

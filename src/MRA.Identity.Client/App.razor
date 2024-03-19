@@ -17,7 +17,7 @@
 
     [Inject] ILocalStorageService LocalStorageService { get; set; }
     [Inject] IConfiguration Configuration { get; set; }
-
+    [Inject] MRA.Identity.Application.Contract.ContentService.IContentService ContentServiceApplicationContract { get; set; }
     protected override async Task OnInitializedAsync()
     {
         await ContentService.InitializeCultureAsync();
@@ -33,10 +33,9 @@
 
     private void SetValidatorOptionsCulture(string lang)
     {
-        // ValidatorOptions.Global.LanguageManager = new CustomLanguageManager();
         ValidatorOptions.Global.LanguageManager.Culture = GetCultureInfo(lang);
         ValidatorOptions.Global.DisplayNameResolver = (type, member, expression) =>
-            member is not null ? ContentService[$"FltValidator:{member.Name}"] : null;
+            member is not null ? ContentServiceApplicationContract[member.Name] : null;
     }
 
     private CultureInfo GetCultureInfo(string lang)

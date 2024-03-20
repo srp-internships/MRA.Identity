@@ -1,0 +1,42 @@
+﻿@using MRA.Identity.Client.Services.Roles
+@using MRA.Identity.Application.Contract.ApplicationRoles.Commands
+@using System.Security.Cryptography.X509Certificates
+@inject IRoleService RoleService
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Delete" Class="mr-3 mb-n1"/>
+            @ContentService["Roles:Create"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        @ContentService["Roles:ConfirmDeletion"]
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(Cancel)">@ContentService["Profile:Cancel"]</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@(async () => await DeleteAsync())">@ContentService["Roles:Delete"]</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+    [Parameter] public string RoleSlug { get; set; }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task DeleteAsync()
+    {
+        var success = await RoleService.Delete(RoleSlug);
+        if (success)
+        {
+            MudDialog.Close();
+        }
+    }
+
+}
+
+}

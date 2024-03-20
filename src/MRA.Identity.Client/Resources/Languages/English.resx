@@ -543,5 +543,31 @@
   <data name="Home:Address" xml:space="preserve">
     <value>Address</value>
   </data>
-
+  <data name="Roles:Role" xml:space="preserve">
+    <value>Role</value>
+  </data>
+  <data name="Roles:Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Roles:Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Roles:CreateNewRole" xml:space="preserve">
+    <value>Create new role</value>
+  </data>
+  <data name="Roles:UpdateRole" xml:space="preserve">
+    <value>Update the role</value>
+  </data>
+  <data name="Roles:Update" xml:space="preserve">
+    <value>Update</value>
+  </data>
+  <data name="Roles:Create" xml:space="preserve">
+    <value>Create</value>
+  </data>
+  <data name="Roles:ConfirmDeletion" xml:space="preserve">
+    <value>Confirm deletion</value>
+  </data>
+  <data name="Roles:Success" xml:space="preserve">
+    <value>Success</value>
+  </data>
 </root>

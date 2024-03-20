@@ -12,6 +12,7 @@ using MRA.Identity.Client.Services;
 using MRA.Identity.Client.Services.Auth;
 using MRA.Identity.Client.Services.ContentService;
 using MRA.Identity.Client.Services.Profile;
+using MRA.Identity.Client.Services.Roles;
 using MRA.Identity.Client.Services.UserPreferences;
 using MudBlazor.Services;
 
@@ -23,10 +24,11 @@ builder.Services.AddFeatureManagement();
 //Mra.BlazorComponents
 builder.Services.AddHttpClientService();
 builder.Services.AddMraPages();
-builder.Services.AddDialogs(); 
+builder.Services.AddDialogs();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 //Mra.BlazorComponents
 
+builder.Services.AddScoped<IRoleService, RoleService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<LayoutService>();

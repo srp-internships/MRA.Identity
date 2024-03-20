@@ -1,0 +1,98 @@
+﻿@page "/Roles"
+@using MRA.Identity.Client.Services.Roles
+@using MRA.Identity.Application.Contract.ApplicationRoles.Responses
+@using MRA.Identity.Client.Pages.RoleManagement.Components
+@using MRA.Identity.Application.Contract.ApplicationRoles.Commands
+@inject IRoleService RoleService
+@inject IDialogService DialogService
+<Header></Header>
+<CascadingAuthenticationState>
+    <AuthorizeView Roles="SuperAdmin" Context="_">
+        <Authorized>
+            <MudTable Hover="true" Items="_roles" Breakpoint="Breakpoint.Xs" @ref="_table">
+                <HeaderContent>
+                    <MudTh>
+                        @ContentService["Roles:Role"]
+                    </MudTh>
+                    <MudTh>
+                        @ContentService["Roles:Edit"]
+                    </MudTh>
+                    <MudTh>
+                        @ContentService["Roles:Delete"]
+                    </MudTh>
+                    <MudTh>
+                        <MudButton StartIcon="@Icons.Material.Filled.Create" OnClick="@(async () => await CreateAsync())">
+                            @ContentService["Roles:CreateNewRole"]
+                        </MudButton>
+                    </MudTh>
+                </HeaderContent>
+                <RowTemplate>
+                    <MudTd>
+                        <MudText>@context.Name</MudText>
+                    </MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="@(async () => await EditAsync(context.Name, context.Slug))"></MudIconButton>
+                    </MudTd>
+                    <MudTd>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="@(async () => await DeleteAsync(context.Slug))"></MudIconButton>
+                    </MudTd>
+
+                </RowTemplate>
+                <NoRecordsContent>
+                    <MudText>@ContentService["UserManager:Nomatchingrecords"]</MudText>
+                </NoRecordsContent>
+                <LoadingContent>
+                    <MudText>@ContentService["UserManager:Loading"]</MudText>
+                </LoadingContent>
+                <PagerContent>
+                    <MudTablePager/>
+                </PagerContent>
+            </MudTable>
+
+        </Authorized>
+        <NotAuthorized>
+            <MudText Typo="Typo.h2">Page is Not Found!</MudText>
+        </NotAuthorized>
+    </AuthorizeView>
+
+</CascadingAuthenticationState>
+
+@code{
+
+    private List<RoleNameResponse> _roles = [];
+    private MudTable<RoleNameResponse> _table;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _roles = await RoleService.GetRoles();
+        StateHasChanged();
+        await _table.ReloadServerData();
+    }
+
+    private async Task DeleteAsync(string name)
+    {
+        await DialogService.ShowAsync<DeleteRoleDialog>("",
+            new DialogParameters { { "RoleSlug", name } });
+    }
+
+    private async Task CreateAsync()
+    {
+        await DialogService.ShowAsync<CreateRoleDialog>("");
+    }
+
+    private async Task EditAsync(string name, string slug)
+    {
+        await DialogService.ShowAsync<UpdateRoleDialog>("",
+            new DialogParameters
+            {
+                {
+                    "Command", new UpdateRoleCommand
+                    {
+                        Slug = slug,
+                        NewRoleName = name
+                    }
+                }
+            });
+    }
+
+}

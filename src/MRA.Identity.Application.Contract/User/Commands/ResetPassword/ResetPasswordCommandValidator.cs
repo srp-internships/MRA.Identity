@@ -1,13 +1,18 @@
 ﻿using FluentValidation;
+using MRA.Identity.Application.Contract.ContentService;
 
 namespace MRA.Identity.Application.Contract.User.Commands.ResetPassword;
+
 public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordCommand>
 {
-    public ResetPasswordCommandValidator()
+    public ResetPasswordCommandValidator(IContentService contentService)
     {
         RuleFor(s => s.Password).NotEmpty().MinimumLength(5);
-        RuleFor(s => s.PhoneNumber).Matches(@"^\+992\d{9}$")
-            .WithMessage("Invalid phone number. Example : +992921234567");
-        RuleFor(s => s.ConfirmPassword).Equal(s => s.Password).WithMessage("ConfirmPassword must be equal to Password.");
+        RuleFor(sm => sm.PhoneNumber).NotEmpty()
+            .Matches(@"^(?:\d{9}|\+992\d{9}|992\d{9})$")
+            .WithMessage(contentService["PhoneNumberMessage"]);
+        RuleFor(s => s.ConfirmPassword).NotEmpty()
+            .Equal(s => s.Password)
+            .WithMessage(contentService["ConfirmPasswordMessage"]);
     }
 }

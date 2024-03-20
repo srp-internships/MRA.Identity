@@ -17,6 +17,7 @@ using MRA.Configurations.Initializer.Azure.EmailService;
 using MRA.Configurations.Initializer.Services;
 using MRA.Configurations.Initializer.OsonSms.SmsService;
 using MRA.Configurations.Common.Constants;
+using MRA.Identity.Application.Contract;
 using MRA.Identity.Infrastructure.Services;
 
 namespace MRA.Identity.Infrastructure;

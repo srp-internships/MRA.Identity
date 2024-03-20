@@ -1,498 +1,507 @@
 <?xml version="1.0" encoding="utf-8"?>
 <root>
-  <!-- 
-    Microsoft ResX Schema 
-    
-    Version 2.0
-    
-    The primary goals of this format is to allow a simple XML format 
-    that is mostly human readable. The generation and parsing of the 
-    various data types are done through the TypeConverter classes 
-    associated with the data types.
-    
-    Example:
-    
-    ... ado.net/XML headers & schema ...
-    <resheader name="resmimetype">text/microsoft-resx</resheader>
-    <resheader name="version">2.0</resheader>
-    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
-    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
-    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
-    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
-    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
-        <value>[base64 mime encoded serialized .NET Framework object]</value>
-    </data>
-    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
-        <comment>This is a comment</comment>
-    </data>
-                
-    There are any number of "resheader" rows that contain simple 
-    name/value pairs.
-    
-    Each data row contains a name, and value. The row also contains a 
-    type or mimetype. Type corresponds to a .NET class that support 
-    text/value conversion through the TypeConverter architecture. 
-    Classes that don't support this are serialized and stored with the 
-    mimetype set.
-    
-    The mimetype is used for serialized objects, and tells the 
-    ResXResourceReader how to depersist the object. This is currently not 
-    extensible. For a given mimetype the value must be set accordingly:
-    
-    Note - application/x-microsoft.net.object.binary.base64 is the format 
-    that the ResXResourceWriter will generate, however the reader can 
-    read any of the formats listed below.
-    
-    mimetype: application/x-microsoft.net.object.binary.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
-            : and then encoded with base64 encoding.
-    
-    mimetype: application/x-microsoft.net.object.soap.base64
-    value   : The object must be serialized with 
-            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
-            : and then encoded with base64 encoding.
-
-    mimetype: application/x-microsoft.net.object.bytearray.base64
-    value   : The object must be serialized into a byte array 
-            : using a System.ComponentModel.TypeConverter
-            : and then encoded with base64 encoding.
-    -->
-  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
-    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
-    <xsd:element name="root" msdata:IsDataSet="true">
-      <xsd:complexType>
-        <xsd:choice maxOccurs="unbounded">
-          <xsd:element name="metadata">
+    <!-- 
+      Microsoft ResX Schema 
+      
+      Version 2.0
+      
+      The primary goals of this format is to allow a simple XML format 
+      that is mostly human readable. The generation and parsing of the 
+      various data types are done through the TypeConverter classes 
+      associated with the data types.
+      
+      Example:
+      
+      ... ado.net/XML headers & schema ...
+      <resheader name="resmimetype">text/microsoft-resx</resheader>
+      <resheader name="version">2.0</resheader>
+      <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+      <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+      <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+      <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+      <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+          <value>[base64 mime encoded serialized .NET Framework object]</value>
+      </data>
+      <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+          <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+          <comment>This is a comment</comment>
+      </data>
+                  
+      There are any number of "resheader" rows that contain simple 
+      name/value pairs.
+      
+      Each data row contains a name, and value. The row also contains a 
+      type or mimetype. Type corresponds to a .NET class that support 
+      text/value conversion through the TypeConverter architecture. 
+      Classes that don't support this are serialized and stored with the 
+      mimetype set.
+      
+      The mimetype is used for serialized objects, and tells the 
+      ResXResourceReader how to depersist the object. This is currently not 
+      extensible. For a given mimetype the value must be set accordingly:
+      
+      Note - application/x-microsoft.net.object.binary.base64 is the format 
+      that the ResXResourceWriter will generate, however the reader can 
+      read any of the formats listed below.
+      
+      mimetype: application/x-microsoft.net.object.binary.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+              : and then encoded with base64 encoding.
+      
+      mimetype: application/x-microsoft.net.object.soap.base64
+      value   : The object must be serialized with 
+              : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+              : and then encoded with base64 encoding.
+  
+      mimetype: application/x-microsoft.net.object.bytearray.base64
+      value   : The object must be serialized into a byte array 
+              : using a System.ComponentModel.TypeConverter
+              : and then encoded with base64 encoding.
+      -->
+    <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+        <xsd:import namespace="http://www.w3.org/XML/1998/namespace"/>
+        <xsd:element name="root" msdata:IsDataSet="true">
             <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" />
-              </xsd:sequence>
-              <xsd:attribute name="name" use="required" type="xsd:string" />
-              <xsd:attribute name="type" type="xsd:string" />
-              <xsd:attribute name="mimetype" type="xsd:string" />
-              <xsd:attribute ref="xml:space" />
+                <xsd:choice maxOccurs="unbounded">
+                    <xsd:element name="metadata">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" use="required" type="xsd:string"/>
+                            <xsd:attribute name="type" type="xsd:string"/>
+                            <xsd:attribute name="mimetype" type="xsd:string"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="assembly">
+                        <xsd:complexType>
+                            <xsd:attribute name="alias" type="xsd:string"/>
+                            <xsd:attribute name="name" type="xsd:string"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="data">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1"/>
+                            <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3"/>
+                            <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4"/>
+                            <xsd:attribute ref="xml:space"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                    <xsd:element name="resheader">
+                        <xsd:complexType>
+                            <xsd:sequence>
+                                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1"/>
+                            </xsd:sequence>
+                            <xsd:attribute name="name" type="xsd:string" use="required"/>
+                        </xsd:complexType>
+                    </xsd:element>
+                </xsd:choice>
             </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="assembly">
-            <xsd:complexType>
-              <xsd:attribute name="alias" type="xsd:string" />
-              <xsd:attribute name="name" type="xsd:string" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="data">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
-              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
-              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
-              <xsd:attribute ref="xml:space" />
-            </xsd:complexType>
-          </xsd:element>
-          <xsd:element name="resheader">
-            <xsd:complexType>
-              <xsd:sequence>
-                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
-              </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" use="required" />
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:choice>
-      </xsd:complexType>
-    </xsd:element>
-  </xsd:schema>
-  <resheader name="resmimetype">
-    <value>text/microsoft-resx</value>
-  </resheader>
-  <resheader name="version">
-    <value>2.0</value>
-  </resheader>
-  <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </resheader>
-  <data name="Header:Home" xml:space="preserve">
+        </xsd:element>
+    </xsd:schema>
+    <resheader name="resmimetype">
+        <value>text/microsoft-resx</value>
+    </resheader>
+    <resheader name="version">
+        <value>2.0</value>
+    </resheader>
+    <resheader name="reader">
+        <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <resheader name="writer">
+        <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral,
+            PublicKeyToken=b77a5c561934e089
+        </value>
+    </resheader>
+    <data name="Header:Home" xml:space="preserve">
     <value>Главная</value>
   </data>
 
-  <data name="Header:SendMessage" xml:space="preserve">
+    <data name="Header:SendMessage" xml:space="preserve">
     <value>Отправить сообщение</value>
   </data>
-  <data name="Header:SendEmail" xml:space="preserve">
+    <data name="Header:SendEmail" xml:space="preserve">
     <value>Отправить email</value>
   </data>
-  <data name="Header:Jobs" xml:space="preserve">
+    <data name="Header:Jobs" xml:space="preserve">
     <value>Вакансии</value>
   </data>
-\
-  <data name="Header:Team" xml:space="preserve">
+    \
+    <data name="Header:Team" xml:space="preserve">
     <value>Команда</value>
   </data>
-  <data name="Header:Academy" xml:space="preserve">
+    <data name="Header:Academy" xml:space="preserve">
     <value>Академия</value>
   </data>
-  <data name="UserButton:Profile" xml:space="preserve">
+    <data name="UserButton:Profile" xml:space="preserve">
     <value>Профиль</value>
   </data>
-  <data name="UserButton:Applications" xml:space="preserve">
+    <data name="UserButton:Applications" xml:space="preserve">
     <value>Отклики</value>
   </data>
-  <data name="UserButton:Logout" xml:space="preserve">
+    <data name="UserButton:Logout" xml:space="preserve">
     <value>Выход</value>
   </data>
-  <data name="UserButton:Sign In" xml:space="preserve">
+    <data name="UserButton:Sign In" xml:space="preserve">
     <value>Вход</value>
   </data>
-  <data name="UserButton:Sign Up" xml:space="preserve">
+    <data name="UserButton:Sign Up" xml:space="preserve">
     <value>Регистрация</value>
   </data>
-  <data name="SignIn:UserName" xml:space="preserve">
+    <data name="SignIn:UserName" xml:space="preserve">
     <value>Имя пользователя</value>
   </data>
-  <data name="SignIn:Password" xml:space="preserve">
+    <data name="SignIn:Password" xml:space="preserve">
     <value>Пароль</value>
   </data>
-  <data name="SignIn:LabelForgot" xml:space="preserve">
+    <data name="SignIn:LabelForgot" xml:space="preserve">
     <value>Забыли пароль?</value>
   </data>
-  <data name="SignIn:LinkReset" xml:space="preserve">
+    <data name="SignIn:LinkReset" xml:space="preserve">
     <value> Сбросить пароль</value>
   </data>
-  <data name="SignIn:SignIn" xml:space="preserve">
+    <data name="SignIn:SignIn" xml:space="preserve">
     <value>Войти</value>
   </data>
-  <data name="SignIn:LabelDontAccount" xml:space="preserve">
+    <data name="SignIn:LabelDontAccount" xml:space="preserve">
     <value>Нет аккаунта?</value>
   </data>
-  <data name="SignIn:LinkSignUp" xml:space="preserve">
+    <data name="SignIn:LinkSignUp" xml:space="preserve">
     <value> Зарегистрироваться</value>
   </data>
-  <data name="SignIn:Wrong Password" xml:space="preserve">
+    <data name="SignIn:Wrong Password" xml:space="preserve">
     <value>Неверное имя пользователя или пароль</value>
   </data>
-  <data name="SignUp:LabelSignUp" xml:space="preserve">
+    <data name="SignUp:LabelSignUp" xml:space="preserve">
     <value>Регистрация</value>
   </data>
-  <data name="SignUp:LabelHaveAccount" xml:space="preserve">
+    <data name="SignUp:LabelHaveAccount" xml:space="preserve">
     <value>У вас есть аккаунт?</value>
   </data>
-  <data name="SignUp:LinkSignIn" xml:space="preserve">
+    <data name="SignUp:LinkSignIn" xml:space="preserve">
     <value> Войти</value>
   </data>
-  <data name="SignUp:FirstName" xml:space="preserve">
+    <data name="SignUp:FirstName" xml:space="preserve">
     <value>Имя</value>
   </data>
-  <data name="SignUp:FirstName_HelperText" xml:space="preserve">
+    <data name="SignUp:FirstName_HelperText" xml:space="preserve">
     <value>Введите ваше имя</value>
   </data>
-  <data name="SignUp:LastName" xml:space="preserve">
+    <data name="SignUp:LastName" xml:space="preserve">
     <value>Фамилия</value>
   </data>
-  <data name="SignUp:LastName_HelperText" xml:space="preserve">
+    <data name="SignUp:LastName_HelperText" xml:space="preserve">
     <value>Введите вашу фамилию</value>
   </data>
-  <data name="SignUp:Email" xml:space="preserve">
+    <data name="SignUp:Email" xml:space="preserve">
     <value>Электронная почта</value>
   </data>
-  <data name="SignUp:Phone" xml:space="preserve">
+    <data name="SignUp:Phone" xml:space="preserve">
     <value>Телефон</value>
   </data>
-  <data name="SignUp:Phone_HelperText" xml:space="preserve">
+    <data name="SignUp:Phone_HelperText" xml:space="preserve">
     <value>Введите ваш номер телефона</value>
   </data>
-  <data name="SignUp:UserName" xml:space="preserve">
+    <data name="SignUp:UserName" xml:space="preserve">
     <value>Имя пользователя</value>
   </data>
-  <data name="SignUp:Password" xml:space="preserve">
+    <data name="SignUp:Password" xml:space="preserve">
     <value>Пароль</value>
   </data>
-  <data name="SignUp:Password_HelperText" xml:space="preserve">
+    <data name="SignUp:Password_HelperText" xml:space="preserve">
     <value>Пароль</value>
   </data>
-  <data name="SignUp:ConfirmPassword" xml:space="preserve">
+    <data name="SignUp:ConfirmPassword" xml:space="preserve">
     <value>Подтвердите пароль</value>
   </data>
-  <data name="SignUp:ConfirmPassword_HelperText" xml:space="preserve">
+    <data name="SignUp:ConfirmPassword_HelperText" xml:space="preserve">
     <value>Подтвердите пароль</value>
   </data>
-  <data name="SignUp:ButtonNext" xml:space="preserve">
+    <data name="SignUp:ButtonNext" xml:space="preserve">
     <value>Далее</value>
   </data>
-  <data name="SignUp:ExternalLoginCard" xml:space="preserve">
+    <data name="SignUp:ExternalLoginCard" xml:space="preserve">
     <value>Продолжить с</value>
   </data>
-  <data name="signUp:messageText" xml:space="preserve">
+    <data name="signUp:messageText" xml:space="preserve">
     <value>Мы отправили код подтверждения на этот номер: $phone$. Пожалуйста, подтвердите свою личность</value>
   </data>
-  <data name="SignUp:Code" xml:space="preserve">
+    <data name="SignUp:Code" xml:space="preserve">
     <value>Код</value>
   </data>
-  <data name="SignUp:Apply" xml:space="preserve">
+    <data name="SignUp:Apply" xml:space="preserve">
     <value>Применить</value>
   </data>
-  <data name="SignUp:ResendCode" xml:space="preserve">
+    <data name="SignUp:ResendCode" xml:space="preserve">
     <value>Отправить код повторно</value>
   </data>
-  <data name="SignUp:Secconds" xml:space="preserve">
+    <data name="SignUp:Secconds" xml:space="preserve">
     <value>секунд осталось для повторной отправки кода.</value>
   </data>
-  <data name="ResetPassword:PhoneNumber" xml:space="preserve">
+    <data name="ResetPassword:PhoneNumber" xml:space="preserve">
     <value>Номер телефона</value>
   </data>
-  <data name="ResetPassword:Sendconfirmationcode" xml:space="preserve">
+    <data name="ResetPassword:Sendconfirmationcode" xml:space="preserve">
     <value>Отправить код подтверждения</value>
   </data>
-  <data name="ResetPassword:Resendcode" xml:space="preserve">
+    <data name="ResetPassword:Resendcode" xml:space="preserve">
     <value>Отправить код ещё раз</value>
   </data>
-  <data name="ResetPassword:NewPassword" xml:space="preserve">
+    <data name="ResetPassword:NewPassword" xml:space="preserve">
     <value>Новый пароль</value>
   </data>
-  <data name="ResetPassword:Changepasswordsuccessfully" xml:space="preserve">
+    <data name="ResetPassword:Changepasswordsuccessfully" xml:space="preserve">
     <value>Пароль успешно изменен</value>
   </data>
-  <data name="Profile:Sendverificationemail" xml:space="preserve">
+    <data name="Profile:Sendverificationemail" xml:space="preserve">
     <value>Отправить Email для подтверждения</value>
   </data>
-  <data name="ResetPassword:Changepassword" xml:space="preserve">
+    <data name="ResetPassword:Changepassword" xml:space="preserve">
     <value>Изменить пароль</value>
   </data>
-  <data name="Profile:Serverisnotresponding" xml:space="preserve">
+    <data name="Profile:Serverisnotresponding" xml:space="preserve">
     <value>Сервер не отвечает</value>
   </data>
-  <data name="Profile:Servernotrespondingtry" xml:space="preserve">
+    <data name="Profile:Servernotrespondingtry" xml:space="preserve">
     <value>Сервер не отвечает, попробуйте позже</value>
   </data>
-  <data name="Profile:Pleasecheckyouremail" xml:space="preserve">
+    <data name="Profile:Pleasecheckyouremail" xml:space="preserve">
     <value>Пожалуйста, проверьте свою почту, мы отправили ссылку для подтверждения</value>
   </data>
-  <data name="Profile:Codeisincorrector" xml:space="preserve">
+    <data name="Profile:Codeisincorrector" xml:space="preserve">
     <value>Код неверен или устарел</value>
   </data>
-  <data name="Profile:Doyoureally" xml:space="preserve">
+    <data name="Profile:Doyoureally" xml:space="preserve">
     <value>Вы действительно хотите удалить эти записи? Этот процесс не может быть отменен.</value>
   </data>
-  <data name="Profile:Delete" xml:space="preserve">
+    <data name="Profile:Delete" xml:space="preserve">
     <value>Удалить</value>
   </data>
-  <data name="Profile:Profileupdatedsuccessfully" xml:space="preserve">
+    <data name="Profile:Profileupdatedsuccessfully" xml:space="preserve">
     <value>Профиль успешно обновлен.</value>
   </data>
-  <data name="Profile:Educationdetailsadded" xml:space="preserve">
+    <data name="Profile:Educationdetailsadded" xml:space="preserve">
     <value>Данные об образовании успешно добавлены</value>
   </data>
-  <data name="Profile:UpdateEducationsuccessfully" xml:space="preserve">
+    <data name="Profile:UpdateEducationsuccessfully" xml:space="preserve">
     <value>Образование успешно обновлено.</value>
   </data>
-  <data name="Profile:AddSkillssuccessfully" xml:space="preserve">
+    <data name="Profile:AddSkillssuccessfully" xml:space="preserve">
     <value>Навыки успешно добавлены.</value>
   </data>
-  <data name="Profile:Experiencedetailsadded" xml:space="preserve">
+    <data name="Profile:Experiencedetailsadded" xml:space="preserve">
     <value>Данные об опыте успешно добавлены.</value>
   </data>
-  <data name="Profile:Emailisnotavailable" xml:space="preserve">
+    <data name="Profile:Emailisnotavailable" xml:space="preserve">
     <value>Email недоступен</value>
   </data>
-  <data name="Profile:EndDate" xml:space="preserve">
+    <data name="Profile:EndDate" xml:space="preserve">
     <value>Дата завершения</value>
   </data>
-  <data name="Profile:UserNameisnotavailable" xml:space="preserve">
+    <data name="Profile:UserNameisnotavailable" xml:space="preserve">
     <value>Имя пользователя недоступно</value>
   </data>
-  <data name="Profile:PhoneNumberisnotavailable" xml:space="preserve">
+    <data name="Profile:PhoneNumberisnotavailable" xml:space="preserve">
     <value>Номер телефона недоступен</value>
   </data>
-  <data name="Profile:Thisphonenumberisnotcorrect" xml:space="preserve">
+    <data name="Profile:Thisphonenumberisnotcorrect" xml:space="preserve">
     <value>Этот номер телефона некорректен!</value>
   </data>
-  <data name="Profile:Resetpasswordsuccessfully" xml:space="preserve">
+    <data name="Profile:Resetpasswordsuccessfully" xml:space="preserve">
     <value>Пароль успешно сброшен</value>
   </data>
-  <data name="Profile:Anerroroccurred" xml:space="preserve">
+    <data name="Profile:Anerroroccurred" xml:space="preserve">
     <value>Произошла ошибка</value>
   </data>
-  <data name="Profile:TryAgain" xml:space="preserve">
+    <data name="Profile:TryAgain" xml:space="preserve">
     <value>Попробуйте снова</value>
   </data>
-  <data name="Profile:PersonalInformation" xml:space="preserve">
+    <data name="Profile:PersonalInformation" xml:space="preserve">
     <value>Личная информация</value>
   </data>
-  <data name="Profile:MyProfile" xml:space="preserve">
+    <data name="Profile:MyProfile" xml:space="preserve">
     <value>Мой профиль</value>
   </data>
-  <data name="Profile:Educations" xml:space="preserve">
+    <data name="Profile:Educations" xml:space="preserve">
     <value>Образование</value>
   </data>
-  <data name="Profile:Experience" xml:space="preserve">
+    <data name="Profile:Experience" xml:space="preserve">
     <value>Опыт работы</value>
   </data>
-  <data name="Profile:Skills" xml:space="preserve">
+    <data name="Profile:Skills" xml:space="preserve">
     <value>Навыки</value>
   </data>
-  <data name="Profile:FirstName" xml:space="preserve">
+    <data name="Profile:FirstName" xml:space="preserve">
     <value>Имя</value>
   </data>
-  <data name="Profile:EmailisnotConfirmed" xml:space="preserve">
+    <data name="Profile:EmailisnotConfirmed" xml:space="preserve">
     <value>Email не подтвержден!</value>
   </data>
-  <data name="Profile:LastName" xml:space="preserve">
+    <data name="Profile:LastName" xml:space="preserve">
     <value>Фамилия</value>
   </data>
-  <data name="Profile:DateOfBirth" xml:space="preserve">
+    <data name="Profile:DateOfBirth" xml:space="preserve">
     <value>Дата рождения</value>
   </data>
-  <data name="Profile:Confirmed" xml:space="preserve">
+    <data name="Profile:Confirmed" xml:space="preserve">
     <value>Подтверждено</value>
   </data>
-  <data name="Profile:PhoneNumberisnotConfirmed" xml:space="preserve">
+    <data name="Profile:PhoneNumberisnotConfirmed" xml:space="preserve">
     <value>Номер телефона не подтвержден!</value>
   </data>
-  <data name="Profile:Codesent" xml:space="preserve">
+    <data name="Profile:Codesent" xml:space="preserve">
     <value>Код отправлен</value>
   </data>
-  <data name="Profile:Confirmationcode" xml:space="preserve">
+    <data name="Profile:Confirmationcode" xml:space="preserve">
     <value>Код подтверждения</value>
   </data>
-  <data name="Profile:Confirm" xml:space="preserve">
+    <data name="Profile:Confirm" xml:space="preserve">
     <value>Подтвердить</value>
   </data>
-  <data name="Profile:AboutMyself" xml:space="preserve">
+    <data name="Profile:AboutMyself" xml:space="preserve">
     <value>О себе</value>
   </data>
-  <data name="Profile:Savechanges" xml:space="preserve">
+    <data name="Profile:Savechanges" xml:space="preserve">
     <value>Сохранить изменения</value>
   </data>
-  <data name="Profile:Specialty" xml:space="preserve">
+    <data name="Profile:Specialty" xml:space="preserve">
     <value>Специальность</value>
   </data>
-  <data name="Profile:University" xml:space="preserve">
+    <data name="Profile:University" xml:space="preserve">
     <value>Университет</value>
   </data>
-  <data name="Profile:StartDate" xml:space="preserve">
+    <data name="Profile:StartDate" xml:space="preserve">
     <value>Дата начала</value>
   </data>
-  <data name="Profile:UntilNow" xml:space="preserve">
+    <data name="Profile:UntilNow" xml:space="preserve">
     <value>До сих пор</value>
   </data>
-  <data name="Profile:Update" xml:space="preserve">
+    <data name="Profile:Update" xml:space="preserve">
     <value>Обновить</value>
   </data>
-  <data name="Profile:Cancel" xml:space="preserve">
+    <data name="Profile:Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
-  <data name="Profile:Present" xml:space="preserve">
+    <data name="Profile:Present" xml:space="preserve">
     <value>Настоящее время</value>
   </data>
-  <data name="Profile:AddNewEducation" xml:space="preserve">
+    <data name="Profile:AddNewEducation" xml:space="preserve">
     <value>Добавить новое образование</value>
   </data>
-  <data name="Profile:NewEducation" xml:space="preserve">
+    <data name="Profile:NewEducation" xml:space="preserve">
     <value>Новое образование</value>
   </data>
-  <data name="Profile:Save" xml:space="preserve">
+    <data name="Profile:Save" xml:space="preserve">
     <value>Сохранить</value>
   </data>
-  <data name="Profile:Experiences" xml:space="preserve">
+    <data name="Profile:Experiences" xml:space="preserve">
     <value>Опыт работы</value>
   </data>
-  <data name="Profile:JobTitle" xml:space="preserve">
+    <data name="Profile:JobTitle" xml:space="preserve">
     <value>Должность</value>
   </data>
-  <data name="Profile:CompanyName" xml:space="preserve">
+    <data name="Profile:CompanyName" xml:space="preserve">
     <value>Название компании</value>
   </data>
-  <data name="Profile:Description" xml:space="preserve">
+    <data name="Profile:Description" xml:space="preserve">
     <value>Описание</value>
   </data>
-  <data name="Profile:CurrentJob" xml:space="preserve">
+    <data name="Profile:CurrentJob" xml:space="preserve">
     <value>Текущая работа</value>
   </data>
-  <data name="Profile:AddNewExperience" xml:space="preserve">
+    <data name="Profile:AddNewExperience" xml:space="preserve">
     <value>Добавить новый опыт работы</value>
   </data>
-  <data name="Profile:NewExperience" xml:space="preserve">
+    <data name="Profile:NewExperience" xml:space="preserve">
     <value>Новый опыт работы</value>
   </data>
-  <data name="Profile:IsCurrentJob" xml:space="preserve">
+    <data name="Profile:IsCurrentJob" xml:space="preserve">
     <value>Текущая работа</value>
   </data>
-  <data name="Profile:AddSkill" xml:space="preserve">
+    <data name="Profile:AddSkill" xml:space="preserve">
     <value>Добавить навык</value>
   </data>
-  <data name="Profile:Tochangeyourpassword,enteryouroldpassword,andthencreateanew,strongpassword." xml:space="preserve">
+    <data name="Profile:Tochangeyourpassword,enteryouroldpassword,andthencreateanew,strongpassword."
+          xml:space="preserve">
     <value>Для изменения пароля, пожалуйста, введите текущий пароль, а затем создайте новый надежный пароль.</value>
   </data>
-  <data name="Profile:OldPassword" xml:space="preserve">
+    <data name="Profile:OldPassword" xml:space="preserve">
     <value>Старый пароль</value>
   </data>
-  <data name="Profile:Ifyouwouldliketonominateyourself,sendusyourСV." xml:space="preserve">
+    <data name="Profile:Ifyouwouldliketonominateyourself,sendusyourСV." xml:space="preserve">
     <value>Если вы хотите подать заявку на рассмотрение своей кандидатуры, пожалуйста, отправьте нам свое резюме.</value>
   </data>
-  <data name="Profile:UploadCV" xml:space="preserve">
+    <data name="Profile:UploadCV" xml:space="preserve">
     <value>Загрузить резюме</value>
   </data>
-  <data name="Profile:ThestatusofyourCVforyourcandidacyis" xml:space="preserve">
+    <data name="Profile:ThestatusofyourCVforyourcandidacyis" xml:space="preserve">
     <value>Статус вашего резюме для вашей кандидатуры</value>
   </data>
-  <data name="Profile:UploadNewCV" xml:space="preserve">
+    <data name="Profile:UploadNewCV" xml:space="preserve">
     <value>Загрузить новое резюме</value>
   </data>
-  <data name="Profile:Ifyouwouldliketonominateyourself,signinandsendusyourСV." xml:space="preserve">
+    <data name="Profile:Ifyouwouldliketonominateyourself,signinandsendusyourСV." xml:space="preserve">
     <value>Если вы хотите подать заявку на рассмотрение своей кандидатуры, войдите в систему и отправьте нам свое резюме.</value>
   </data>
-  <data name="Profile:SwitchtoLightTheme" xml:space="preserve">
+    <data name="Profile:SwitchtoLightTheme" xml:space="preserve">
     <value>Переключиться на светлую тему</value>
   </data>
-  <data name="Profile:Switchtosystem" xml:space="preserve">
+    <data name="Profile:Switchtosystem" xml:space="preserve">
     <value>Переключиться на системную тему</value>
   </data>
-  <data name="Profile:SwitchtoDarkTheme" xml:space="preserve">
+    <data name="Profile:SwitchtoDarkTheme" xml:space="preserve">
     <value>Переключиться на темную тему</value>
   </data>
-  <data name="Profile:SelectLanguage" xml:space="preserve">
+    <data name="Profile:SelectLanguage" xml:space="preserve">
     <value>Выберать язык</value>
   </data>
- 
 
-   <data name="UserManager:Users">
-    <value>Пользователи</value>
-  </data>
-  <data name="UserManager:Searchname">
-    <value>Поиск по имени пользователя или полному имени</value>
-  </data>
-  <data name="UserManager:FullName">
-    <value>Полное имя</value>
-  </data>
-  <data name="UserManager:Roles">
-    <value>Роли</value>
-  </data>
-  <data name="UserManager:Nomatchingrecords">
-    <value>Совпадающих записей не найдено</value>
-  </data>
-  <data name="UserManager:Loading">
-    <value>Загрузка...</value>
-  </data>
+
+    <data name="UserManager:Users">
+        <value>Пользователи</value>
+    </data>
+    <data name="UserManager:Searchname">
+        <value>Поиск по имени пользователя или полному имени</value>
+    </data>
+    <data name="UserManager:FullName">
+        <value>Полное имя</value>
+    </data>
+    <data name="UserManager:Roles">
+        <value>Роли</value>
+    </data>
+    <data name="UserManager:Nomatchingrecords">
+        <value>Совпадающих записей не найдено</value>
+    </data>
+    <data name="UserManager:Loading">
+        <value>Загрузка...</value>
+    </data>
 
     <data name="UserRoles:PersonalData">
-    <value>Личные данные</value>
-  </data>
-  <data name="UserRoles:UnConfirmed">
-    <value>Не подтверждено</value>
-  </data>
-  <data name="UserRoles:Gender">
-    <value>Пол</value>
-  </data>
-  <data name="UserRoles:History">
-    <value>История</value>
-  </data>
+        <value>Личные данные</value>
+    </data>
+    <data name="UserRoles:UnConfirmed">
+        <value>Не подтверждено</value>
+    </data>
+    <data name="UserRoles:Gender">
+        <value>Пол</value>
+    </data>
+    <data name="UserRoles:History">
+        <value>История</value>
+    </data>
 
-   <data name="Home:Address" xml:space="preserve">
+    <data name="Home:Address" xml:space="preserve">
     <value>Адрес</value>
   </data>
+
+    
+
 </root>

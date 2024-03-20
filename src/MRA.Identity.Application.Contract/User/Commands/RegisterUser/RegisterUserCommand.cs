@@ -9,8 +9,8 @@ public class RegisterUserCommand : IRequest<Guid>
     public string LastName { get; set; } = "";
     public string PhoneNumber { get; set; } = "";
     public int VerificationCode { get; set; }
-    
     private string _username;
+
     public string Username
     {
         get { return _username; }

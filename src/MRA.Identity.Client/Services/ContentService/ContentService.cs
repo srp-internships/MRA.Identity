@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Blazored.LocalStorage;
+using FluentValidation;
 using Microsoft.Extensions.Localization;
 using Microsoft.FeatureManagement;
 using Microsoft.IdentityModel.Tokens;
@@ -39,7 +40,9 @@ public class ContentService(
 
     public async Task ChangeCulture(string name)
     {
+        Console.WriteLine("Test");
         _applicationCulture = new CultureInfo(name);
+        ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo(name);
         await localStorageService.SetItemAsStringAsync(nameof(ApplicationCulturesNames), name);
     }
 

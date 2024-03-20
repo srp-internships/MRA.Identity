@@ -1,4 +1,4 @@
-using System.Reflection;
+using System.Globalization;
 using MRA.Identity.Application;
 using MRA.Identity.Infrastructure;
 using MRA.Identity.Infrastructure.Persistence;
@@ -10,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using MRA.Configurations.Initializer.Azure.Insight;
 using MRA.Configurations.Initializer.Azure.KeyVault;
 using MRA.Configurations.Initializer.Azure.AppConfig;
+using MRA.Identity.Application.Contract;
 using Sieve.Models;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -59,11 +60,12 @@ builder.Services.AddSwaggerGen(c =>
 });
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-
+builder.Services.AddLocalization(opt => opt.ResourcesPath="Resources");
 builder.Services.AddFluentValidationAutoValidation().AddFluentValidationClientsideAdapters();
 builder.Services.AddValidatorsFromAssembly(typeof(RemoveUserSkillCommand).Assembly);
 builder.Services.Configure<SieveOptions>(builder.Configuration.GetSection("MraIdentity-Sieve"));
-
+builder.Services.AddFluentValidatorCustomMessages();
+ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("ru-RU");
 WebApplication app = builder.Build();
 
 app.UseSwagger();

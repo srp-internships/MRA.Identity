@@ -38,7 +38,7 @@
                                 </MudItem>
                                 <MudItem>
                                     <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary"
-                                                        Function="@(async () => await _table.ReloadServerData())"
+                                                        OnClick="@(async () => await _table.ReloadServerData())"
                                                         Style="margin-top: 1px;">
                                         <MudIcon Icon="@Icons.Material.Filled.Search"/>
                                     </ProgressTaskButton>

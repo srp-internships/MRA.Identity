@@ -63,12 +63,13 @@
                     </BlazoredTextEditor>
                     <MudInput @bind-Value="@_imageLinkToInsertToEditor"/>
                     <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary"
-                                        Function="InsertImage"> Insert image
+                                        OnClick="@InsertImage">
+                        Insert image
                     </ProgressTaskButton>
                 </MudCardContent>
             </MudForm>
             <MudCardActions>
-                <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" Function="@(async () => await Submit())">Create</ProgressTaskButton>
+                <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" OnClick="@(async () => await Submit())">Create</ProgressTaskButton>
             </MudCardActions>
         </MudCard>
     </AuthorizeView>

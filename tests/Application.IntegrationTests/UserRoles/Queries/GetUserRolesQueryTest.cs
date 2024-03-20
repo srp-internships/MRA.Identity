@@ -1,12 +1,11 @@
+using Microsoft.AspNetCore.Http;
+
 namespace MRA.Jobs.Application.IntegrationTests.UserRoles.Queries;
 
 public class GetUserRolesQueryTest : BaseTest
 {
     [Test]
-    [TestCase("TestUser", HttpStatusCode.OK)]
-    [TestCase("alex09991", HttpStatusCode.NotFound)]
-    [Ignore("")]
-    public async Task GetUserRolesQuery_HttpStatusCode(string userName, HttpStatusCode statusCode)
+    public async Task GetUserRolesQuery_HttpStatusCode()
     {
         var user = new ApplicationUser
         {
@@ -14,12 +13,13 @@ public class GetUserRolesQueryTest : BaseTest
             Email = "Test@con.ty",
         };
 
-        await AddEntity(user);
+        await AddUser(user, "adkjf!@QSFa21");   
 
         var role = new ApplicationRole
         {
             Slug = "rol_test",
-            Name = "Rol_Test"
+            Name = "Rol_Test",
+            NormalizedName = "ROL_TEST"
         };
 
         await AddEntity(role);
@@ -33,10 +33,10 @@ public class GetUserRolesQueryTest : BaseTest
             Slug = slug
         };
         await AddEntity(userRole);
-        
+
         await AddAuthorizationAsync();
         var response = await _client.GetAsync(
-                $"api/UserRoles?userName={userName}");
-        Assert.That(response.StatusCode == statusCode);
+            $"api/UserRoles?userName={user.UserName}");
+        Assert.That((int)response.StatusCode, Is.EqualTo(StatusCodes.Status200OK));
     }
 }

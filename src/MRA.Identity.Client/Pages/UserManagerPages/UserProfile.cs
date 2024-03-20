@@ -22,6 +22,16 @@ public partial class UserProfile
     [Parameter] public string Username { get; set; }
     private List<UserRolesResponse> Roles { get; set; }
     private List<UserClaimsResponse> UserClaims { get; set; }
+
+    private List<UserClaimsResponse> ReadOnlyClaims { get; set; } =
+    [
+        new UserClaimsResponse { ClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/application" },
+        new UserClaimsResponse { ClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/role" },
+        new UserClaimsResponse { ClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/id" },
+        new UserClaimsResponse { ClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/username" },
+        new UserClaimsResponse { ClaimType = "http://schemas.microsoft.com/ws/2008/06/identity/claims/email" }
+    ];
+
     [Inject] private IHttpClientService HttpClient { get; set; }
     [Inject] private ISnackbar Snackbar { get; set; }
     [Inject] private IConfiguration Configuration { get; set; }
@@ -59,7 +69,12 @@ public partial class UserProfile
             await HttpClient.GetFromJsonAsync<List<UserClaimsResponse>>(
                 Configuration.GetIdentityUrl($"Claims?username={Username}"));
         if (userClaimsResponse.HttpStatusCode == HttpStatusCode.OK)
-            UserClaims = userClaimsResponse.Result;
+        {
+            UserClaims = userClaimsResponse.Result?.Where(s=> ReadOnlyClaims.All(f => f.ClaimType != s.ClaimType)).ToList();
+            ReadOnlyClaims.ForEach(s =>
+                s.ClaimValue = userClaimsResponse.Result?.FirstOrDefault(f => f.ClaimType == s.ClaimType)
+                    ?.ClaimValue);
+        }
     }
 
     private async Task ReloadDataAsync()

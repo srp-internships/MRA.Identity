@@ -190,12 +190,7 @@
                         </MudItem>
                     </MudGrid>
                 </MudTabPanel>
-                <MudTabPanel Icon="@Icons.Material.Filled.List" Text="Applications">
-                    <MudLink Target="_blank"
-                             Href=@($"{Configuration["Platforms:Jobs"]}Dashboard/Applications?page=1&pageSize=10&FullName={_user.FullName}&PhoneNumber={_user.PhoneNumber}&Email={_user.Email}")>
-                        go to applications
-                    </MudLink>
-                </MudTabPanel>
+
                 <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
                     <Authorized Context="authContext2">
                         <MudTabPanel Icon="@Icons.Material.Filled.Settings" Text="Settings">

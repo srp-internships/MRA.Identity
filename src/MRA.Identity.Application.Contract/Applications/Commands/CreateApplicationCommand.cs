@@ -2,11 +2,10 @@
 
 namespace MRA.Identity.Application.Contract.Applications.Commands;
 
-public class CreateApplicationCommand : IRequest<Guid>
+public class CreateApplicationCommand : IRequest<string>
 {
     public required string Name { get; set; }
     public string Description { get; set; }
-    public required string ClientSecret { get; set; }
     public string[] CallbackUrls { get; set; }
     public bool IsProtected { get; set; }
 }

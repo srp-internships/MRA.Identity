@@ -3,6 +3,7 @@
 public class Application
 {
     public Guid Id { get; set; }
+    public required string Slug { get; set; }
     public required string Name { get; set; }
     public string Description { get; set; }
     public required string ClientSecret { get; set; }

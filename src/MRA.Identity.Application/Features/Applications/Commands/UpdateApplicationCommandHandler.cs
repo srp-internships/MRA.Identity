@@ -13,12 +13,6 @@ public class UpdateApplicationCommandHandler(
 {
     public async Task<Unit> Handle(UpdateApplicationCommand request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.Name))
-            throw new ValidationException("Name cannot be empty");
-        if (request.CallbackUrls.Any(s => !Uri.TryCreate(s, UriKind.Absolute, out _)))
-            throw new ValidationException("Invalid callback url");
-        //TODO: use fluentValidation
-
         if (await context.Applications.AnyAsync(
                 s => s.Slug != request.Slug && s.Name.ToLower() == request.Name.ToLower(),
                 cancellationToken))
@@ -26,8 +20,6 @@ public class UpdateApplicationCommandHandler(
         var application =
             await context.Applications.FirstOrDefaultAsync(s => s.Slug == request.Slug, cancellationToken) ??
             throw new ValidationException("Application with slug " + request.Slug + " does not exist");
-        ;
-
 
         mapper.Map(request, application);
         await context.SaveChangesAsync(cancellationToken);

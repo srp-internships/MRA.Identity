@@ -17,12 +17,6 @@ public class CreateApplicationCommandHandler(
 {
     public async Task<string> Handle(CreateApplicationCommand request, CancellationToken cancellationToken)
     {
-        if (string.IsNullOrWhiteSpace(request.Name))
-            throw new ValidationException("Name cannot be empty");
-        if (request.CallbackUrls.Any(s => !Uri.TryCreate(s, UriKind.Absolute, out _)))
-            throw new ValidationException("Invalid callback url");
-        //TODO create fluent validator
-
         var application = mapper.Map<Domain.Entities.Application>(request);
         var exist = await context.Applications.AnyAsync(s => s.Name.ToLower() == application.Name.ToLower(),
             cancellationToken);

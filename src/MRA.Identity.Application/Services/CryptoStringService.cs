@@ -5,7 +5,8 @@ namespace MRA.Identity.Application.Services;
 
 public class CryptoStringService : ICryptoStringService
 {
-    private const string AllowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_=/&";
+    // ReSharper disable once InconsistentNaming
+    private const string ALLOWED_CHARS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_=/&";
 
     public string GetCryptoString(int length = 86)
     {
@@ -18,7 +19,7 @@ public class CryptoStringService : ICryptoStringService
 
         for (var i = 0; i < length; i++)
         {
-            chars[i] = AllowedChars[data[i] % AllowedChars.Length];
+            chars[i] = ALLOWED_CHARS[data[i] % ALLOWED_CHARS.Length];
         }
 
         return new string(chars);

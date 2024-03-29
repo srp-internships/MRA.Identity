@@ -1,16 +1,19 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MRA.Identity.Application.Common.Interfaces.DbContexts;
 using MRA.Identity.Domain.Entities;
 using MRA.Identity.Infrastructure.Identity;
 using MRA.Configurations.Common.Constants;
+using Newtonsoft.Json;
 
 namespace MRA.Identity.Infrastructure.Persistence;
 
 public class ApplicationDbContextInitializer(
     RoleManager<ApplicationRole> roleManager,
     UserManager<ApplicationUser> userManager,
-    IApplicationDbContext context)
+    IApplicationDbContext context,
+    IConfiguration configuration)
 {
     private ApplicationRole _superAdminRole = null!;
     private ApplicationRole _applicationRole = null!;
@@ -23,6 +26,11 @@ public class ApplicationDbContextInitializer(
 
         await CreateApplicationAdmin("MraJobs", "12345678");
         await CreateApplicationAdmin("MraOnlinePlatform", "12345678");
+
+        if (configuration["Environment"] != "Production")
+        {
+            await CreateSeedUsersAsync();
+        }
     }
 
     private async Task CreateApplicationAdmin(string applicationName, string adminPassword)
@@ -211,7 +219,7 @@ public class ApplicationDbContextInitializer(
             await context.UserClaims.AddAsync(claim);
             //create username claim
 
-            //create email claim
+            //create email claims
             claim = new ApplicationUserClaim
             {
                 ClaimType = ClaimTypes.Email,
@@ -340,6 +348,405 @@ public class ApplicationDbContextInitializer(
             ThrowExceptionFromIdentityResult(createRoleResult);
         }
         //student
+    }
+
+    private class UserModel
+    {
+        public string Email { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool IsPhoneVerificationRequired { get; set; }
+        public bool IsEmailVerificationRequired { get; set; }
+        public int VerificationCode { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string ConfirmPassword { get; set; }
+    }
+
+    private async Task CreateSeedUsersAsync()
+    {
+        string json = @"[
+{
+    'Email': 'durdona@silkroadprofessionals.com',
+    'FirstName': 'Durdona',
+    'LastName': 'Uzoqova',
+    'PhoneNumber': '+992113456789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'durdona',
+    'Password': 'RandomPassword1',
+    'ConfirmPassword': 'RandomPassword1'
+  },
+  {
+    'Email': 'niazovd@gmail.com',
+    'FirstName': 'Doniyor',
+    'LastName': 'Niyozov',
+    'PhoneNumber': '+992123156789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 5555,
+    'Username': 'doniyor',
+    'Password': 'RandomPassword2',
+    'ConfirmPassword': 'RandomPassword2'
+  },
+  {
+    'Email': 'zubaidullo.nematov@silkroadprofessionals.com',
+    'FirstName': 'Zubaidullo',
+    'LastName': 'Nematov',
+    'PhoneNumber': '+992123423789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'zubaidullo',
+    'Password': 'RandomPassword3',
+    'ConfirmPassword': 'RandomPassword3'
+  },{
+    'Email': 'alisa.esh@silkroadprofessionals.com',
+    'FirstName': 'Alisa',
+    'LastName': 'Esh',
+    'PhoneNumber': '+992123326789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'alisa',
+    'Password': 'RandomPassword4',
+    'ConfirmPassword': 'RandomPassword4'
+  },
+  {
+    'Email': 'abbosk@silkroadprofessionals.com',
+    'FirstName': 'Abbos',
+    'LastName': 'Kamolov',
+    'PhoneNumber': '+992123346789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'abbos',
+    'Password': 'RandomPassword5',
+    'ConfirmPassword': 'RandomPassword5'
+  },
+  {
+    'Email': 'rahmatillo.abduqodirov@silkroadprofessionals.com',
+    'FirstName': 'Rahmatillo',
+    'LastName': 'Abduqodirov',
+    'PhoneNumber': '+992123443789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'rahmatillo',
+    'Password': 'RandomPassword6',
+    'ConfirmPassword': 'RandomPassword6'
+  },
+  {
+    'Email': 'parvina@silkroadprofessionals.com',
+    'FirstName': 'Parvina',
+    'LastName': 'Zulfikorova',
+    'PhoneNumber': '+992123246789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'parvina',
+    'Password': 'RandomPassword7',
+    'ConfirmPassword': 'RandomPassword7'
+  },{
+    'Email': 'ghanijon.safarov@silkroadprofessionals.com',
+    'FirstName': 'Ghanijon',
+    'LastName': 'Safarov',
+    'PhoneNumber': '+992126556789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'ghanijon',
+    'Password': 'RandomPassword8',
+    'ConfirmPassword': 'RandomPassword8'
+  },
+  {
+    'Email': 'mirolim@silkroadprofessionals.com',
+    'FirstName': 'Mirolim',
+    'LastName': 'Majidov',
+    'PhoneNumber': '+992123676789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'mirolim',
+    'Password': 'RandomPassword9',
+    'ConfirmPassword': 'RandomPassword9'
+  },
+  {
+    'Email': 'muhammadislom.ismatov@silkroadprofessionals.com',
+    'FirstName': 'Muhammadislom',
+    'LastName': 'Ismatov',
+    'PhoneNumber': '+992123876789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'muhammadislom',
+    'Password': 'RandomPassword10',
+    'ConfirmPassword': 'RandomPassword10'
+  },
+  {
+    'Email': 'abbosidiqov@silkroadprofessionals.com',
+    'FirstName': 'Abbos',
+    'LastName': 'Sidiqov',
+    'PhoneNumber': '+992723456789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'abbosidiqov',
+    'Password': 'RandomPassword11',
+    'ConfirmPassword': 'RandomPassword11'
+  },{
+    'Email': 'bohir@silkroadprofessionals.com',
+    'FirstName': 'Bohirjon',
+    'LastName': 'Ahmedov',
+    'PhoneNumber': '+992123776789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'bohirjon',
+    'Password': 'RandomPassword11',
+    'ConfirmPassword': 'RandomPassword11'
+  },
+  {
+    'Email': 'usmonjonn@silkroadprofessionals.com',
+    'FirstName': 'Usmonjon',
+    'LastName': 'Nurmatov',
+    'PhoneNumber': '+992653456789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'usmonjon',
+    'Password': 'RandomPassword12',
+    'ConfirmPassword': 'RandomPassword12'
+  },
+  {
+    'Email': 'tursunhujan@silkroadprofessionals.com',
+    'FirstName': 'Tursunhuja',
+    'LastName': 'Norhujaev',
+    'PhoneNumber': '+992126456789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'tursunhuja',
+    'Password': 'RandomPassword13',
+    'ConfirmPassword': 'RandomPassword13'
+  },
+  {
+    'Email': 'sanjar@silkroadprofessionals.com',
+    'FirstName': 'Sanjar',
+    'LastName': 'Akhmedov',
+    'PhoneNumber': '+992123656789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'sanjar',
+    'Password': 'RandomPassword14',
+    'ConfirmPassword': 'RandomPassword14'
+  },
+  {
+    'Email': 'islomjon.makhsudov@silkroadprofessionals.com',
+    'FirstName': 'Islomjon',
+    'LastName': 'Makhsudov',
+    'PhoneNumber': '+992123456589',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'islomjon',
+    'Password': 'RandomPassword15',
+    'ConfirmPassword': 'RandomPassword15'
+  },
+  {
+    'Email': 'mirzodalerm@silkroadprofessionals.com',
+    'FirstName': 'Mirzodaler',
+    'LastName': 'Muhsinzoda',
+    'PhoneNumber': '+992123456989',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'mirzodaler',
+    'Password': 'RandomPassword16',
+    'ConfirmPassword': 'RandomPassword16'
+  },
+{
+    'Email': 'shuhrat@silkroadprofessionals.com',
+    'FirstName': 'Shuhrat',
+    'LastName': 'Rahmonov',
+    'PhoneNumber': '+992123459789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'shuhrat',
+    'Password': 'RandomPassword17',
+    'ConfirmPassword': 'RandomPassword17'
+  },
+  {
+    'Email': 'samuel.rivera@silkroadprofessionals.com',
+    'FirstName': 'Samuel',
+    'LastName': 'Rivera',
+    'PhoneNumber': '+992123456669',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'samuel',
+    'Password': 'RandomPassword18',
+    'ConfirmPassword': 'RandomPassword18'
+  },
+  {
+    'Email': 'malika@silkroadprofessionals.com',
+    'FirstName': 'Malika',
+    'LastName': 'Mukhsinova',
+    'PhoneNumber': '+992123465789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'malika',
+    'Password': 'RandomPassword19',
+    'ConfirmPassword': 'RandomPassword19'
+  },
+  {
+    'Email': 'nizomjon@silkroadprofessionals.com',
+    'FirstName': 'Nizomjon',
+    'LastName': 'Rahmonberdiev',
+    'PhoneNumber': '+992553456789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'nizomjon',
+    'Password': 'RandomPassword20',
+    'ConfirmPassword': 'RandomPassword20'
+  },
+  {
+    'Email': 'o.khakimova@silkroadprofessionals.com',
+    'FirstName': 'Olga',
+    'LastName': 'Khakimova',
+    'PhoneNumber': '+992773456789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'o.khakimova',
+    'Password': 'RandomPassword21',
+    'ConfirmPassword': 'RandomPassword21'
+  },
+  {
+    'Email': 'abdurasul@silkroadprofessionals.com',
+    'FirstName': 'Abdurasul',
+    'LastName': 'Isoqov',
+    'PhoneNumber': '+992177456789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'abdurasul',
+    'Password': 'RandomPassword22',
+    'ConfirmPassword': 'RandomPassword22'
+  },
+  {
+    'Email': 'komiljon.najmitdinov@silkroadprofessionals.com',
+    'FirstName': 'Komiljon',
+    'LastName': 'Najmitdinov',
+    'PhoneNumber': '+992123477789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'komiljon',
+    'Password': 'RandomPassword23',
+    'ConfirmPassword': 'RandomPassword23'
+  },
+  {
+    'Email': 'azimjon.faizulloev@silkroadprofessionals.com',
+    'FirstName': 'Azimjon',
+    'LastName': 'Faizulloev',
+    'PhoneNumber': '+992123456779',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'azimjon',
+    'Password': 'RandomPassword24',
+    'ConfirmPassword': 'RandomPassword24'
+  },{
+    'Email': 'doniyor@silkroadprofessionals.com',
+    'FirstName': 'Doniyor',
+    'LastName': 'Niyozov',
+    'PhoneNumber': '+992123456777',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'doniyor',
+    'Password': 'RandomPassword25',
+    'ConfirmPassword': 'RandomPassword25'
+  },
+  {
+    'Email': 'dalerjon.olimov@silkroadprofessionals.com',
+    'FirstName': 'Dalerjon',
+    'LastName': 'Olimov',
+    'PhoneNumber': '+992123450089',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'dalerjon',
+    'Password': 'RandomPassword26',
+    'ConfirmPassword': 'RandomPassword26'
+  },
+  {
+    'Email': 'muhammad@silkroadprofessionals.com',
+    'FirstName': 'Muhammad',
+    'LastName': 'Abdugafforov',
+    'PhoneNumber': '+992100456789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'muhammad',
+    'Password': 'RandomPassword27',
+    'ConfirmPassword': 'RandomPassword27'
+  },
+  {
+    'Email': 'orasta@silkroadprofessionals.com',
+    'FirstName': 'Orasta',
+    'LastName': 'Mirdadoeva',
+    'PhoneNumber': '+992983456789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'orasta',
+    'Password': 'RandomPassword28',
+    'ConfirmPassword': 'RandomPassword28'
+  },
+  {
+    'Email': 'asliya@silkroadprofessionals.com',
+    'FirstName': 'Asliya',
+    'LastName': 'Boturova',
+    'PhoneNumber': '+992993456789',
+    'IsPhoneVerificationRequired': false,
+    'IsEmailVerificationRequired': false,
+    'VerificationCode': 1234,
+    'Username': 'asliya',
+    'Password': 'RandomPassword29',
+    'ConfirmPassword': 'RandomPassword29'
+  }]";
+        var users = JsonConvert.DeserializeObject<List<UserModel>>(json);
+        foreach (var user in users)
+        {
+            await CreateTestUser(user.Username, user.FirstName, user.LastName, user.Email, user.Password);
+        }
+    }
+
+    private async Task CreateTestUser(string username, string firstname, string lastname, string email, string password)
+    {
+        if (await userManager.FindByNameAsync(username) != null) return;
+
+
+        ApplicationUser user = new()
+        {
+            UserName = username.Trim(),
+            NormalizedUserName = username.Trim().ToLower(),
+            Email = email,
+            NormalizedEmail = email.ToLower(),
+            EmailConfirmed = false,
+            FirstName = firstname,
+            LastName = lastname,
+        };
+
+        await userManager.CreateAsync(user, password);
     }
 
     private static void ThrowExceptionFromIdentityResult(IdentityResult result,

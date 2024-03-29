@@ -30,6 +30,7 @@ public class ApplicationDbContextInitializer(
         if (configuration["Environment"] != "Production")
         {
             await CreateSeedUsersAsync();
+            await CreateSeedExperiencesEducationsSkillsAsync();
         }
     }
 
@@ -154,7 +155,6 @@ public class ApplicationDbContextInitializer(
 
         await context.SaveChangesAsync();
     }
-
 
     private async Task CreateSuperAdminAsync()
     {
@@ -755,6 +755,57 @@ public class ApplicationDbContextInitializer(
         await userManager.CreateAsync(user, password);
         var newUser = await userManager.FindByNameAsync(user.UserName);
         if (newUser != null) await CreateClaimAsync(newUser.UserName, newUser.Id, newUser.Email);
+    }
+
+    private async Task CreateSeedExperiencesEducationsSkillsAsync()
+    {
+        var user = await userManager.Users
+            .Include(u => u.Educations)
+            .Include(u => u.Experiences)
+            .Include(u => u.UserSkills)
+            .FirstOrDefaultAsync(x => x.UserName == "applicant1");
+        if (user == null) return;
+
+        if (user.Educations.Count == 0)
+        {
+            EducationDetail education = new()
+            {
+                University = "Таджикский Национальный Университет",
+                Speciality = "Компьютерные науки",
+                StartDate = new DateTime(2018, 9, 1),
+                EndDate = new DateTime(2022, 6, 30),
+                UserId = user.Id
+            };
+            await context.Educations.AddAsync(education);
+        }
+
+        if (user.Experiences.Count == 0)
+        {
+            ExperienceDetail experience = new()
+            {
+                JobTitle = "Старший разработчик",
+                CompanyName = "ООО 'Инновации'",
+                Description =
+                    "Разработка и поддержка веб-приложений на C#. Работа в команде, участие в планировании и оценке задач.",
+                StartDate = new DateTime(2022, 7, 1),
+                EndDate = new DateTime(2024, 3, 29),
+                Address = "ул. Ленина, 10, Душанбе, Таджикистан",
+                UserId = user.Id
+            };
+            await context.Experiences.AddAsync(experience);
+        }
+
+        if (!user.UserSkills.Any())
+        {
+            List<UserSkill> userSkills =
+            [
+                new UserSkill { Skill = new Skill() { Name = "dotNet" }, UserId = user.Id },
+                new UserSkill { Skill = new Skill() { Name = "scrum" }, UserId = user.Id }
+            ];
+            await context.UserSkills.AddRangeAsync(userSkills);
+        }
+
+        await context.SaveChangesAsync();
     }
 
     private async Task CreateClaimAsync(string username, Guid id, string email,

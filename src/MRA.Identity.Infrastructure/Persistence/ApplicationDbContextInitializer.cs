@@ -728,6 +728,9 @@ public class ApplicationDbContextInitializer(
         {
             await CreateTestUser(user.Username, user.FirstName, user.LastName, user.Email, user.Password);
         }
+
+        await CreateTestUser("applicant1", "ApplicantTest", "ApplicantTest", "applicant1@gmail.com",
+            "applicantPassword");
     }
 
     private async Task CreateTestUser(string username, string firstname, string lastname, string email, string password)

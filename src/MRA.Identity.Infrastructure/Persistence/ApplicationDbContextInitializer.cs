@@ -731,12 +731,15 @@ public class ApplicationDbContextInitializer(
 
         await CreateTestUser("applicant1", "ApplicantTest", "ApplicantTest", "applicant1@gmail.com",
             "applicantPassword");
+
+        await CreateTestUser("Jerry", "Tom", "Jerry", "tom1234@gmail.com",
+            "tom1234");
     }
 
-    private async Task CreateTestUser(string username, string firstname, string lastname, string email, string password)
+    private async Task CreateTestUser(string username, string firstname, string lastname, string email,
+        string password)
     {
         if (await userManager.FindByNameAsync(username) != null) return;
-
 
         ApplicationUser user = new()
         {
@@ -750,6 +753,33 @@ public class ApplicationDbContextInitializer(
         };
 
         await userManager.CreateAsync(user, password);
+        var newUser = await userManager.FindByNameAsync(user.UserName);
+        if (newUser != null) await CreateClaimAsync(newUser.UserName, newUser.Id, newUser.Email);
+    }
+
+    private async Task CreateClaimAsync(string username, Guid id, string email,
+        CancellationToken cancellationToken = default)
+    {
+        var userClaims = new[]
+        {
+            new ApplicationUserClaim
+            {
+                UserId = id, ClaimType = ClaimTypes.Id, ClaimValue = id.ToString(), Slug = $"{username}-id"
+            },
+            new ApplicationUserClaim
+            {
+                UserId = id,
+                ClaimType = ClaimTypes.Username,
+                ClaimValue = username,
+                Slug = $"{username}-username"
+            },
+            new ApplicationUserClaim
+            {
+                UserId = id, ClaimType = ClaimTypes.Email, ClaimValue = email, Slug = $"{username}-email"
+            }
+        };
+        await context.UserClaims.AddRangeAsync(userClaims, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     private static void ThrowExceptionFromIdentityResult(IdentityResult result,

@@ -72,7 +72,17 @@
                 </MudButton>
             </AuthorizeView>
         </CascadingAuthenticationState>
+        <MudButton Href="@Configuration["Platforms:Academy"]" Target="_blank" Color="Color.Inherit" Variant="Variant.Text" Class="@GetActiveClass(DocPages.Academy)">
+            <MudText>
+                <b>@ContentService["Header:Academy"] </b>
+            </MudText>
+        </MudButton>
 
+        <MudButton Href="@($"{Configuration["Platforms:Jobs"]}{token}")" Color="Color.Inherit" Variant="Variant.Text">
+            <MudText>
+                <b>@ContentService["Header:Jobs"] </b>
+            </MudText>
+        </MudButton>
         <DynamicHeaderButtons Application="Identity"/>
 
     </MudHidden>

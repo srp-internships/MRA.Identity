@@ -29,7 +29,7 @@ public sealed partial class UserManager
     private IEnumerable<string> Options { get; set; } = new HashSet<string>();
 
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 

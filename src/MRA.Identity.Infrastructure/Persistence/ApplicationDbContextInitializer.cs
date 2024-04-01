@@ -29,10 +29,37 @@ public class ApplicationDbContextInitializer(
 
         if (configuration["Environment"] != "Production")
         {
+            await CreateApplicationsAsync();
             await CreateSeedUsersAsync();
             await CreateSeedExperiencesEducationsSkillsAsync();
+            
+            await context.SaveChangesAsync();
         }
     }
+
+    private async Task CreateApplicationsAsync()
+    {
+        if (await context.Applications.FirstOrDefaultAsync(x => x.Name == "Mra Jobs") == null)
+            await context.Applications.AddAsync(
+                new Domain.Entities.Application()
+                {
+                    Name = "Mra Jobs",
+                    Slug = "mra-jobs",
+                    IsProtected = true,
+                    ClientSecret = "qwertyuio"
+                });
+        if (await context.Applications.FirstOrDefaultAsync(x => x.Name == "MRA Assets Management") == null)
+            await context.Applications.AddAsync(
+                new Domain.Entities.Application()
+                {
+                    Name = "MRA Assets Management",
+                    Slug = "mra-assets-management",
+                    IsProtected = true,
+                    ClientSecret = "qwertyu1"
+                });
+        await context.SaveChangesAsync();
+    }
+
 
     private async Task CreateApplicationAdmin(string applicationName, string adminPassword)
     {
@@ -680,7 +707,7 @@ public class ApplicationDbContextInitializer(
     'FirstName': 'Dalerjon',
     'LastName': 'Olimov',
     'PhoneNumber': '+992123450089',
-    'IsPhoneVerificationRequired': false,
+    'IsPhoneVerificationRequired': false,   
     'IsEmailVerificationRequired': false,
     'VerificationCode': 1234,
     'Username': 'dalerjon',
@@ -724,20 +751,25 @@ public class ApplicationDbContextInitializer(
     'ConfirmPassword': 'RandomPassword29'
   }]";
         var users = JsonConvert.DeserializeObject<List<UserModel>>(json);
+        var mraAssetsManagement =
+            await context.Applications.FirstOrDefaultAsync(x => x.Name == "MRA Assets Management");
         foreach (var user in users)
         {
-            await CreateTestUser(user.Username, user.FirstName, user.LastName, user.Email, user.Password);
+            await CreateTestUser(user.Username, user.FirstName, user.LastName, user.Email, user.Password,
+                mraAssetsManagement);
         }
 
+        var mraJobs = await context.Applications.FirstOrDefaultAsync(x => x.Name == "Mra Jobs");
+
         await CreateTestUser("applicant1", "ApplicantTest", "ApplicantTest", "applicant1@gmail.com",
-            "applicantPassword");
+            "applicantPassword", mraJobs);
 
         await CreateTestUser("Jerry", "Tom", "Jerry", "tom1234@gmail.com",
-            "tom1234");
+            "tom1234", mraJobs);
     }
 
     private async Task CreateTestUser(string username, string firstname, string lastname, string email,
-        string password)
+        string password, Domain.Entities.Application application = null)
     {
         if (await userManager.FindByNameAsync(username) != null) return;
 
@@ -754,7 +786,18 @@ public class ApplicationDbContextInitializer(
 
         await userManager.CreateAsync(user, password);
         var newUser = await userManager.FindByNameAsync(user.UserName);
-        if (newUser != null) await CreateClaimAsync(newUser.UserName, newUser.Id, newUser.Email);
+        if (newUser != null)
+        {
+            await CreateClaimAsync(newUser.UserName, newUser.Id, newUser.Email);
+            if (application != null)
+            {
+                await context.ApplicationUserLinks.AddAsync(new ApplicationUserLink()
+                {
+                    ApplicationId = application.Id,
+                    UserId = newUser.Id
+                });
+            }
+        }
     }
 
     private async Task CreateSeedExperiencesEducationsSkillsAsync()

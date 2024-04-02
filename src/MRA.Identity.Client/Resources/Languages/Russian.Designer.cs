@@ -60,348 +60,6 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to О себе.
-        /// </summary>
-        internal static string FltValidator_AboutMyself {
-            get {
-                return ResourceManager.GetString("FltValidator:AboutMyself", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Адрес.
-        /// </summary>
-        internal static string FltValidator_Address {
-            get {
-                return ResourceManager.GetString("FltValidator:Address", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Код.
-        /// </summary>
-        internal static string FltValidator_Code {
-            get {
-                return ResourceManager.GetString("FltValidator:Code", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Комментарий.
-        /// </summary>
-        internal static string FltValidator_Comment {
-            get {
-                return ResourceManager.GetString("FltValidator:Comment", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Название компании.
-        /// </summary>
-        internal static string FltValidator_CompanyName {
-            get {
-                return ResourceManager.GetString("FltValidator:CompanyName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Подтверждение пароля.
-        /// </summary>
-        internal static string FltValidator_ConfirmPassword {
-            get {
-                return ResourceManager.GetString("FltValidator:ConfirmPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Текущий пароль.
-        /// </summary>
-        internal static string FltValidator_CurrentPassword {
-            get {
-                return ResourceManager.GetString("FltValidator:CurrentPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Дата.
-        /// </summary>
-        internal static string FltValidator_Date {
-            get {
-                return ResourceManager.GetString("FltValidator:Date", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Дата рождения.
-        /// </summary>
-        internal static string FltValidator_DateOfBirth {
-            get {
-                return ResourceManager.GetString("FltValidator:DateOfBirth", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Описание.
-        /// </summary>
-        internal static string FltValidator_Description {
-            get {
-                return ResourceManager.GetString("FltValidator:Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Образование.
-        /// </summary>
-        internal static string FltValidator_Educations {
-            get {
-                return ResourceManager.GetString("FltValidator:Educations", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Электронная почта.
-        /// </summary>
-        internal static string FltValidator_Email {
-            get {
-                return ResourceManager.GetString("FltValidator:Email", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Дата окончания.
-        /// </summary>
-        internal static string FltValidator_EndDate {
-            get {
-                return ResourceManager.GetString("FltValidator:EndDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Опыт работы.
-        /// </summary>
-        internal static string FltValidator_Experiences {
-            get {
-                return ResourceManager.GetString("FltValidator:Experiences", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Имя.
-        /// </summary>
-        internal static string FltValidator_FirstName {
-            get {
-                return ResourceManager.GetString("FltValidator:FirstName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Пол.
-        /// </summary>
-        internal static string FltValidator_Gender {
-            get {
-                return ResourceManager.GetString("FltValidator:Gender", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Идентификатор.
-        /// </summary>
-        internal static string FltValidator_Id {
-            get {
-                return ResourceManager.GetString("FltValidator:Id", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Текущая работа.
-        /// </summary>
-        internal static string FltValidator_IsCurrentJob {
-            get {
-                return ResourceManager.GetString("FltValidator:IsCurrentJob", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Должность.
-        /// </summary>
-        internal static string FltValidator_JobTitle {
-            get {
-                return ResourceManager.GetString("FltValidator:JobTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Фамилия.
-        /// </summary>
-        internal static string FltValidator_LastName {
-            get {
-                return ResourceManager.GetString("FltValidator:LastName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Имя.
-        /// </summary>
-        internal static string FltValidator_Name {
-            get {
-                return ResourceManager.GetString("FltValidator:Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Новый пароль.
-        /// </summary>
-        internal static string FltValidator_NewPassword {
-            get {
-                return ResourceManager.GetString("FltValidator:NewPassword", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Пароль.
-        /// </summary>
-        internal static string FltValidator_Password {
-            get {
-                return ResourceManager.GetString("FltValidator:Password", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Намер телефона.
-        /// </summary>
-        internal static string FltValidator_PhoneNumber {
-            get {
-                return ResourceManager.GetString("FltValidator:PhoneNumber", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Имя отправителя.
-        /// </summary>
-        internal static string FltValidator_SenderUserName {
-            get {
-                return ResourceManager.GetString("FltValidator:SenderUserName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Отправлено в.
-        /// </summary>
-        internal static string FltValidator_SentAt {
-            get {
-                return ResourceManager.GetString("FltValidator:SentAt", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Слаг.
-        /// </summary>
-        internal static string FltValidator_Slug {
-            get {
-                return ResourceManager.GetString("FltValidator:Slug", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Специальность.
-        /// </summary>
-        internal static string FltValidator_Speciality {
-            get {
-                return ResourceManager.GetString("FltValidator:Speciality", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Дата начала.
-        /// </summary>
-        internal static string FltValidator_StartDate {
-            get {
-                return ResourceManager.GetString("FltValidator:StartDate", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Статус.
-        /// </summary>
-        internal static string FltValidator_Status {
-            get {
-                return ResourceManager.GetString("FltValidator:Status", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Тема.
-        /// </summary>
-        internal static string FltValidator_Subject {
-            get {
-                return ResourceManager.GetString("FltValidator:Subject", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Текст.
-        /// </summary>
-        internal static string FltValidator_Text {
-            get {
-                return ResourceManager.GetString("FltValidator:Text", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Университет.
-        /// </summary>
-        internal static string FltValidator_University {
-            get {
-                return ResourceManager.GetString("FltValidator:University", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to До сих пор.
-        /// </summary>
-        internal static string FltValidator_UntilNow {
-            get {
-                return ResourceManager.GetString("FltValidator:UntilNow", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Пользователь.
-        /// </summary>
-        internal static string FltValidator_User {
-            get {
-                return ResourceManager.GetString("FltValidator:User", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Идентификатор пользователя.
-        /// </summary>
-        internal static string FltValidator_UserId {
-            get {
-                return ResourceManager.GetString("FltValidator:UserId", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Имя пользователя.
-        /// </summary>
-        internal static string FltValidator_Username {
-            get {
-                return ResourceManager.GetString("FltValidator:Username", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Навыки пользователя.
-        /// </summary>
-        internal static string FltValidator_UserSkills {
-            get {
-                return ResourceManager.GetString("FltValidator:UserSkills", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Академия.
         /// </summary>
         internal static string Header_Academy {
@@ -1110,6 +768,87 @@ namespace MRA.Identity.Client.Resources.Languages {
         internal static string ResetPassword_Sendconfirmationcode {
             get {
                 return ResourceManager.GetString("ResetPassword:Sendconfirmationcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Подтвердите удаление.
+        /// </summary>
+        internal static string Roles_ConfirmDeletion {
+            get {
+                return ResourceManager.GetString("Roles:ConfirmDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Создать.
+        /// </summary>
+        internal static string Roles_Create {
+            get {
+                return ResourceManager.GetString("Roles:Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Создать новую роль.
+        /// </summary>
+        internal static string Roles_CreateNewRole {
+            get {
+                return ResourceManager.GetString("Roles:CreateNewRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Удалить.
+        /// </summary>
+        internal static string Roles_Delete {
+            get {
+                return ResourceManager.GetString("Roles:Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Изменить.
+        /// </summary>
+        internal static string Roles_Edit {
+            get {
+                return ResourceManager.GetString("Roles:Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Роль.
+        /// </summary>
+        internal static string Roles_Role {
+            get {
+                return ResourceManager.GetString("Roles:Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Успешно.
+        /// </summary>
+        internal static string Roles_Success {
+            get {
+                return ResourceManager.GetString("Roles:Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Обновить.
+        /// </summary>
+        internal static string Roles_Update {
+            get {
+                return ResourceManager.GetString("Roles:Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Изменить.
+        /// </summary>
+        internal static string Roles_UpdateRole {
+            get {
+                return ResourceManager.GetString("Roles:UpdateRole", resourceCulture);
             }
         }
         

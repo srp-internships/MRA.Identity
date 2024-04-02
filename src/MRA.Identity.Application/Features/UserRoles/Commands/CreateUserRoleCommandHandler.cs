@@ -4,51 +4,38 @@ using Microsoft.EntityFrameworkCore;
 using MRA.Identity.Application.Common.Interfaces.DbContexts;
 using MRA.Identity.Application.Contract.UserRoles.Commands;
 using MRA.Identity.Domain.Entities;
-using MRA.Configurations.Common.Constants;
 using MRA.Identity.Application.Common.Exceptions;
+using MRA.Identity.Application.Common.Interfaces.Services;
 
 namespace MRA.Identity.Application.Features.UserRoles.Commands;
 
 public class CreateUserRoleCommandHandler(
     RoleManager<ApplicationRole> roleManager,
     UserManager<ApplicationUser> userManager,
-    IApplicationDbContext applicationDbContext)
+    IApplicationDbContext applicationDbContext,
+    ISlugService slugService)
     : IRequestHandler<CreateUserRolesCommand, string>
 {
     public async Task<string> Handle(CreateUserRolesCommand request,
         CancellationToken cancellationToken)
     {
         var user = await userManager.Users.FirstOrDefaultAsync(u => u.NormalizedUserName == request.UserName.ToUpper(),
-            cancellationToken: cancellationToken);
-        _ = user ?? throw new NotFoundException("user is not found");
+            cancellationToken: cancellationToken) ?? throw new NotFoundException("user is not found");
+        if (await userManager.IsInRoleAsync(user, request.RoleName))
+            throw new ValidationException("user is already in that role");
 
-        var role = await roleManager.Roles.FirstOrDefaultAsync(r => r.NormalizedName == request.RoleName.ToUpper(),
-            cancellationToken: cancellationToken);
-        if (role == null)
-        {
-            role = new ApplicationRole
-            {
-                Id = Guid.NewGuid(),
-                Name = request.RoleName,
-                NormalizedName = request.RoleName.ToUpper(),
-                Slug = request.RoleName.ToLower(),
-            };
-            var createResult = await roleManager.CreateAsync(role);
-            if (!createResult.Succeeded)
-            {
-                throw new ValidationException(createResult.Errors.First().Description);
-            }
-        }
 
-        var newUserRole = new ApplicationUserRole
+        var role = await roleManager.FindByNameAsync(request.RoleName) ??
+                   throw new NotFoundException("role is not found");
+
+        var userRole = new ApplicationUserRole
         {
             UserId = user.Id,
             RoleId = role.Id,
-            Slug = $"{user.UserName}-{role.Slug}"
+            Slug = slugService.GenerateSlug(request.UserName + "-" + request.RoleName)
         };
-        await applicationDbContext.UserRoles.AddAsync(newUserRole, cancellationToken);
+        await applicationDbContext.UserRoles.AddAsync(userRole, cancellationToken);
         await applicationDbContext.SaveChangesAsync(cancellationToken);
-        
-        return newUserRole.Slug;
+        return userRole.Slug;
     }
 }

@@ -1,4 +1,3 @@
-using System.Net.Mime;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;

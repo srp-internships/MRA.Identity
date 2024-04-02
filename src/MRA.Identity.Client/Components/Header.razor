@@ -59,6 +59,13 @@
                     </MudText>
                 </MudButton>
             </AuthorizeView>
+            <AuthorizeView Roles="SuperAdmin">
+                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/applications" Class="@GetActiveClass(DocPages.UserManager)">
+                    <MudText>
+                        <b>Applications</b>
+                    </MudText>
+                </MudButton>
+            </AuthorizeView>
             <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
                 <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/UserManager" Class="@GetActiveClass(DocPages.UserManager)">
                     <MudText>
@@ -107,6 +114,13 @@
     <MudNavMenu Rounded="true" Dense="true" Color="Color.Primary" Class="pa-2">
         <MudNavLink Match="NavLinkMatch.All" Href="/" Target="_blank">@ContentService["Profile:MyProfile"]</MudNavLink>
         <CascadingAuthenticationState>
+            <AuthorizeView Roles="SuperAdmin">
+                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/applications" Class="@GetActiveClass(DocPages.UserManager)">
+                    <MudText>
+                        <b>Applications</b>
+                    </MudText>
+                </MudButton>
+            </AuthorizeView>
             <AuthorizeView Roles="ApplicationAdmin">
                 <MudNavLink Href="/UserManager">
                     <MudText>

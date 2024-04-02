@@ -8,4 +8,5 @@ public class ApplicationResponse
     public required string ClientSecret { get; set; }
     public string[] CallbackUrls { get; set; }
     public bool IsProtected { get; set; }
+    public required string Slug { get; set; }
 }

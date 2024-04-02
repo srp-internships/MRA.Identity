@@ -1,4 +1,3 @@
-using System.Net.Mime;
 using Blazored.LocalStorage;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
@@ -9,9 +8,9 @@ using MRA.BlazorComponents.Dialogs;
 using MRA.BlazorComponents.DynamicPages;
 using MRA.BlazorComponents.HttpClient;
 using MRA.Identity.Application.Contract;
-using MRA.Identity.Application.Contract.ContentService;
 using MRA.Identity.Client;
 using MRA.Identity.Client.Services;
+using MRA.Identity.Client.Services.Applications;
 using MRA.Identity.Client.Services.Auth;
 using MRA.Identity.Client.Services.Profile;
 using MRA.Identity.Client.Services.UserPreferences;
@@ -31,6 +30,7 @@ builder.Services.AddDialogs();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthStateProvider>();
 //Mra.BlazorComponents
 
+builder.Services.AddScoped<IApplicationsService, ApplicationsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserProfileService, UserProfileService>();
 builder.Services.AddScoped<LayoutService>();

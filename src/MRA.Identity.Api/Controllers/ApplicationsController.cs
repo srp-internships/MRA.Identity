@@ -32,6 +32,13 @@ public class ApplicationsController(ISender mediator) : ControllerBase
         return Ok();
     }
 
+    [HttpGet("{slug}")]
+    public async Task<IActionResult> Get(string slug)
+    {
+        var result = await mediator.Send(new GetApplicationQuery { Slug = slug });
+        return Ok(result);
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetAll()
     {

@@ -30,5 +30,7 @@ public static class DependencyInitializer
         services.AddValidatorsFromAssembly(assem);
 
         services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+        services.AddScoped<ICryptoStringService, CryptoStringService>();
     }
 }

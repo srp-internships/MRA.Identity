@@ -1,11 +1,15 @@
 ﻿using FluentValidation;
+using MRA.Identity.Application.Contract.ContentService;
 
 namespace MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
+
 public class CheckUserDetailsQueryValidator : AbstractValidator<CheckUserDetailsQuery>
 {
-    public CheckUserDetailsQueryValidator()
+    public CheckUserDetailsQueryValidator(IContentService contentService)
     {
-        RuleFor(s => s.PhoneNumber).Matches(@"^(?:\d{9}|\+992\d{9}|992\d{9})$").WithMessage("Invalid phone number. Example : +992921234567, 992921234567, 921234567");
+        RuleFor(sm => sm.PhoneNumber).NotEmpty()
+            .Matches(@"^(?:\d{9}|\+992\d{9}|992\d{9})$")
+            .WithMessage(contentService["PhoneNumberMessage"]);
         RuleFor(s => s.UserName.Length > 3);
         RuleFor(s => s.Email).EmailAddress();
     }

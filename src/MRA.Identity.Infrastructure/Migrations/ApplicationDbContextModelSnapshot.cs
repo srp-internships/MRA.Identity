@@ -22,6 +22,35 @@ namespace MRA.Identity.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("MRA.Identity.Domain.Entities.Application", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CallbackUrls")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClientSecret")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsProtected")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Slug")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Applications");
+                });
+
             modelBuilder.Entity("MRA.Identity.Domain.Entities.ApplicationRole", b =>
                 {
                     b.Property<Guid>("Id")
@@ -163,6 +192,27 @@ namespace MRA.Identity.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("AspNetUserClaims", (string)null);
+                });
+
+            modelBuilder.Entity("MRA.Identity.Domain.Entities.ApplicationUserLink", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ApplicationId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ApplicationUserLinks");
                 });
 
             modelBuilder.Entity("MRA.Identity.Domain.Entities.ApplicationUserRole", b =>
@@ -425,6 +475,25 @@ namespace MRA.Identity.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MRA.Identity.Domain.Entities.ApplicationUserLink", b =>
+                {
+                    b.HasOne("MRA.Identity.Domain.Entities.Application", "Application")
+                        .WithMany("ApplicationUserLinks")
+                        .HasForeignKey("ApplicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MRA.Identity.Domain.Entities.ApplicationUser", "User")
+                        .WithMany("ApplicationUserLinks")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Application");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("MRA.Identity.Domain.Entities.ApplicationUserRole", b =>
                 {
                     b.HasOne("MRA.Identity.Domain.Entities.ApplicationRole", null)
@@ -508,8 +577,15 @@ namespace MRA.Identity.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("MRA.Identity.Domain.Entities.Application", b =>
+                {
+                    b.Navigation("ApplicationUserLinks");
+                });
+
             modelBuilder.Entity("MRA.Identity.Domain.Entities.ApplicationUser", b =>
                 {
+                    b.Navigation("ApplicationUserLinks");
+
                     b.Navigation("Educations");
 
                     b.Navigation("Experiences");

@@ -25,4 +25,5 @@ public class ApplicationUser : IdentityUser<Guid>
     public ICollection<EducationDetail> Educations { get; set; }
     public ICollection<ExperienceDetail> Experiences { get; set; }
     public IEnumerable<UserSkill> UserSkills { get; set; }
+    public ICollection<ApplicationUserLink> ApplicationUserLinks { get; set; }
 }

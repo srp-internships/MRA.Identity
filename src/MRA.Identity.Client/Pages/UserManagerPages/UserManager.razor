@@ -1,10 +1,8 @@
 ﻿@page "/UserManager"
 @page "/Candidates"
-@using MRA.BlazorComponents.Dialogs
-@using MRA.BlazorComponents.SendEmail.Components
 <Header></Header>
 <CascadingAuthenticationState>
-    <AuthorizeView Roles="Reviewer, ApplicationAdmin, SuperAdmin" Context="_">
+    <AuthorizeView Roles="ApplicationAdmin, SuperAdmin" Context="_">
         <Authorized>
             <MudGrid>
                 <MudItem xs="12">
@@ -13,32 +11,17 @@
                             <b>@ContentService["UserManager:Users"]</b>
                         </MudText>
                         <MudSpacer/>
-                        <MudItem lg="6">
+                        <MudItem lg="4">
                             <MudGrid>
-                                <MudItem lg="4">
+                                <MudItem lg="8">
                                     <MudTextField T="string" Label="Search" @bind-Value="@_searchString"
                                                   IconSize="Size.Medium" Margin="Margin.Dense"
                                                   Class="mt-0" Immediate="true" Variant="Variant.Outlined">
                                     </MudTextField>
                                 </MudItem>
-                                <MudItem lg="6">
-                                    <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))"
-                                               MultiSelection="true" @bind-Value="SelectedSkills" SelectAll="true"
-                                               Variant="Variant.Outlined" Style="margin-top: 0px;" Margin="Margin.Dense"
-                                               @bind-SelectedValues="Options" T="string" Label="Filter by skills"
-                                               AnchorOrigin="Origin.BottomCenter">
-                                        @if (_allSkills != null)
-                                        {
-                                            @foreach (var skill in _allSkills.Skills)
-                                            {
-                                                <MudSelectItem T="string" Value="@skill">@skill</MudSelectItem>
-                                            }
-                                        }
-                                    </MudSelect>
-                                </MudItem>
                                 <MudItem>
                                     <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary"
-                                                        Function="@(async () => await _table.ReloadServerData())"
+                                                        OnClick="@(async () => await _table.ReloadServerData())"
                                                         Style="margin-top: 1px;">
                                         <MudIcon Icon="@Icons.Material.Filled.Search"/>
                                     </ProgressTaskButton>
@@ -68,12 +51,6 @@
                                 </MudTh>
                                 <MudTh>
                                     @ContentService["ResetPassword:PhoneNumber"]
-                                </MudTh>
-                                <MudTh>
-                                    @ContentService["Header:SendMessage"]
-                                </MudTh>
-                                <MudTh>
-                                    @ContentService["Header:SendEmail"]
                                 </MudTh>
                                 <MudTh>More</MudTh>
                             </HeaderContent>
@@ -106,15 +83,6 @@
                                     }
                                 </MudTd>
                                 <MudTd>@context.PhoneNumber</MudTd>
-                                <MudTd>
-                                    @if (context.PhoneNumberConfirmed)
-                                    {
-                                        <ButtonMessageSender DefaultPhoneNumber=@context.PhoneNumber></ButtonMessageSender>
-                                    }
-                                </MudTd>
-                                <MudTd>
-                                    <SendEmailButton Title="Send email" Email="@context.Email"></SendEmailButton>
-                                </MudTd>
                                 <MudTd>
                                     @{
                                         var userRolesLink = $"/UserProfile/{context.UserName}";

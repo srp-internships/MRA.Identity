@@ -1,0 +1,41 @@
+﻿@using MRA.Identity.Client.Services.Applications
+@inject IApplicationsService ApplicationsService
+@inject NavigationManager NavigationManager
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Delete" Class="mr-3 mb-n1"/>
+            Delete
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        Confirm deletion
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(Cancel)">Cancel</MudButton>
+        <MudButton Color="Color.Error" OnClick="@(async () => await DeleteAsync())">Delete</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+
+
+    [Parameter] public string Slug { get; set; }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task DeleteAsync()
+    {
+        var success = await ApplicationsService.DeleteAsync(Slug);
+        if (success)
+        {
+            NavigationManager.NavigateTo("/applications");
+            MudDialog.Close();
+        }
+    }
+
+}

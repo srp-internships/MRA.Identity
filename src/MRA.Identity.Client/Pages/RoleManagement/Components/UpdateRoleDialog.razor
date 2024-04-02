@@ -1,0 +1,44 @@
+﻿@using MRA.Identity.Client.Services.Roles
+@using MRA.Identity.Application.Contract.ApplicationRoles.Commands
+@inject IRoleService RoleService
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Update" Class="mr-3 mb-n1"/>
+            @ContentService["Roles:UpdateRole"]
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudTextField @bind-Value="Command.NewRoleName" Label="Имя"/>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(Cancel)">@ContentService["Profile:Cancel"]</MudButton>
+        <MudButton Color="Color.Primary" OnClick="@(async () => await UpdateAsync())">@ContentService["Roles:Edit"]</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+
+    [Parameter] public required UpdateRoleCommand Command { get; set; }
+
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task UpdateAsync()
+    {
+        if (!string.IsNullOrWhiteSpace(Command.NewRoleName))
+        {
+            var success = await RoleService.Put(Command);
+            if (success)
+            {
+                MudDialog.Close();
+            }
+        }
+    }
+
+}

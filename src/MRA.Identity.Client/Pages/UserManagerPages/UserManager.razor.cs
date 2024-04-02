@@ -26,19 +26,11 @@ public sealed partial class UserManager
 
     private GetAllUsersByFilters _query = new();
     private MudTable<UserResponse> _table;
-    private UserSkillsResponse _allSkills;
-    private string SelectedSkills { get; set; } = "";
     private IEnumerable<string> Options { get; set; } = new HashSet<string>();
 
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        _allSkills = await UserProfileService.GetAllSkills();
-        if (_allSkills != null)
-        {
-            _allSkills.Skills = _allSkills.Skills.Distinct().OrderBy(x => x).ToList();
-        }
-
         var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 
         if (currentUri.Query.IsNullOrEmpty())

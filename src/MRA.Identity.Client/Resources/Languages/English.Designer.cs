@@ -123,15 +123,6 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Download applicant CV.
-        /// </summary>
-        internal static string Dashboard_Appilcations_More_CVButton {
-            get {
-                return ResourceManager.GetString("Dashboard:Appilcations:More:CVButton", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Name.
         /// </summary>
         internal static string Dashboard_Appilcations_Name {
@@ -204,15 +195,6 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Internships.
-        /// </summary>
-        internal static string Header_Internships {
-            get {
-                return ResourceManager.GetString("Header:Internships", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Jobs.
         /// </summary>
         internal static string Header_Jobs {
@@ -249,542 +231,11 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Trainings.
-        /// </summary>
-        internal static string Header_Trainings {
-            get {
-                return ResourceManager.GetString("Header:Trainings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to About.
-        /// </summary>
-        internal static string Home_About {
-            get {
-                return ResourceManager.GetString("Home:About", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  Silk Road Professionals (SRP) is a full-cycle software development company founded in 2014. We are legally registered in Virginia, USA and in Dehmoy, Tajikistan..
-        /// </summary>
-        internal static string Home_AboutContent {
-            get {
-                return ResourceManager.GetString("Home:AboutContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Silk Road Professionals.
-        /// </summary>
-        internal static string Home_AboutTitle {
-            get {
-                return ResourceManager.GetString("Home:AboutTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Address.
         /// </summary>
         internal static string Home_Address {
             get {
                 return ResourceManager.GetString("Home:Address", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sugd, Jabbor Rasulov district,.
-        /// </summary>
-        internal static string Home_Address_p1 {
-            get {
-                return ResourceManager.GetString("Home:Address_p1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Dehmoy, 80 Somoni Steet.
-        /// </summary>
-        internal static string Home_Address_p2 {
-            get {
-                return ResourceManager.GetString("Home:Address_p2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Agile.
-        /// </summary>
-        internal static string Home_Agile {
-            get {
-                return ResourceManager.GetString("Home:Agile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Our highest priority is to satisfy the customer through early and continuous delivery of valuable software..
-        /// </summary>
-        internal static string Home_AgileDetails {
-            get {
-                return ResourceManager.GetString("Home:AgileDetails", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Apps.
-        /// </summary>
-        internal static string Home_Apps {
-            get {
-                return ResourceManager.GetString("Home:Apps", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Build Amazing.
-        /// </summary>
-        internal static string Home_BuildAmazing {
-            get {
-                return ResourceManager.GetString("Home:BuildAmazing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  Always on the lookout for the hi-tech advancements. Build not only a product that can sell well, but a platform through which to deliver it..
-        /// </summary>
-        internal static string Home_BuildAmazing_Content_ {
-            get {
-                return ResourceManager.GetString("Home:BuildAmazing_Content.", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Client.
-        /// </summary>
-        internal static string Home_Client {
-            get {
-                return ResourceManager.GetString("Home:Client", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  We build and run scalable applications with cloud computing..
-        /// </summary>
-        internal static string Home_CloudServiceDescription {
-            get {
-                return ResourceManager.GetString("Home:CloudServiceDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cloud Native Development.
-        /// </summary>
-        internal static string Home_CloudServiceTitle {
-            get {
-                return ResourceManager.GetString("Home:CloudServiceTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Code Quality.
-        /// </summary>
-        internal static string Home_CodeQuality {
-            get {
-                return ResourceManager.GetString("Home:CodeQuality", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to We do our best to write Descriptive Maintainable Economical Testable code..
-        /// </summary>
-        internal static string Home_CodeQualityDetails {
-            get {
-                return ResourceManager.GetString("Home:CodeQualityDetails", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Contact.
-        /// </summary>
-        internal static string Home_Contact {
-            get {
-                return ResourceManager.GetString("Home:Contact", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Continual Learning.
-        /// </summary>
-        internal static string Home_ContinualLearning {
-            get {
-                return ResourceManager.GetString("Home:ContinualLearning", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  We are committed to keeping our skills and knowledge up to date so, that we can meet the requirements of our clients..
-        /// </summary>
-        internal static string Home_ContinualLearningDetails {
-            get {
-                return ResourceManager.GetString("Home:ContinualLearningDetails", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Design.
-        /// </summary>
-        internal static string Home_Design {
-            get {
-                return ResourceManager.GetString("Home:Design", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  We build applications for an OS of your need..
-        /// </summary>
-        internal static string Home_DesktopServiceDescription {
-            get {
-                return ResourceManager.GetString("Home:DesktopServiceDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Desktop Applications.
-        /// </summary>
-        internal static string Home_DesktopServiceTitle {
-            get {
-                return ResourceManager.GetString("Home:DesktopServiceTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Development.
-        /// </summary>
-        internal static string Home_Development {
-            get {
-                return ResourceManager.GetString("Home:Development", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Email Us.
-        /// </summary>
-        internal static string Home_Email {
-            get {
-                return ResourceManager.GetString("Home:Email", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to info@silkroadprofessionals.com.
-        /// </summary>
-        internal static string Home_EmailLink {
-            get {
-                return ResourceManager.GetString("Home:EmailLink", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Glorify God.
-        /// </summary>
-        internal static string Home_GlorifyGod {
-            get {
-                return ResourceManager.GetString("Home:GlorifyGod", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to We want everything we do to bring glory to God..
-        /// </summary>
-        internal static string Home_GlorifyGodDetails {
-            get {
-                return ResourceManager.GetString("Home:GlorifyGodDetails", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to We Developer Softwate and Provide Outsourse Programming support..
-        /// </summary>
-        internal static string Home_Hero_Content {
-            get {
-                return ResourceManager.GetString("Home:Hero_Content", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to We are here..
-        /// </summary>
-        internal static string Home_Hero_Title_1 {
-            get {
-                return ResourceManager.GetString("Home:Hero_Title_1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to   To help you!.
-        /// </summary>
-        internal static string Home_Hero_Title_2 {
-            get {
-                return ResourceManager.GetString("Home:Hero_Title_2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to How.
-        /// </summary>
-        internal static string Home_How {
-            get {
-                return ResourceManager.GetString("Home:How", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Intrinsic Control.
-        /// </summary>
-        internal static string Home_IntrinsicControl {
-            get {
-                return ResourceManager.GetString("Home:IntrinsicControl", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to We encourage our programmers to be self-motivated towards improving their own skills and producing quality work..
-        /// </summary>
-        internal static string Home_IntrinsicControlDetails {
-            get {
-                return ResourceManager.GetString("Home:IntrinsicControlDetails", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Meet.
-        /// </summary>
-        internal static string Home_Meet {
-            get {
-                return ResourceManager.GetString("Home:Meet", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To engage a team of local talented IT professionals and empower them to deliver outstanding IT services to our partners.
-        /// </summary>
-        internal static string Home_MissionContent {
-            get {
-                return ResourceManager.GetString("Home:MissionContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to OUR MISSION.
-        /// </summary>
-        internal static string Home_MissionTitle {
-            get {
-                return ResourceManager.GetString("Home:MissionTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to We build a native and cross platform mobile applications..
-        /// </summary>
-        internal static string Home_MobileServiceDescription {
-            get {
-                return ResourceManager.GetString("Home:MobileServiceDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Mobile Development.
-        /// </summary>
-        internal static string Home_MobileServiceTitle {
-            get {
-                return ResourceManager.GetString("Home:MobileServiceTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  Our Team.
-        /// </summary>
-        internal static string Home_OurTeam {
-            get {
-                return ResourceManager.GetString("Home:OurTeam", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  And Partner Testimonials.
-        /// </summary>
-        internal static string Home_Partner {
-            get {
-                return ResourceManager.GetString("Home:Partner", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Planning.
-        /// </summary>
-        internal static string Home_Planning {
-            get {
-                return ResourceManager.GetString("Home:Planning", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Main principles.
-        /// </summary>
-        internal static string Home_Principles {
-            get {
-                return ResourceManager.GetString("Home:Principles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Productivity.
-        /// </summary>
-        internal static string Home_Productivity {
-            get {
-                return ResourceManager.GetString("Home:Productivity", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  We are committed to providing the tools and environment that our programmers need to reach maximum productivity..
-        /// </summary>
-        internal static string Home_ProductivityDetails {
-            get {
-                return ResourceManager.GetString("Home:ProductivityDetails", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  Us.
-        /// </summary>
-        internal static string Home_Us {
-            get {
-                return ResourceManager.GetString("Home:Us", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to View Team.
-        /// </summary>
-        internal static string Home_ViewTeam {
-            get {
-                return ResourceManager.GetString("Home:ViewTeam", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to To drive our business partners to a new level of success by providing remarkable IT outsourcing and outstaffing services.
-        /// </summary>
-        internal static string Home_VisionContent {
-            get {
-                return ResourceManager.GetString("Home:VisionContent", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to OUR VISION.
-        /// </summary>
-        internal static string Home_VisionTitle {
-            get {
-                return ResourceManager.GetString("Home:VisionTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to We develop websites and enterprise web applications..
-        /// </summary>
-        internal static string Home_WebServiceDescription {
-            get {
-                return ResourceManager.GetString("Home:WebServiceDescription", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Web Development.
-        /// </summary>
-        internal static string Home_WebServiceTitle {
-            get {
-                return ResourceManager.GetString("Home:WebServiceTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  We Do.
-        /// </summary>
-        internal static string Home_WeDo {
-            get {
-                return ResourceManager.GetString("Home:WeDo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to  We Work.
-        /// </summary>
-        internal static string Home_WeWork {
-            get {
-                return ResourceManager.GetString("Home:WeWork", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to What.
-        /// </summary>
-        internal static string Home_What {
-            get {
-                return ResourceManager.GetString("Home:What", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Working Hours.
-        /// </summary>
-        internal static string Home_WorkingHours {
-            get {
-                return ResourceManager.GetString("Home:WorkingHours", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Mon: 12pm to 9pm.
-        /// </summary>
-        internal static string Home_WorkingHours1 {
-            get {
-                return ResourceManager.GetString("Home:WorkingHours1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Tue - Fri: 8am to 5:30pm.
-        /// </summary>
-        internal static string Home_WorkingHours2 {
-            get {
-                return ResourceManager.GetString("Home:WorkingHours2", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sat - Sun: closed.
-        /// </summary>
-        internal static string Home_WorkingHours3 {
-            get {
-                return ResourceManager.GetString("Home:WorkingHours3", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Internships.
-        /// </summary>
-        internal static string Internships_Internships {
-            get {
-                return ResourceManager.GetString("Internships:Internships", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Jobs.
-        /// </summary>
-        internal static string Jobs_Jobs {
-            get {
-                return ResourceManager.GetString("Jobs:Jobs", resourceCulture);
             }
         }
         
@@ -1131,7 +582,7 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Old Password.
+        ///   Looks up a localized string similar to Current Password.
         /// </summary>
         internal static string Profile_OldPassword {
             get {
@@ -1329,7 +780,7 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To change your password, enter your old password, and then create a new, strong password..
+        ///   Looks up a localized string similar to To change your password, enter your current password, and then create a new, strong password..
         /// </summary>
         internal static string Profile_Tochangeyourpassword_enteryouroldpassword_andthencreateanew_strongpassword_ {
             get {
@@ -1461,6 +912,87 @@ namespace MRA.Identity.Client.Resources.Languages {
         internal static string ResetPassword_Sendconfirmationcode {
             get {
                 return ResourceManager.GetString("ResetPassword:Sendconfirmationcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm deletion.
+        /// </summary>
+        internal static string Roles_ConfirmDeletion {
+            get {
+                return ResourceManager.GetString("Roles:ConfirmDeletion", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create.
+        /// </summary>
+        internal static string Roles_Create {
+            get {
+                return ResourceManager.GetString("Roles:Create", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new role.
+        /// </summary>
+        internal static string Roles_CreateNewRole {
+            get {
+                return ResourceManager.GetString("Roles:CreateNewRole", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        internal static string Roles_Delete {
+            get {
+                return ResourceManager.GetString("Roles:Delete", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit.
+        /// </summary>
+        internal static string Roles_Edit {
+            get {
+                return ResourceManager.GetString("Roles:Edit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Role.
+        /// </summary>
+        internal static string Roles_Role {
+            get {
+                return ResourceManager.GetString("Roles:Role", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Success.
+        /// </summary>
+        internal static string Roles_Success {
+            get {
+                return ResourceManager.GetString("Roles:Success", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update.
+        /// </summary>
+        internal static string Roles_Update {
+            get {
+                return ResourceManager.GetString("Roles:Update", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Update the role.
+        /// </summary>
+        internal static string Roles_UpdateRole {
+            get {
+                return ResourceManager.GetString("Roles:UpdateRole", resourceCulture);
             }
         }
         
@@ -1600,7 +1132,7 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Firs name.
+        ///   Looks up a localized string similar to First name.
         /// </summary>
         internal static string SignUp_FirstName {
             get {
@@ -1731,15 +1263,6 @@ namespace MRA.Identity.Client.Resources.Languages {
         internal static string SignUp_UserName {
             get {
                 return ResourceManager.GetString("SignUp:UserName", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Trainings.
-        /// </summary>
-        internal static string Trainings_Trainings {
-            get {
-                return ResourceManager.GetString("Trainings:Trainings", resourceCulture);
             }
         }
         
@@ -1875,394 +1398,6 @@ namespace MRA.Identity.Client.Resources.Languages {
         internal static string UserRoles_UnConfirmed {
             get {
                 return ResourceManager.GetString("UserRoles:UnConfirmed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to All.
-        /// </summary>
-        internal static string VacanciesList_All {
-            get {
-                return ResourceManager.GetString("VacanciesList:All", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deadline.
-        /// </summary>
-        internal static string VacanciesList_Deadline {
-            get {
-                return ResourceManager.GetString("VacanciesList:Deadline", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Duration.
-        /// </summary>
-        internal static string VacanciesList_Duration {
-            get {
-                return ResourceManager.GetString("VacanciesList:Duration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to End date.
-        /// </summary>
-        internal static string VacanciesList_End_date {
-            get {
-                return ResourceManager.GetString("VacanciesList:End date", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to month(s).
-        /// </summary>
-        internal static string VacanciesList_month_s_ {
-            get {
-                return ResourceManager.GetString("VacanciesList:month(s)", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to There are currently no job vacancies available. Please check back later :).
-        /// </summary>
-        internal static string VacanciesList_NoJobs {
-            get {
-                return ResourceManager.GetString("VacanciesList:NoJobs", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Posted.
-        /// </summary>
-        internal static string VacanciesList_Posted {
-            get {
-                return ResourceManager.GetString("VacanciesList:Posted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Search.
-        /// </summary>
-        internal static string VacanciesList_Search {
-            get {
-                return ResourceManager.GetString("VacanciesList:Search", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Additional Details.
-        /// </summary>
-        internal static string VacancyApplication_Additional_Details {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Additional Details", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Apply.
-        /// </summary>
-        internal static string VacancyApplication_Apply {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Apply", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Apply using profile.
-        /// </summary>
-        internal static string VacancyApplication_Apply_using_profile {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Apply using profile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Apply with uploading file.
-        /// </summary>
-        internal static string VacancyApplication_Apply_with_uploading_file {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Apply with uploading file", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cover Letter.
-        /// </summary>
-        internal static string VacancyApplication_Cover_Letter {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Cover Letter", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deadline.
-        /// </summary>
-        internal static string VacancyApplication_Deadline {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Deadline", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Duration.
-        /// </summary>
-        internal static string VacancyApplication_Duration {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Duration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to End Date.
-        /// </summary>
-        internal static string VacancyApplication_End_Date {
-            get {
-                return ResourceManager.GetString("VacancyApplication:End Date", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Fees.
-        /// </summary>
-        internal static string VacancyApplication_Fees {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Fees", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to month(s).
-        /// </summary>
-        internal static string VacancyApplication_month_s_ {
-            get {
-                return ResourceManager.GetString("VacancyApplication:month(s)", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Posted.
-        /// </summary>
-        internal static string VacancyApplication_Posted {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Posted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Processing.
-        /// </summary>
-        internal static string VacancyApplication_Processing {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Processing", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Questions.
-        /// </summary>
-        internal static string VacancyApplication_Questions {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Questions", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Required year of experience.
-        /// </summary>
-        internal static string VacancyApplication_Required_year_of_experience {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Required year of experience", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Upload your CV.
-        /// </summary>
-        internal static string VacancyApplication_Upload_your_CV {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Upload your CV", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Vacancy Details.
-        /// </summary>
-        internal static string VacancyApplication_Vacancy_Details {
-            get {
-                return ResourceManager.GetString("VacancyApplication:Vacancy Details", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to year(s).
-        /// </summary>
-        internal static string VacancyApplication_year_s_ {
-            get {
-                return ResourceManager.GetString("VacancyApplication:year(s)", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Already have an account?.
-        /// </summary>
-        internal static string VacancyDetails_Already_have_an_account_ {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Already have an account?", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Apply Now.
-        /// </summary>
-        internal static string VacancyDetails_Apply_Now {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Apply Now", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Are you ready to take your career to the next level with.
-        /// </summary>
-        internal static string VacancyDetails_Are_you_ready_to_take_your_career_to_the_next_level_with {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Are you ready to take your career to the next level with", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Deadline.
-        /// </summary>
-        internal static string VacancyDetails_Deadline {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Deadline", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Download CV.
-        /// </summary>
-        internal static string VacancyDetails_Download_CV {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Download CV", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Duration.
-        /// </summary>
-        internal static string VacancyDetails_Duration {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Duration", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to End Date.
-        /// </summary>
-        internal static string VacancyDetails_End_Date {
-            get {
-                return ResourceManager.GetString("VacancyDetails:End Date", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Explore.
-        /// </summary>
-        internal static string VacancyDetails_Explore {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Explore", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Fees.
-        /// </summary>
-        internal static string VacancyDetails_Fees {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Fees", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to month(s).
-        /// </summary>
-        internal static string VacancyDetails_month_s_ {
-            get {
-                return ResourceManager.GetString("VacancyDetails:month(s)", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to opportunities.
-        /// </summary>
-        internal static string VacancyDetails_opportunities {
-            get {
-                return ResourceManager.GetString("VacancyDetails:opportunities", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Posted.
-        /// </summary>
-        internal static string VacancyDetails_Posted {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Posted", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Required year of experience.
-        /// </summary>
-        internal static string VacancyDetails_Required_year_of_experience {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Required year of experience", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sign In.
-        /// </summary>
-        internal static string VacancyDetails_Sign_In {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Sign In", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sign Up.
-        /// </summary>
-        internal static string VacancyDetails_Sign_Up {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Sign Up", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Unfortunately, the deadline has already expired.
-        /// </summary>
-        internal static string VacancyDetails_Unfortunately__the_deadline_has_already_expired {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Unfortunately, the deadline has already expired", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Write a cover letter, answer few questions and send your application!.
-        /// </summary>
-        internal static string VacancyDetails_Write_a_cover_letter__answer_few_questions_and_send_your_application_ {
-            get {
-                return ResourceManager.GetString("VacancyDetails:Write a cover letter, answer few questions and send your applicati" +
-                        "on!", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to year(s).
-        /// </summary>
-        internal static string VacancyDetails_year_s_ {
-            get {
-                return ResourceManager.GetString("VacancyDetails:year(s)", resourceCulture);
             }
         }
     }

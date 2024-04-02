@@ -78,7 +78,7 @@
                                     <td>@_personalData.Gender</td>
                                 </tr>
                                 <tr>
-                                    <td>@ContentService["Home:About"]:</td>
+                                    <td>@ContentService["Profile:AboutMyself"]:</td>
                                     <td></td>
                                     <td>@_personalData.AboutMyself</td>
                                 </tr>
@@ -190,77 +190,83 @@
                         </MudItem>
                     </MudGrid>
                 </MudTabPanel>
-                <MudTabPanel Icon="@Icons.Material.Filled.List" Text="Applications">
-                    <MudLink Target="_blank"
-                             Href=@($"{Configuration["Platforms:Jobs"]}Dashboard/Applications?page=1&pageSize=10&FullName={_user.FullName}&PhoneNumber={_user.PhoneNumber}&Email={_user.Email}")>
-                        go to applications
-                    </MudLink>
-                </MudTabPanel>
-                <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
+
+                <AuthorizeView Roles="SuperAdmin">
                     <Authorized Context="authContext2">
-                        <MudTabPanel Icon="@Icons.Material.Filled.Settings" Text="Settings">
+                        <MudTabPanel Icon="@Icons.Material.Filled.List" Text="Assign Role">
+                            <MudText Typo="Typo.h6">
+                                <b>Assign role for current user</b>
+                            </MudText>
 
-                            <MudGrid>
-                                <!-- Roles -->
-                                <MudItem lg="6" xs="12">
+                            <MudStack Row="true">
+                                <MudTextField Margin="Margin.Dense" Label=@ContentService["UserManager:Roles"]
+                                              Variant="Variant.Outlined" @bind-Value="NewRoleName"/>
+                                <MudIconButton Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" OnClick="@OnAddClick"/>
 
-                                    <MudText Typo="Typo.h6">
-                                        <b>@ContentService["UserManager"]</b>
-                                    </MudText>
+                            </MudStack>
+                            <br/>
+                            <MudTable Items="@Roles" Dense="true" Hover="true" Breakpoint="@Breakpoint.None">
+                                <RowTemplate>
+                                    <MudTd Style="width:100%">@context.RoleName</MudTd>
+                                    <MudTd Style="width:auto">
+                                        <MudIconButton @onclick="() => OnDeleteClick(context.Slug)" Icon="@Icons.Material.Filled.Delete" Color="Color.Error"></MudIconButton>
+                                    </MudTd>
+                                </RowTemplate>
+                            </MudTable>
 
-                                    <MudStack Row="true">
-                                        <MudTextField Margin="Margin.Dense" Label=@ContentService["UserManager:Roles"]
-                                                      Variant="Variant.Outlined" @bind-Value="NewRoleName"/>
-                                        <MudFab Size="Size.Medium" StartIcon="@Icons.Material.Filled.Add" OnClick="@OnAddClick"/>
-                                    </MudStack>
-                                    <br/>
-                                    <MudTable Items="@Roles" Dense="true" Hover="true" Breakpoint="@Breakpoint.None">
-                                        <RowTemplate>
-                                            <MudTd Style="width:100%">@context.RoleName</MudTd>
-                                            <MudTd Style="width:auto">
-                                                <MudIconButton @onclick="() => OnDeleteClick(context.Slug)" Icon="@Icons.Material.Filled.Delete" Color="Color.Error"></MudIconButton>
-                                            </MudTd>
-                                        </RowTemplate>
-                                    </MudTable>
-                                </MudItem>
+                        </MudTabPanel>
+                        <MudTabPanel Icon="@Icons.Material.Filled.Key" Text="Claims">
+                            <MudText Typo="Typo.h6">
+                                <b>Claims</b>
+                            </MudText>
 
-                                <!-- Claims -->
-                                <MudItem lg="6" xs="12">
-
-                                    <MudText Typo="Typo.h6">
-                                        <b>Claims</b>
-                                    </MudText>
-
-                                    <MudStack Row="true">
-                                        <MudTextField Margin="Margin.Dense" Label="Claim Type"
-                                                      Variant="Variant.Outlined" @bind-Value="_claimType"/>
-                                        <MudTextField Margin="Margin.Dense" Label="Claim Value"
-                                                      Variant="Variant.Outlined" @bind-Value="_claimValue"/>
-                                        @if (!_loader)
-                                        {
-                                            <MudFab Size="Size.Medium" StartIcon="@Icons.Material.Filled.Add" OnClick="@OnAddClaimClick"/>
-                                        }
-                                        else
-                                        {
-                                            <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
-                                        }
-                                    </MudStack>
-                                    <br/>
-                                    <MudTable Items="@UserClaims" Dense="true" Hover="true" Breakpoint="@Breakpoint.None">
-                                        <RowTemplate>
-                                            <MudTd Style="width:100%">@context.ClaimType</MudTd>
-                                            <MudTd Style="width:100%">@context.ClaimValue</MudTd>
-                                            <MudTd Style="width:auto">
-
-                                                <MudIconButton @onclick="() => OnDeleteClaimClick(context.Slug)"
-                                                               Icon="@Icons.Material.Filled.Delete" Color="Color.Error"/>
-
-                                            </MudTd>
-                                        </RowTemplate>
-                                    </MudTable>
-                                </MudItem>
-                            </MudGrid>
-
+                            <MudStack Row="true">
+                                <MudTextField Margin="Margin.Dense" Label="Claim Type"
+                                              Variant="Variant.Outlined" @bind-Value="_claimType"/>
+                                <MudTextField Margin="Margin.Dense" Label="Claim Value"
+                                              Variant="Variant.Outlined" @bind-Value="_claimValue"/>
+                                @if (!_loader)
+                                {
+                                    <MudIconButton Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" OnClick="@OnAddClaimClick"/>
+                                }
+                                else
+                                {
+                                    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
+                                }
+                            </MudStack>
+                            <br/>
+                            <MudText Typo="Typo.h6">
+                                <b>Basic Claims</b>
+                            </MudText>
+                            <MudTable Items="@ReadOnlyClaims" Dense="true" Hover="true" Breakpoint="@Breakpoint.None">
+                                <HeaderContent>
+                                    <MudTh>@ContentService["ClaimType"]</MudTh>
+                                    <MudTh>@ContentService["ClaimValue"]</MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd Style="width:100%">@context.ClaimType</MudTd>
+                                    <MudTd Style="width:100%">@context.ClaimValue</MudTd>
+                                </RowTemplate>
+                            </MudTable>
+                            <br><br>
+                            <MudText Typo="Typo.h6">
+                                <b>User Claims</b>
+                            </MudText>
+                            <MudTable Items="@UserClaims" Dense="true" Hover="true" Breakpoint="@Breakpoint.None">
+                                <HeaderContent>
+                                    <MudTh>@ContentService["ClaimType"]</MudTh>
+                                    <MudTh>@ContentService["ClaimValue"]</MudTh>
+                                    <MudTh></MudTh>
+                                </HeaderContent>
+                                <RowTemplate>
+                                    <MudTd Style="width:100%">@context.ClaimType</MudTd>
+                                    <MudTd Style="width:100%">@context.ClaimValue</MudTd>
+                                    <MudTd Style="width:auto">
+                                        <MudIconButton @onclick="() => OnDeleteClaimClick(context.Slug)"
+                                                       Icon="@Icons.Material.Filled.Delete" Color="Color.Error"/>
+                                    </MudTd>
+                                </RowTemplate>
+                            </MudTable>
                         </MudTabPanel>
                     </Authorized>
                     <NotAuthorized></NotAuthorized>

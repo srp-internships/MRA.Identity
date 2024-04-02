@@ -69,7 +69,7 @@
                     </EditForm>
                 </MudCardContent>
                 <MudCardActions>
-                    <ProgressTaskButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Function="SendCode" Color="Color.Primary"
+                    <ProgressTaskButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" OnClick="@SendCode" Color="Color.Primary"
                                         Class="ml-auto" FullWidth="true">
                         <MudText>@ContentService["SignUp:ButtonNext"]</MudText>
                     </ProgressTaskButton>
@@ -95,13 +95,12 @@
                     <br/>
                     <br/>
                     <MudCardActions>
-                        <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Function="ConfirmCode">
+                        <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="@ConfirmCode">
                             <MudText>@ContentService["SignUp:Apply"]</MudText>
                         </ProgressTaskButton>
                         <MudButton Variant="Variant.Text" Color="Color.Info" FullWidth="true" OnClick="SendCode" Disabled="@_isResendDisabled">
                             <MudText>@ContentService["SignUp:ResendCode"]</MudText>
                         </MudButton>
-
                     </MudCardActions>
                     <div>
                         <MudText Color="Color.Default">@_timeLeft @ContentService["SignUp:Secconds"]</MudText>

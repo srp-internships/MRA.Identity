@@ -1,23 +1,27 @@
-﻿using MRA.Identity.Application.Contract.UserRoles.Commands;
-using MRA.Configurations.Common.Constants;
+﻿using Microsoft.AspNetCore.Http;
+using MRA.Identity.Application.Contract.UserRoles.Commands;
 
 namespace MRA.Jobs.Application.IntegrationTests.UserRoles.Commands;
 
 public class CreateUserRolesCommandTest : BaseTest
 {
+    private ApplicationUser _user = null!;
+
+    [SetUp]
+    public async Task SetUp()
+    {
+        _user = new ApplicationUser { UserName = "Test123", Email = "Test1231231@con.ty", };
+        await AddUser(_user, "fasdfasdf@1231Q!");
+    }
+
     [Test]
-    [Ignore("by Firuz")]
     public async Task CreateUserRole_ShouldCreateUserRole_Success()
     {
-        var user = new ApplicationUser { UserName = "Test123", Email = "Test1231231@con.ty", };
-
-        await AddEntity(user);
-
-        var role = new ApplicationRole { Slug = "rol1", Name = "Rol1" };
+        var role = new ApplicationRole { Slug = "rol1", Name = "rol1", NormalizedName = "ROL1" };
 
         await AddEntity(role);
 
-        var command = new CreateUserRolesCommand { UserName = user.UserName, RoleName = role.Name };
+        var command = new CreateUserRolesCommand { UserName = _user.UserName, RoleName = role.Name };
 
         await AddAuthorizationAsync();
         var response = await _client.PostAsJsonAsync("/api/userRoles", command);
@@ -27,26 +31,31 @@ public class CreateUserRolesCommandTest : BaseTest
 
 
     [Test]
-    [Ignore("by Firuz")]
-    public async Task CreateUserRole_ShouldCreateUserRole_ClaimRoleShouldBeCreated()
+    public async Task CreateUserRole_UnExistRole_ShouldReturnNotFound()
     {
-        var user = new ApplicationUser { UserName = "Test321", Email = "Test@con.ty", };
-
-        await AddEntity(user);
-
-        var role = new ApplicationRole { Slug = "rol1", Name = "Rol1" };
+        var role = new ApplicationRole { Slug = "rol2", Name = "Rol2", NormalizedName = "ROL2" };
 
         await AddEntity(role);
 
-        var command = new CreateUserRolesCommand { UserName = user.UserName, RoleName = role.Name };
+        var command = new CreateUserRolesCommand { UserName = _user.UserName, RoleName = role.Name + "as;dfhlkjsd" };
 
         await AddAuthorizationAsync();
         var response = await _client.PostAsJsonAsync("/api/UserRoles", command);
 
-        response.EnsureSuccessStatusCode();
+        Assert.That((int)response.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
+    }
 
-        var claim = await GetEntity<ApplicationUserClaim>(s =>
-            s.UserId == user.Id && s.ClaimType == ClaimTypes.Role);
-        claim.Should().NotBeNull();
+    [Test]
+    public async Task CreateUserRole_UnExistUser_ShouldReturnNotFound()
+    {
+        var role = new ApplicationRole { Slug = "rol3", Name = "Rol3", NormalizedName = "ROL3" };
+
+        await AddEntity(role);
+        var command = new CreateUserRolesCommand { UserName = _user.UserName + "afdsdf", RoleName = role.Name };
+
+        await AddAuthorizationAsync();
+        var response = await _client.PostAsJsonAsync("/api/UserRoles", command);
+
+        Assert.That((int)response.StatusCode, Is.EqualTo(StatusCodes.Status404NotFound));
     }
 }

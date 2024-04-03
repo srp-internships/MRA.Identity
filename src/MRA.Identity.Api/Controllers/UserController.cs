@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MRA.Identity.Application.Contract.User.Commands;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
 using MRA.Identity.Application.Contract.UserEmail.Commands;
@@ -9,7 +10,7 @@ namespace MRA.Identity.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(ApplicationPolicies.Reviewer)]
+[Authorize(ApplicationPolicies.SuperAdministrator)]
 public class UserController(ISender mediator) : ControllerBase
 {
     [HttpGet]
@@ -18,7 +19,24 @@ public class UserController(ISender mediator) : ControllerBase
         var users = await mediator.Send(byFilters);
         return Ok(users);
     }
-    
+
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> Post([FromBody] GetAllUsersByFilterCommand command)
+    {
+        var users = await mediator.Send(new GetAllUsersByFilters()
+        {
+            ApplicationId = command.ApplicationId,
+            ApplicationClientSecret = command.ApplicationClientSecret,
+            PageSize = command.PageSize,
+            Skills = command.Skills,
+            Page = command.Page,
+            Sorts = command.Sorts,
+            Filters = command.Filters
+        });
+        return Ok(users);
+    }
+
     [HttpGet("GetListUsers/ByFilter")]
     public async Task<IActionResult> GetListUsers([FromQuery] GetListUsersQuery query)
     {

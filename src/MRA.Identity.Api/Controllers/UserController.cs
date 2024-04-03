@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MRA.Identity.Application.Contract.User.Commands;
+using MRA.Identity.Application.Contract.User.Commands.UsersByApplications;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
 using MRA.Identity.Application.Contract.UserEmail.Commands;
@@ -14,17 +14,17 @@ namespace MRA.Identity.Api.Controllers;
 public class UserController(ISender mediator) : ControllerBase
 {
     [HttpGet]
-    public async Task<IActionResult> Get([FromQuery] GetAllUsersByFilters byFilters)
+    public async Task<IActionResult> Get([FromQuery] GetPagedListUsersQuery query)
     {
-        var users = await mediator.Send(byFilters);
+        var users = await mediator.Send(query);
         return Ok(users);
     }
 
     [HttpPost]
     [AllowAnonymous]
-    public async Task<IActionResult> Post([FromBody] GetAllUsersByFilterCommand command)
+    public async Task<IActionResult> Post([FromBody] GetPagedListUsersCommand command)
     {
-        var users = await mediator.Send(new GetAllUsersByFilters()
+        var users = await mediator.Send(new GetPagedListUsersQuery()
         {
             ApplicationId = command.ApplicationId,
             ApplicationClientSecret = command.ApplicationClientSecret,
@@ -41,6 +41,22 @@ public class UserController(ISender mediator) : ControllerBase
     public async Task<IActionResult> GetListUsers([FromQuery] GetListUsersQuery query)
     {
         var users = await mediator.Send(query);
+        return Ok(users);
+    }
+
+    [HttpPost("GetListUsersCommand/ByFilter")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetListUsersCommand([FromBody] GetListUsersCommand command)
+    {
+        var users = await mediator.Send(new GetListUsersQuery()
+        {
+            ApplicationId = command.ApplicationId,
+            ApplicationClientSecret = command.ApplicationClientSecret,
+            Skills = command.Skills,
+            FullName = command.FullName,
+            Email = command.Email,
+            PhoneNumber = command.PhoneNumber
+        });
         return Ok(users);
     }
 

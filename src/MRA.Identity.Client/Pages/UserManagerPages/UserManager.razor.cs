@@ -24,7 +24,7 @@ public sealed partial class UserManager
     private bool _isLoaded = false;
     private string _searchString = "";
 
-    private GetAllUsersByFilters _query = new();
+    private GetPagedListUsersQuery _query = new();
     private MudTable<UserResponse> _table;
     private IEnumerable<string> Options { get; set; } = new HashSet<string>();
 

@@ -13,26 +13,19 @@ using MRA.Identity.Domain.Entities;
 
 namespace MRA.Identity.Application.Features.Users.Query;
 
-public class GetAllUsersQueryHandler(
+public class GetPagedListUsersQueryHandler(
     IApplicationDbContext dbContext,
     UserManager<ApplicationUser> userManager,
     IMapper mapper,
     IApplicationSieveProcessor sieveProcessor)
-    : IRequestHandler<GetAllUsersByFilters, PagedList<UserResponse>>
+    : IRequestHandler<GetPagedListUsersQuery, PagedList<UserResponse>>
 {
-    public async Task<PagedList<UserResponse>> Handle(GetAllUsersByFilters request, CancellationToken cancellationToken)
+    public async Task<PagedList<UserResponse>> Handle(GetPagedListUsersQuery request, CancellationToken cancellationToken)
     {
         var users = userManager.Users
             .Include(u => u.UserSkills)
             .ThenInclude(s => s.Skill)
             .AsNoTracking();
-
-        if (!request.Skills.IsNullOrEmpty())
-        {
-            var skills = request.Skills.Split(',').Select(s => s.Trim()).Distinct();
-            users = users.Where(u =>
-                skills.Intersect(u.UserSkills.Select(s => s.Skill.Name)).Count() == skills.Count());
-        }
 
         if (request.ApplicationId != null && !request.ApplicationClientSecret.IsNullOrEmpty())
         {
@@ -41,11 +34,17 @@ public class GetAllUsersQueryHandler(
                     cancellationToken) == null)
                 throw new NotFoundException("There is no such application");
 
-
             users = users.Include(u => u.ApplicationUserLinks)
                 .Where(u => u.ApplicationUserLinks.Any(l => l.ApplicationId == request.ApplicationId));
         }
-
+        
+        if (!request.Skills.IsNullOrEmpty())
+        {
+            var skills = request.Skills.Split(',').Select(s => s.Trim()).Distinct();
+            users = users.Where(u =>
+                skills.Intersect(u.UserSkills.Select(s => s.Skill.Name)).Count() == skills.Count());
+        }
+        
         var result = sieveProcessor.ApplyAdnGetPagedList(request,
             users, mapper.Map<UserResponse>);
 

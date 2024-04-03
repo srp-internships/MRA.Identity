@@ -10,7 +10,7 @@ namespace MRA.Identity.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-[Authorize(ApplicationPolicies.SuperAdministrator)]
+[Authorize(ApplicationPolicies.Administrator)]
 public class UserController(ISender mediator) : ControllerBase
 {
     [HttpGet]

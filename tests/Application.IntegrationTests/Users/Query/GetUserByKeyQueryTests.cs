@@ -41,10 +41,10 @@ public class GetUserByKeyQueryTests : BaseTest
 
     [Test]
     [TestCase("", HttpStatusCode.Forbidden)]
-    [TestCase(ApplicationPolicies.Reviewer, HttpStatusCode.OK)]
+    [TestCase(ApplicationPolicies.Reviewer, HttpStatusCode.Forbidden)]
     [TestCase(ApplicationPolicies.Administrator, HttpStatusCode.OK)]
     [TestCase(ApplicationPolicies.SuperAdministrator, HttpStatusCode.OK)]
-    public async Task GetUserByKey_Return_Forbidden(string role, HttpStatusCode statusCode)
+    public async Task GetUserByKey_Return_StatusCode(string role, HttpStatusCode statusCode)
     {
         if (role == ApplicationPolicies.SuperAdministrator || role == ApplicationPolicies.Administrator)
             await AddAuthorizationAsync();

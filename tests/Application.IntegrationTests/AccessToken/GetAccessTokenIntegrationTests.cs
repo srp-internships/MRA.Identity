@@ -9,6 +9,27 @@ namespace MRA.Jobs.Application.IntegrationTests.AccessToken;
 public class GetAccessTokenIntegrationTests : BaseTest
 {
     private JwtTokenResponse LoginResponse { get; set; }
+    private readonly ApplicationRole _role = new() { Name = "Reviewer" + nameof(GetAccessTokenIntegrationTests) };
+
+    private readonly MRA.Identity.Domain.Entities.Application _application =
+        new MRA.Identity.Domain.Entities.Application
+        {
+            Slug = "Application" + nameof(GetAccessTokenIntegrationTests),
+            Name = "Application" + nameof(GetAccessTokenIntegrationTests),
+            ClientSecret = "fa;sldkjfalskjdfoqwijf;odsnfoweifneronflkfn;doifneoio",
+            CallbackUrls = ["https://localhost"],
+            Description = ""
+        };
+
+    public override async Task OneTimeSetup()
+    {
+        await base.OneTimeSetup();
+        _role.NormalizedName = _role.Name?.ToUpper();
+        _role.Slug = _role.NormalizedName;
+        await AddEntity(_role);
+        _application.DefaultRoleId = _role.Id;
+        await AddEntity(_application);
+    }
 
     [SetUp]
     public async Task SetUp()
@@ -23,7 +44,9 @@ public class GetAccessTokenIntegrationTests : BaseTest
                 Username = "@Alex111122",
                 LastName = "Makedonsky",
                 PhoneNumber = "+992123156789",
-                ConfirmPassword = "password@#12P"
+                ConfirmPassword = "password@#12P",
+                ApplicationId = _application.Id,
+                CallBackUrl = _application.CallbackUrls.First()
             };
             var res = await _client.GetAsync($"api/sms/send_code?PhoneNumber={registerCommand1.PhoneNumber}");
             res.EnsureSuccessStatusCode();
@@ -77,7 +100,7 @@ public class GetAccessTokenIntegrationTests : BaseTest
         var request = new GetAccessTokenUsingRefreshTokenQuery
         {
             AccessToken = "sdf", //invalid accessToken
-            RefreshToken = LoginResponse.RefreshToken
+            RefreshToken = LoginResponse.RefreshToken,
         };
 
         //Act

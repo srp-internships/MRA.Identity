@@ -6,6 +6,26 @@ namespace MRA.Jobs.Application.IntegrationTests.Users.Command;
 [TestFixture]
 public class RegistrationTests : BaseTest
 {
+    private readonly ApplicationRole _role = new() { Name = "Reviewer" + nameof(LoginTest) };
+
+    private readonly MRA.Identity.Domain.Entities.Application _application = new()
+        {
+            Slug = "Application" + nameof(RegistrationTests),
+            Name = "Application" + nameof(RegistrationTests),
+            ClientSecret = "fa;sldkjfalskjdfoqwijf;odsnfoweifneronflkfn;doifneoio",
+            CallbackUrls = ["https://localhost"]
+        };
+
+    public override async Task OneTimeSetup()
+    {
+        await base.OneTimeSetup();
+        _role.NormalizedName = _role.Name?.ToUpper();
+        _role.Slug = _role.NormalizedName;
+        await AddEntity(_role);
+        _application.DefaultRoleId = _role.Id;
+        await AddEntity(_application);
+    }
+
     [Test]
     [TestCase("Alex99", "alex99@example.com", "+992123451789")]
     [TestCase(" Jason ", "jason@example.com", "+992223451789")]
@@ -22,7 +42,9 @@ public class RegistrationTests : BaseTest
             Username = userName,
             LastName = "Makedonsky",
             PhoneNumber = phoneNumber,
-            ConfirmPassword = "password@#12P"
+            ConfirmPassword = "password@#12P",
+            ApplicationId = _application.Id,
+            CallBackUrl = _application.CallbackUrls.First()
         };
         var res = await _client.GetAsync($"api/sms/send_code?PhoneNumber={request.PhoneNumber}");
         res.EnsureSuccessStatusCode();
@@ -52,6 +74,8 @@ public class RegistrationTests : BaseTest
             Username = "@Alex22",
             LastName = "Makedonskiy",
             PhoneNumber = "+992523456789",
+            ApplicationId = _application.Id,
+            CallBackUrl = _application.CallbackUrls.First()
         };
 
         // Assert
@@ -92,7 +116,9 @@ public class RegistrationTests : BaseTest
             Username = userName,
             LastName = "Makesddonsky",
             PhoneNumber = "+992623456701",
-            ConfirmPassword = "passdsword@#12P"
+            ConfirmPassword = "passdsword@#12P",
+            ApplicationId = _application.Id,
+            CallBackUrl = _application.CallbackUrls.First()
         };
 
         // Assert
@@ -124,7 +150,9 @@ public class RegistrationTests : BaseTest
             Username = "@Alerrrx223",
             LastName = "Makerradonsky",
             PhoneNumber = "+992723456789",
-            ConfirmPassword = "passworrrrd@#12P"
+            ConfirmPassword = "passworrrrd@#12P",
+            ApplicationId = _application.Id,
+            CallBackUrl = _application.CallbackUrls.First()
         };
         var res = await _client.GetAsync($"api/sms/send_code?PhoneNumber={request.PhoneNumber}");
         res.EnsureSuccessStatusCode();

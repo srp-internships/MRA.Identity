@@ -6,6 +6,28 @@ namespace MRA.Jobs.Application.IntegrationTests.Email;
 [TestFixture]
 public class EmailTest : BaseTest
 {
+    private readonly ApplicationRole _role = new() { Name = "Reviewer" + nameof(EmailTest) };
+
+    private readonly MRA.Identity.Domain.Entities.Application _application =
+        new MRA.Identity.Domain.Entities.Application
+        {
+            Slug = "Application" + nameof(EmailTest),
+            Name = "Application" + nameof(EmailTest),
+            ClientSecret = "fa;sldkjfalskjdfoqwijf;odsnfoweifneronflkfn;doifneoio",
+            CallbackUrls = ["https://localhost"],
+            Description = ""
+        };
+
+    public override async Task OneTimeSetup()
+    {
+        await base.OneTimeSetup();
+        _role.NormalizedName = _role.Name?.ToUpper();
+        _role.Slug = _role.NormalizedName;
+        await AddEntity(_role);
+        _application.DefaultRoleId = _role.Id;
+        await AddEntity(_application);
+    }
+    
     [Test]
     [Ignore("emailTemplate")]
     public async Task Email_VerifyEmail_True()
@@ -54,7 +76,9 @@ public class EmailTest : BaseTest
             Username = "@Alex221",
             LastName = "Makedonsky1",
             PhoneNumber = "+992323456789",
-            ConfirmPassword = "password@#12P"
+            ConfirmPassword = "password@#12P",
+            ApplicationId = _application.Id,
+            CallBackUrl = _application.CallbackUrls.First()
         };
         // Act
         var res = await _client.GetAsync($"api/sms/send_code?PhoneNumber={request.PhoneNumber}");

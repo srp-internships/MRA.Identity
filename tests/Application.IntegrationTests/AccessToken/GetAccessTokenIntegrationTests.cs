@@ -53,7 +53,11 @@ public class GetAccessTokenIntegrationTests : BaseTest
 
             registerCommand1.VerificationCode =
                 (await GetEntity<ConfirmationCode>(x => x.PhoneNumber == registerCommand1.PhoneNumber)).Code;
-            var loginCommand1 = new LoginUserCommand { Username = "@Alex111122", Password = "password@#12P" };
+            var loginCommand1 = new LoginUserCommand
+            {
+                Username = "@Alex111122", Password = "password@#12P", ApplicationId = _application.Id,
+                CallBackUrl = _application.CallbackUrls.First()
+            };
 
             await RegisterUser(registerCommand1);
             LoginResponse = await LoginUser(loginCommand1);
@@ -122,14 +126,21 @@ public class GetAccessTokenIntegrationTests : BaseTest
             Username = "@Alex222",
             LastName = "Makedonsky",
             PhoneNumber = "+992423456711",
-            ConfirmPassword = "password@#12P2"
+            ConfirmPassword = "password@#12P2",
+            ApplicationId = _application.Id,
+            CallBackUrl = _application.CallbackUrls.First()
         };
         var res = await _client.GetAsync($"api/sms/send_code?PhoneNumber={registerCommand2.PhoneNumber}");
         res.EnsureSuccessStatusCode();
 
         registerCommand2.VerificationCode =
             (await GetEntity<ConfirmationCode>(x => x.PhoneNumber == registerCommand2.PhoneNumber)).Code;
-        var loginCommand2 = new LoginUserCommand { Username = "@Alex222", Password = "password@#12P2" };
+        var loginCommand2 = new LoginUserCommand
+        {
+            Username = "@Alex222", Password = "password@#12P2",
+            ApplicationId = _application.Id,
+            CallBackUrl = _application.CallbackUrls.First()
+        };
 
         await RegisterUser(registerCommand2);
         var loginResponse2 = await LoginUser(loginCommand2);

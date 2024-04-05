@@ -26,9 +26,9 @@ public class LoginUserCommandHandler(
         if (!success)
             throw new UnauthorizedAccessException("Incorrect password.");
 
-        await applicationUserLinkService.CreateUserLinkAsync(user.Id, request.ApplicationId, request.CallBackUrl,
-            cancellationToken);
-        
+        await applicationUserLinkService.CreateUserLinkIfNotExistAsync(user.Id, request.ApplicationId,
+            request.CallBackUrl, cancellationToken);
+
         var claims = await userManager.GetClaimsAsync(user);
 
         return new JwtTokenResponse

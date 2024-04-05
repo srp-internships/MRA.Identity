@@ -57,18 +57,20 @@ public class RegisterUserCommandHandler(
             DateOfBirth = new DateTime(2000, 1, 1)
         };
 
-        await applicationUserLinkService.CreateUserLinkAsync(user.Id, request.ApplicationId, request.CallBackUrl,
+        var application = await applicationUserLinkService.CreateUserLinkAsync(user.Id, request.ApplicationId, request.CallBackUrl,
             cancellationToken);
-
-        bool phoneVerified = codeChecker.VerifyPhone(request.VerificationCode, request.PhoneNumber);
-        if (phoneVerified) user.PhoneNumberConfirmed = true;
-        else throw new ValidationException("Phone number is not verified");
-
-        IdentityResult result = await userManager.CreateAsync(user, request.Password);
-
-        if (!result.Succeeded)
+        if (!application.IsProtected)
         {
-            throw new UnauthorizedAccessException(result.Errors.First().Description);
+            bool phoneVerified = codeChecker.VerifyPhone(request.VerificationCode, request.PhoneNumber);
+            if (phoneVerified) user.PhoneNumberConfirmed = true;
+            else throw new ValidationException("Phone number is not verified");
+
+            IdentityResult result = await userManager.CreateAsync(user, request.Password);
+
+            if (!result.Succeeded)
+            {
+                throw new UnauthorizedAccessException(result.Errors.First().Description);
+            }
         }
 
         await emailVerification.SendVerificationEmailAsync(user);

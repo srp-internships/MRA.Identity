@@ -7,7 +7,7 @@ namespace MRA.Jobs.Application.IntegrationTests.Users.Command;
 public class LoginTest : BaseTest
 {
     private readonly ApplicationRole _role = new() { Name = "Reviewer" + nameof(LoginTest) };
-
+    
     private readonly MRA.Identity.Domain.Entities.Application _application = new()
     {
         Slug = "Application" + nameof(LoginTest),
@@ -32,8 +32,8 @@ public class LoginTest : BaseTest
         // Arrange
         var request = new LoginUserCommand
         {
-            Username = "@Alex33",
-            Password = "password@#12P",
+            Username = NewUser.UserName,
+            Password = NewUserPassword,
             ApplicationId = _application.Id,
             CallBackUrl = _application.CallbackUrls.First()
         };

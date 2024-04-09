@@ -20,6 +20,14 @@ public abstract class BaseTest
     protected ApplicationUser Applicant { get; private set; }
     protected ApplicationUser Reviewer { get; private set; }
 
+    protected const string NewUserPassword = "asds;daAFES32!#";
+
+    protected readonly ApplicationUser NewUser = new()
+    {
+        UserName = "uuuuser", Email = "user@example.com",
+        NormalizedEmail = "user@example.com".ToUpper()
+    };
+
     /// <summary>
     /// Initializing of factory and _context. And Creating a InMemoryDB
     /// </summary>
@@ -28,6 +36,7 @@ public abstract class BaseTest
     public virtual async Task OneTimeSetup()
     {
         _factory = new CustomWebApplicationFactory();
+        await AddUser(NewUser, NewUserPassword);
 
         // Register a new user and add it to the database to check whether he has logged in
         var request1 = new ApplicationUser()

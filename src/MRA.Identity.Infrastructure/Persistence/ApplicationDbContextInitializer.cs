@@ -47,7 +47,10 @@ public class ApplicationDbContextInitializer(
                     Name = "Mra Jobs",
                     Slug = "mra-jobs",
                     IsProtected = true,
-                    ClientSecret = "mraJobsApplicationSecret"
+                    ClientSecret = "mraJobsApplicationSecret",
+                    Description = "",
+                    DefaultRoleId = (await roleManager.FindByNameAsync("Applicant"))!.Id,
+                    CallbackUrls = []
                 });
         if (await context.Applications.FirstOrDefaultAsync(x => x.Name == "MRA Assets Management") == null)
             await context.Applications.AddAsync(
@@ -57,6 +60,9 @@ public class ApplicationDbContextInitializer(
                     Name = "MRA Assets Management",
                     Slug = "mra-assets-management",
                     IsProtected = true,
+                    Description = "",
+                    DefaultRoleId = (await roleManager.FindByNameAsync("Reviewer"))!.Id,
+                    CallbackUrls = [],
                     ClientSecret = "mraAssetsManagementSecret"
                 });
         await context.SaveChangesAsync();

@@ -22,14 +22,16 @@ public class GetUsersByApplicationsTests : BaseTest
             Name = "Mra Jobs", Slug = "mra-jobs",
             Id = _application1Id,
             ClientSecret = _application1ClientSecret,
-            IsProtected = true
+            IsProtected = true,
+            CallbackUrls = ["Https://localhost"]
         });
         await AddEntity(new Identity.Domain.Entities.Application()
             {
                 Name = "Mra Academy", Slug = "mra-academy",
                 Id = _application2Id,
                 ClientSecret = _application2ClientSecret,
-                IsProtected = true
+                IsProtected = true,
+                CallbackUrls = ["Https://localhost"]
             }
         );
 

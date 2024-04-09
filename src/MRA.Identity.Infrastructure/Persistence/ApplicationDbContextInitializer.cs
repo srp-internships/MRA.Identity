@@ -32,7 +32,7 @@ public class ApplicationDbContextInitializer(
             await CreateApplicationsAsync();
             await CreateSeedUsersAsync();
             await CreateSeedExperiencesEducationsSkillsAsync();
-            
+
             await context.SaveChangesAsync();
         }
     }
@@ -43,19 +43,21 @@ public class ApplicationDbContextInitializer(
             await context.Applications.AddAsync(
                 new Domain.Entities.Application()
                 {
+                    Id = Guid.Parse("4f67d20a-4f2a-4c7f-8a35-4c15c2d0c3e2"),
                     Name = "Mra Jobs",
                     Slug = "mra-jobs",
                     IsProtected = true,
-                    ClientSecret = "qwertyuio"
+                    ClientSecret = "mraJobsApplicationSecret"
                 });
         if (await context.Applications.FirstOrDefaultAsync(x => x.Name == "MRA Assets Management") == null)
             await context.Applications.AddAsync(
                 new Domain.Entities.Application()
                 {
+                    Id = Guid.Parse("6ba7b810-9dad-11d1-80b4-00c04fd430c8"),
                     Name = "MRA Assets Management",
                     Slug = "mra-assets-management",
                     IsProtected = true,
-                    ClientSecret = "qwertyu1"
+                    ClientSecret = "mraAssetsManagementSecret"
                 });
         await context.SaveChangesAsync();
     }

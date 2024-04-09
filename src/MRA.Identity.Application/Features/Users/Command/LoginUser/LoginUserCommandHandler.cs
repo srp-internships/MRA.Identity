@@ -27,7 +27,7 @@ public class LoginUserCommandHandler(
             throw new UnauthorizedAccessException("Incorrect password.");
 
         await applicationUserLinkService.CreateUserLinkIfNotExistAsync(user.Id, request.ApplicationId,
-            request.CallBackUrl, cancellationToken);
+            request.CallBackUrl, cancellationToken: cancellationToken);
 
         var claims = await userManager.GetClaimsAsync(user);
 

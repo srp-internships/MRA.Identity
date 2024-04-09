@@ -57,8 +57,9 @@ public class RegisterUserCommandHandler(
             DateOfBirth = new DateTime(2000, 1, 1)
         };
 
-        var application = await applicationUserLinkService.CreateUserLinkAsync(user.Id, request.ApplicationId, request.CallBackUrl,
-            cancellationToken);
+        var application = await applicationUserLinkService.CreateUserLinkAsync(user.Id, request.ApplicationId,
+            request.CallBackUrl,
+            cancellationToken: cancellationToken);
         if (!application.IsProtected)
         {
             bool phoneVerified = codeChecker.VerifyPhone(request.VerificationCode, request.PhoneNumber);

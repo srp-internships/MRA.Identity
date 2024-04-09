@@ -14,14 +14,14 @@ public class ApplicationUserLinkService(IApplicationDbContext context) : IApplic
     private MRA.Identity.Domain.Entities.Application _application;
 
     public async Task CreateUserLinkIfNotExistAsync(Guid userId, Guid applicationId,
-        string callback, CancellationToken cancellationToken)
+        string callback, bool? checkProtected = true, CancellationToken cancellationToken = default)
     {
         if (!await HasUserLink(cancellationToken))
-            await CreateUserLinkAsync(userId, applicationId, callback, cancellationToken);
+            await CreateUserLinkAsync(userId, applicationId, callback, checkProtected, cancellationToken);
     }
 
     public async Task<Domain.Entities.Application> CreateUserLinkAsync(Guid userId, Guid applicationId, string callback,
-        CancellationToken cancellationToken)
+        bool? checkProtected = true, CancellationToken cancellationToken = default)
     {
         _userId = userId;
         _applicationId = applicationId;
@@ -29,6 +29,11 @@ public class ApplicationUserLinkService(IApplicationDbContext context) : IApplic
         _application =
             await context.Applications.FirstOrDefaultAsync(a => a.Id == applicationId, cancellationToken)
             ?? throw new NotFoundException($"application with id {applicationId} does not exist");
+        if (_application.IsProtected && checkProtected == true)
+        {
+            throw new ForbiddenAccessException();
+        }
+
         CheckCallback();
 
         await AddApplicationUserLinkAsync(cancellationToken);
@@ -38,11 +43,11 @@ public class ApplicationUserLinkService(IApplicationDbContext context) : IApplic
             UserId = userId,
             RoleId = _application.DefaultRoleId
         };
-        
+
         if (!await context.UserRoles.AnyAsync(s => s.UserId == userRole.UserId && s.RoleId == userRole.RoleId,
                 cancellationToken: cancellationToken))
             await context.UserRoles.AddAsync(userRole, cancellationToken);
-        
+
         await context.SaveChangesAsync(cancellationToken);
         return _application;
     }

@@ -7,7 +7,7 @@ namespace MRA.Jobs.Application.IntegrationTests.Users.Command;
 public class LoginTest : BaseTest
 {
     private readonly ApplicationRole _role = new() { Name = "Reviewer" + nameof(LoginTest) };
-    
+
     private readonly MRA.Identity.Domain.Entities.Application _application = new()
     {
         Slug = "Application" + nameof(LoginTest),
@@ -48,6 +48,51 @@ public class LoginTest : BaseTest
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(jwt?.AccessToken, Is.Not.Null.Or.Empty);
         });
+    }
+
+    [Test]
+    public async Task UserIsNotInApplication_ShouldCreateApplicationUserLink()
+    {
+        var user = new ApplicationUser()
+            { UserName = @"John", Email = "John@example.com", FirstName = "John", LastName = "John" };
+        await AddUser(user, "Password12#1");
+
+        var request = new LoginUserCommand
+        {
+            Username = user.UserName,
+            Password = "Password12#1",
+            ApplicationId = _application.Id,
+            CallBackUrl = _application.CallbackUrls.First()
+        };
+        (await _client.PostAsJsonAsync("api/auth/login", request)).EnsureSuccessStatusCode();
+        var applicationUserLink =
+            await GetEntity<ApplicationUserLink>(s => s.UserId == user.Id && s.ApplicationId == _application.Id);
+        applicationUserLink.Should().NotBeNull();
+    }
+
+    [Test]
+    public async Task UserIsInApplication_ShouldCreateApplicationUserLink()
+    {
+        var user = new ApplicationUser()
+            { UserName = @"John1", Email = "John1@example.com", FirstName = "Joh1n", LastName = "Jo1hn" };
+        await AddUser(user, "Password12#1");
+
+        var applicationUserLink = new ApplicationUserLink
+        {
+            UserId = user.Id,
+            ApplicationId = _application.Id
+        };
+        await AddEntity(applicationUserLink);
+
+        var request = new LoginUserCommand
+        {
+            Username = user.UserName,
+            Password = "Password12#1",
+            ApplicationId = _application.Id,
+            CallBackUrl = _application.CallbackUrls.First()
+        };
+
+        (await _client.PostAsJsonAsync("api/auth/login", request)).EnsureSuccessStatusCode();
     }
 
     [Test]

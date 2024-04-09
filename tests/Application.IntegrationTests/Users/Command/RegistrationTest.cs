@@ -9,12 +9,12 @@ public class RegistrationTests : BaseTest
     private readonly ApplicationRole _role = new() { Name = "Reviewer" + nameof(LoginTest) };
 
     private readonly MRA.Identity.Domain.Entities.Application _application = new()
-        {
-            Slug = "Application" + nameof(RegistrationTests),
-            Name = "Application" + nameof(RegistrationTests),
-            ClientSecret = "fa;sldkjfalskjdfoqwijf;odsnfoweifneronflkfn;doifneoio",
-            CallbackUrls = ["https://localhost"]
-        };
+    {
+        Slug = "Application" + nameof(RegistrationTests),
+        Name = "Application" + nameof(RegistrationTests),
+        ClientSecret = "fa;sldkjfalskjdfoqwijf;odsnfoweifneronflkfn;doifneoio",
+        CallbackUrls = ["https://localhost"]
+    };
 
     public override async Task OneTimeSetup()
     {
@@ -52,7 +52,6 @@ public class RegistrationTests : BaseTest
         request.VerificationCode = (await GetEntity<ConfirmationCode>(x => x.PhoneNumber == request.PhoneNumber)).Code;
         // Assert
         var response = await _client.PostAsJsonAsync("api/Auth/register", request);
-       var ct= response.Content;
         Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
         // Assert
@@ -169,5 +168,72 @@ public class RegistrationTests : BaseTest
         Assert.That(userClaims.Exists(s => s.ClaimType == ClaimTypes.Id && s.ClaimValue == user.Id.ToString()));
         Assert.That(userClaims.Exists(s => s.ClaimType == ClaimTypes.Email && s.ClaimValue == request.Email));
         Assert.That(userClaims.Exists(s => s.ClaimType == ClaimTypes.Username && s.ClaimValue == request.Username));
+    }
+
+    [Test]
+    public async Task Register_ValidRequest_ShouldCreateApplicationUserLink()
+    {
+        // Arrange
+        var request = new RegisterUserCommand
+        {
+            Email = "test12345@example.com",
+            Password = "password@#12P1324",
+            FirstName = "Alex1231ee",
+            Username = "userNametes5jk",
+            LastName = "fafsceptor",
+            PhoneNumber = "+992929888587",
+            ConfirmPassword = "password@#12P1324",
+            ApplicationId = _application.Id,
+            CallBackUrl = _application.CallbackUrls.First()
+        };
+        var res = await _client.GetAsync($"api/sms/send_code?PhoneNumber={request.PhoneNumber}");
+        res.EnsureSuccessStatusCode();
+
+        request.VerificationCode = (await GetEntity<ConfirmationCode>(x => x.PhoneNumber == request.PhoneNumber)).Code;
+        // Assert
+        var response = await _client.PostAsJsonAsync("api/Auth/register", request);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+
+        var user = await GetEntity<ApplicationUser>(s => s.UserName == request.Username);
+
+        var applicationUserLink =
+            await GetEntity<ApplicationUserLink>(s => s.UserId == user.Id && s.ApplicationId == _application.Id);
+        applicationUserLink.Should().NotBeNull();
+    }
+
+    [Test]
+    public async Task Register_ProtectedApplication_ShouldNotProcess()
+    {
+        var application = new Identity.Domain.Entities.Application
+        {
+            Slug = "applicationdddddddddddddddddddddddddddddddd",
+            Name = "applicationnaemmmmeeee",
+            Description = "null",
+            ClientSecret = "null",
+            CallbackUrls = ["https://localhost"],
+            IsProtected = true,
+            DefaultRoleId = _role.Id
+        };
+        await AddEntity(application);
+        // Arrange
+        var request = new RegisterUserCommand
+        {
+            Email = "test12345@example.com",
+            Password = "password@#12P1324",
+            FirstName = "Alex1231ee",
+            Username = "userNametesttest12345",
+            LastName = "fafsceptor",
+            PhoneNumber = "+992987777459",
+            ConfirmPassword = "password@#12P1324",
+            ApplicationId = application.Id,
+            CallBackUrl = application .CallbackUrls.First()
+        };
+        var res = await _client.GetAsync($"api/sms/send_code?PhoneNumber={request.PhoneNumber}");
+        res.EnsureSuccessStatusCode();
+
+        request.VerificationCode = (await GetEntity<ConfirmationCode>(x => x.PhoneNumber == request.PhoneNumber)).Code;
+        // Assert
+        var response = await _client.PostAsJsonAsync("api/Auth/register", request);
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.Forbidden));
     }
 }

@@ -3,8 +3,9 @@
 public interface IApplicationUserLinkService
 {
     public Task<Domain.Entities.Application> CreateUserLinkAsync(Guid userId, Guid applicationId, string callback,
-        CancellationToken cancellationToken);
+        bool? checkProtected = true,
+        CancellationToken cancellationToken = default);
 
     public Task CreateUserLinkIfNotExistAsync(Guid userId, Guid applicationId,
-        string callback, CancellationToken cancellationToken);
+        string callback, bool? checkProtected = true, CancellationToken cancellationToken = default);
 }

@@ -1,9 +1,6 @@
-using MediatR;
-using MRA.Identity.Application.Contract.User.Responses;
+namespace MRA.Identity.Application.Contract.User.Commands.UsersByApplications;
 
-namespace MRA.Identity.Application.Contract.User.Queries;
-
-public class GetListUsersQuery : IRequest<List<UserResponse>>
+public class GetListUsersCommand
 {
     public string FullName { get; set; }
     public string PhoneNumber { get; set; }

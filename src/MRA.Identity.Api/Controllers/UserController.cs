@@ -34,6 +34,7 @@ public class UserController(ISender mediator) : ControllerBase
             Sorts = command.Sorts,
             Filters = command.Filters
         });
+        
         return Ok(users);
     }
 

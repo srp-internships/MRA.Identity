@@ -114,6 +114,24 @@ public class LoginTest : BaseTest
     }
 
     [Test]
+    public async Task Login_SuperAdmin_ReturnsReturnsOk()
+    {
+        // Arrange
+        var request = new LoginUserCommand
+        {
+            Username = "SuperAdmin", Password = "Mra123!!@#$AGfer4",
+            ApplicationId = Guid.Empty,
+            CallBackUrl = "httpasdfaaas;l;;"
+        };
+
+        // Act
+        var response = await _client.PostAsJsonAsync("/api/Auth/login", request);
+
+        // Assert
+        Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+    }
+
+    [Test]
     [TestCase("@Alex22", "password")]
     [TestCase("@Alex22", "ejehfefhuehf")]
     [TestCase("@Alex", "fesijfwer11")]

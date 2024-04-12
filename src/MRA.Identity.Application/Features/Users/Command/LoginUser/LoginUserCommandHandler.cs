@@ -26,8 +26,12 @@ public class LoginUserCommandHandler(
         if (!success)
             throw new UnauthorizedAccessException("Incorrect password.");
 
-        await applicationUserLinkService.CreateUserLinkIfNotExistAsync(user.Id, request.ApplicationId,
-            request.CallBackUrl, cancellationToken: cancellationToken);
+        //Check userLink if not superAdmin
+        if (user.UserName != "SuperAdmin")
+        {
+            await applicationUserLinkService.CreateUserLinkIfNotExistAsync(user.Id, request.ApplicationId,
+                request.CallBackUrl, cancellationToken: cancellationToken);
+        }
 
         var claims = await userManager.GetClaimsAsync(user);
 

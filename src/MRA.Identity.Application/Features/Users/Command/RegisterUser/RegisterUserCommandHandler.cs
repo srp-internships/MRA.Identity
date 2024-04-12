@@ -56,21 +56,24 @@ public class RegisterUserCommandHandler(
             LastName = request.LastName,
             DateOfBirth = new DateTime(2000, 1, 1)
         };
+        IdentityResult createResult = await userManager.CreateAsync(user, request.Password);
+        if (!createResult.Succeeded)
+        {
+            throw new UnauthorizedAccessException(createResult.Errors.First().Description);
+        }
 
         var application = await applicationUserLinkService.CreateUserLinkAsync(user.Id, request.ApplicationId,
-            request.CallBackUrl,
-            cancellationToken: cancellationToken);
+            request.CallBackUrl, cancellationToken: cancellationToken);
+
         if (!application.IsProtected)
         {
             bool phoneVerified = codeChecker.VerifyPhone(request.VerificationCode, request.PhoneNumber);
             if (phoneVerified) user.PhoneNumberConfirmed = true;
-            else throw new ValidationException("Phone number is not verified");
-
-            IdentityResult result = await userManager.CreateAsync(user, request.Password);
-
-            if (!result.Succeeded)
+            else
             {
-                throw new UnauthorizedAccessException(result.Errors.First().Description);
+                context.Users.Remove(user);
+                await context.SaveChangesAsync(cancellationToken);
+                throw new ValidationException("Phone number is not verified");
             }
         }
 

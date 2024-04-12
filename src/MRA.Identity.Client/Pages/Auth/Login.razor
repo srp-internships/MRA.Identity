@@ -29,7 +29,7 @@
                             </div>
                         </div>
                         <MudText>
-                            @ContentService["SignIn:LabelDontAccount"] <MudLink Href="@($"registration?callback={_callback}&page={_page}")"> @ContentService["SignIn:LinkSignUp"]</MudLink>
+                            @ContentService["SignIn:LabelDontAccount"] <MudLink Href="@($"registration?callback={_callback}&applicationId={_applicationId}")"> @ContentService["SignIn:LinkSignUp"]</MudLink>
                         </MudText>
                     </CardHeaderContent>
                 </MudCardHeader>
@@ -65,8 +65,8 @@
 
 @code {
     private readonly LoginUserCommand _loginCommand = new();
-    string _callback = string.Empty;
-    string _page = string.Empty;
+    private string _callback = string.Empty;
+    private Guid _applicationId;
 
     private async Task OnValidSubmit()
     {
@@ -85,10 +85,14 @@
         }
 
         var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-        if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("callback", out var param))
-            _callback = param;
-        if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
-            _page = param;
+        var query = QueryHelpers.ParseQuery(currentUri.Query);
+        if (query.TryGetValue("callback", out var callback))
+            _callback = callback;
+        if (query.TryGetValue("applicationId", out var applicationId))
+            if (!Guid.TryParse(applicationId, out _applicationId))
+                NavigationManager.NavigateTo("/notfound");
+        _loginCommand.ApplicationId = _applicationId;
+        _loginCommand.CallBackUrl = _callback;
         StateHasChanged();
     }
 

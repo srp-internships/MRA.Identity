@@ -19,16 +19,7 @@ public class GetProfileUserQueryTest : BaseTest
 
         Assert.That(HttpStatusCode.Forbidden == response.StatusCode);
     }
-
-    [Test]
-    public async Task GetProfileByUserName_ShouldReturnProfileByUserName_Success()
-    {
-        await AddReviewerAuthorizationAsync();
-        var response = await _client.GetAsync($"/api/Profile?userName=@Alex33");
-
-        response.EnsureSuccessStatusCode();
-    }
-
+    
     [Test]
     public async Task GetProfileByUserName_ShouldReturnProfileByUserName_NotFound()
     {

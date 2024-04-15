@@ -34,7 +34,7 @@ public class UserController(ISender mediator) : ControllerBase
             Sorts = command.Sorts,
             Filters = command.Filters
         });
-        
+
         return Ok(users);
     }
 
@@ -65,6 +65,15 @@ public class UserController(ISender mediator) : ControllerBase
     public async Task<IActionResult> GetByKey([FromRoute] string key)
     {
         var userResponse = await mediator.Send(new GetUserByKeyQuery { Key = key });
+        return Ok(userResponse);
+    }
+
+    [HttpPost("{key}")]
+    [Authorize]
+    public async Task<IActionResult> PostByKey([FromRoute] string key, [FromBody] GetUserByKeyQuery query)
+    {
+        query.Key = key;
+        var userResponse = await mediator.Send(query);
         return Ok(userResponse);
     }
 

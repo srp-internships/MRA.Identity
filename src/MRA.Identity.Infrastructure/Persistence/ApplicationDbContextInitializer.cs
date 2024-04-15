@@ -26,9 +26,11 @@ public class ApplicationDbContextInitializer(
 
         await CreateSuperAdminAsync();
 
-        await CreateApplicationAdmin("MraJobs", "12345678");
-        await CreateApplicationAdmin("MraOnlinePlatform", "12345678");
         await CreateApplicationsAsync();
+
+        await CreateApplicationAdmin("MraJobs", "12345678", "mra-jobs");
+        await CreateApplicationAdmin("MraOnlinePlatform", "12345678", "mra-online-platform");
+        await CreateApplicationAdmin("MraAssetsManagement", "12345678", "mra-assets-management");
 
         if (configuration["Environment"] != "Production")
         {
@@ -42,11 +44,13 @@ public class ApplicationDbContextInitializer(
     private async Task CreateApplicationsAsync()
     {
         var mraJobsApplicationSecret = "mraJobsApplicationSecret";
-        var mraAssetsManagementSecret = "mraJobsApplicationSecret";
+        var mraAssetsManagementSecret = "mraAssetsManagementSecret";
+        var mraOnlinePlatformSecret = "mraOnlinePlatformSecret";
         if (configuration["Environment"] == "Production")
         {
             mraJobsApplicationSecret = cryptoStringService.GetCryptoString();
             mraAssetsManagementSecret = cryptoStringService.GetCryptoString();
+            mraOnlinePlatformSecret = cryptoStringService.GetCryptoString();
         }
 
         if (await context.Applications.FirstOrDefaultAsync(x => x.Name == "Mra Jobs") == null)
@@ -75,11 +79,24 @@ public class ApplicationDbContextInitializer(
                     CallbackUrls = [],
                     ClientSecret = mraAssetsManagementSecret
                 });
+
+        if (await context.Applications.FirstOrDefaultAsync(x => x.Name == "Mra Online Platform") == null)
+            await context.Applications.AddAsync(
+                new Domain.Entities.Application()
+                {
+                    Id = Guid.Parse("fb2bdd6c-4e31-4255-bf40-aba748c6777f"),
+                    Name = "Mra Online Platform",
+                    Slug = "mra-online-platform",
+                    IsProtected = true,
+                    Description = "",
+                    DefaultRoleId = (await roleManager.FindByNameAsync("Reviewer"))!.Id,
+                    CallbackUrls = [],
+                    ClientSecret = mraOnlinePlatformSecret
+                });
         await context.SaveChangesAsync();
     }
 
-
-    private async Task CreateApplicationAdmin(string applicationName, string adminPassword)
+    private async Task CreateApplicationAdmin(string applicationName, string adminPassword, string applicationSlug)
     {
         //create user
         var mraJobsAdminUser =
@@ -100,7 +117,7 @@ public class ApplicationDbContextInitializer(
             ThrowExceptionFromIdentityResult(createMraJobsAdminResult);
         }
 
-        var application = await context.Applications.FirstOrDefaultAsync(x => x.Slug == "mra-jobs");
+        var application = await context.Applications.FirstOrDefaultAsync(x => x.Slug == applicationSlug);
         if (application != null)
         {
             if (await context.ApplicationUserLinks.FirstOrDefaultAsync(x =>

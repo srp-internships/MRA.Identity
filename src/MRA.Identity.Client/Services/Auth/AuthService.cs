@@ -102,7 +102,9 @@ public class AuthService(
             await LoginUserAsync(new LoginUserCommand
             {
                 Password = command.Password,
-                Username = command.Username
+                Username = command.Username,
+                ApplicationId = command.ApplicationId,
+                CallBackUrl = command.CallBackUrl
             });
             await userProfileService.Get();
             navigationManager.NavigateTo("/");

@@ -33,7 +33,14 @@ public class ProfileController(IMediator mediator) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetProfileByUserName([FromQuery] string userName = null)
     {
-        var result = await mediator.Send(new GetPofileQuery { UserName = userName });
+        var result = await mediator.Send(new GetProfileQuery { UserName = userName });
+        return Ok(result);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> PostProfileByUserName([FromBody] GetProfileQuery query)
+    {
+        var result = await mediator.Send(query);
         return Ok(result);
     }
 
@@ -131,7 +138,6 @@ public class ProfileController(IMediator mediator) : ControllerBase
 
 
     [HttpGet("GetAllExperiences")]
-
     public async Task<IActionResult> GetAllExperiences()
     {
         var result = await mediator.Send(new GetAllExperienceQuery());
@@ -144,5 +150,4 @@ public class ProfileController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(new CVGenerateQuery());
         return File(result, "application/pdf", "cv.pdf");
     }
-
 }

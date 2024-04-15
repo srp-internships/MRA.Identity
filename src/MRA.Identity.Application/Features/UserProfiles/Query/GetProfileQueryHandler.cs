@@ -8,27 +8,44 @@ using MRA.Identity.Application.Contract.Profile.Queries;
 using MRA.Identity.Application.Contract.Profile.Responses;
 
 namespace MRA.Identity.Application.Features.UserProfiles.Query;
+
 public class GetProfileQueryHandler(
     IApplicationDbContext context,
     IMapper mapper,
     IUserHttpContextAccessor userHttpContextAccessor)
-    : IRequestHandler<GetPofileQuery, UserProfileResponse>
+    : IRequestHandler<GetProfileQuery, UserProfileResponse>
 {
-    public async Task<UserProfileResponse> Handle(GetPofileQuery request, CancellationToken cancellationToken)
+    public async Task<UserProfileResponse> Handle(GetProfileQuery request, CancellationToken cancellationToken)
     {
         var userRoles = userHttpContextAccessor.GetUserRoles();
         var userName = userHttpContextAccessor.GetUserName();
 
-        if (request.UserName != null && !userRoles.Any())
-            throw new ForbiddenAccessException("Access is denied");
-
         if (request.UserName != null)
             userName = request.UserName;
 
-        var user = await context.Users
-            .FirstOrDefaultAsync(u => u.UserName == userName, cancellationToken: cancellationToken);
-        _ = user ?? throw new NotFoundException("user is not found");
-        var response = mapper.Map<UserProfileResponse>(user);
+        var user = context.Users
+            .Where(u => u.UserName == userName);
+
+
+        if (request.UserName != null && !userRoles.Any())
+            throw new ForbiddenAccessException("Access is denied");
+        
+        var application = await context.Applications.FirstOrDefaultAsync(x =>
+                x.Id == request.ApplicationId && x.ClientSecret == request.ApplicationClientSecret,
+            cancellationToken);
+
+        if (!userRoles.Any(r => r == "SuperAdmin") && request.UserName != null)
+        {
+            if (application is null)
+                throw new NotFoundException("There is no such application");
+
+            user = user.Include(u => u.ApplicationUserLinks)
+                .Where(u => u.ApplicationUserLinks.Any(l => l.ApplicationId == application.Id));
+        }
+
+        var _user = user.FirstOrDefault();
+        if (_user == null) throw new NotFoundException("user is not found");
+        var response = mapper.Map<UserProfileResponse>(_user);
         return response;
     }
 }

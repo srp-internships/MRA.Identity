@@ -176,11 +176,11 @@ public class RegistrationTests : BaseTest
         // Arrange
         var request = new RegisterUserCommand
         {
-            Email = "test12345@example.com",
+            Email = "test12345@exampfadsle.com",
             Password = "password@#12P1324",
-            FirstName = "Alex1231ee",
-            Username = "userNametes5jk",
-            LastName = "fafsceptor",
+            FirstName = "Alex1231eafdse",
+            Username = "userNametes5jkafds",
+            LastName = "fafsceptoadsfr",
             PhoneNumber = "+992929888587",
             ConfirmPassword = "password@#12P1324",
             ApplicationId = _application.Id,

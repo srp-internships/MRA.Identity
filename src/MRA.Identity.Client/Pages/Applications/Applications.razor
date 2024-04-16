@@ -4,41 +4,51 @@
 @using MRA.Identity.Client.Pages.Applications.Components
 @inject IApplicationsService ApplicationsService
 @inject IDialogService DialogService
-<Header></Header>
-<MudCard>
-    <MudCardHeader>
+<CascadingAuthenticationState>
+    <AuthorizeView Roles="SuperAdmin">
+        <Authorized>
 
-        <MudText Typo="Typo.h6" Class="mb-2">Applications</MudText>
-        <MudSpacer></MudSpacer>
-        <MudButton StartIcon="@Icons.Material.Filled.Create" OnClick="@(ShowCreateDialog)">Create</MudButton>
-    </MudCardHeader>
-    <MudCardContent>
-        <MudTable @ref="_table" T="ApplicationResponse" Items="_applications">
-            <HeaderContent>
-                <MudTh>Name</MudTh>
-                <MudTh>Application ID</MudTh>
-                <MudTh>Is protected</MudTh>
-                <MudTh></MudTh>
-            </HeaderContent>
+            <Header></Header>
+            <MudCard>
+                <MudCardHeader>
 
-            <RowTemplate>
-                <MudTd>
-                    <MudText Typo="Typo.subtitle1" Variant="TypographyVariant.Subtitle1" Class="mb-1">@context.Name</MudText>
-                    <MudText Typo="Typo.body2">@context.Description</MudText>
-                </MudTd>
-                <MudTd>
-                    <MudTextField ReadOnly Variant="Variant.Filled" Value="@context.Id"/>
-                </MudTd>
-                <MudTd>
-                    <MudTextField ReadOnly Variant="Variant.Filled" Value="@context.IsProtected"/>
-                </MudTd>
-                <MudTd>
-                    <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Href="@($"/application/details/{context.Slug}")"/>
-                </MudTd>
-            </RowTemplate>
-        </MudTable>
-    </MudCardContent>
-</MudCard>
+                    <MudText Typo="Typo.h6" Class="mb-2">Applications</MudText>
+                    <MudSpacer></MudSpacer>
+                    <MudButton StartIcon="@Icons.Material.Filled.Create" OnClick="@(ShowCreateDialog)">Create</MudButton>
+                </MudCardHeader>
+                <MudCardContent>
+                    <MudTable @ref="_table" T="ApplicationResponse" Items="_applications">
+                        <HeaderContent>
+                            <MudTh>Name</MudTh>
+                            <MudTh>Application ID</MudTh>
+                            <MudTh>Is protected</MudTh>
+                            <MudTh></MudTh>
+                        </HeaderContent>
+
+                        <RowTemplate>
+                            <MudTd>
+                                <MudText Typo="Typo.subtitle1" Variant="TypographyVariant.Subtitle1" Class="mb-1">@context.Name</MudText>
+                                <MudText Typo="Typo.body2">@context.Description</MudText>
+                            </MudTd>
+                            <MudTd>
+                                <MudTextField ReadOnly Variant="Variant.Filled" Value="@context.Id"/>
+                            </MudTd>
+                            <MudTd>
+                                <MudTextField ReadOnly Variant="Variant.Filled" Value="@context.IsProtected"/>
+                            </MudTd>
+                            <MudTd>
+                                <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Href="@($"/application/details/{context.Slug}")"/>
+                            </MudTd>
+                        </RowTemplate>
+                    </MudTable>
+                </MudCardContent>
+            </MudCard>
+        </Authorized>
+        <NotAuthorized>
+            Sorry this page doesn't exist
+        </NotAuthorized>
+    </AuthorizeView>
+</CascadingAuthenticationState>
 
 @code {
     private MudTable<ApplicationResponse> _table;
@@ -55,4 +65,5 @@
     {
         await DialogService.ShowAsync<CreateApplicationsDialog>("Create");
     }
+
 }

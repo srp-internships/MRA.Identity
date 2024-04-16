@@ -5,13 +5,11 @@
 @inject IApplicationsService ApplicationsService
 @inject IDialogService DialogService
 <CascadingAuthenticationState>
-    <AuthorizeView Roles="SuperAdmin">
+    <AuthorizeView Roles="SuperAdmin" Context="_">
         <Authorized>
-
             <Header></Header>
             <MudCard>
                 <MudCardHeader>
-
                     <MudText Typo="Typo.h6" Class="mb-2">Applications</MudText>
                     <MudSpacer></MudSpacer>
                     <MudButton StartIcon="@Icons.Material.Filled.Create" OnClick="@(ShowCreateDialog)">Create</MudButton>
@@ -63,7 +61,7 @@
 
     private async Task ShowCreateDialog()
     {
-        await DialogService.ShowAsync<CreateApplicationsDialog>("Create");
+        await DialogService.ShowAsync<CreateApplicationsDialog>("Create", new DialogOptions { MaxWidth = MaxWidth.Medium, FullWidth = true });
     }
 
 }

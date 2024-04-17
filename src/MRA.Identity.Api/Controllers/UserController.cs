@@ -21,13 +21,22 @@ public class UserController(ISender mediator) : ControllerBase
         var users = await mediator.Send(query);
         return Ok(users);
     }
-
+    
     [HttpGet("GetListUsers/ByFilter")]
     public async Task<IActionResult> GetListUsers([FromQuery] GetListUsersQuery query)
     {
         var users = await mediator.Send(query);
         return Ok(users);
     }
+    
+    [HttpGet("{key}")]
+    public async Task<IActionResult> GetByKey([FromRoute] string key)
+    {
+        var userResponse = await mediator.Send(new GetUserByKeyQuery { Key = key });
+        return Ok(userResponse);
+    }
+
+ 
 
     [HttpGet("CheckUserDetails/{userName}/{phoneNumber}/{email}")]
     [AllowAnonymous]
@@ -45,7 +54,7 @@ public class UserController(ISender mediator) : ControllerBase
         await mediator.Send(command);
         return Ok();
     }
-
+    
     #endregion
 
     #region ExternalApplications
@@ -56,13 +65,6 @@ public class UserController(ISender mediator) : ControllerBase
     {
         var users = await mediator.Send(command);
         return Ok(users);
-    }
-
-    [HttpGet("{key}")]
-    public async Task<IActionResult> GetByKey([FromRoute] string key)
-    {
-        var userResponse = await mediator.Send(new GetUserByKeyQuery { Key = key });
-        return Ok(userResponse);
     }
 
     [HttpPost("GetListUsersCommand/ByFilter")]
@@ -76,7 +78,7 @@ public class UserController(ISender mediator) : ControllerBase
 
     [HttpPost("{key}")]
     [AllowAnonymous]
-    public async Task<IActionResult> PostByKey([FromRoute] string key, [FromBody] GetUserByKeyQuery query)
+    public async Task<IActionResult> PostByKey([FromRoute] string key, [FromBody] GetUserByKeyCommand query)
     {
         query.Key = key;
         var userResponse = await mediator.Send(query);

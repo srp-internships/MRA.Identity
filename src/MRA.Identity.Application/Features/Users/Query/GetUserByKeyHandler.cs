@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using AutoMapper;
+﻿using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -21,51 +20,19 @@ public class GetUserByKeyHandler(
 {
     public async Task<UserResponse> Handle(GetUserByKeyQuery request, CancellationToken cancellationToken)
     {
-        ApplicationUser user;
-        var isSuperAdmin = httpContextAccessor.GetUserName() == "SuperAdmin";
         var isGuid = Guid.TryParse(request.Key, out var userId);
+        var isSuperAdmin = httpContextAccessor.GetUserName() == "SuperAdmin";
+        var applications = isSuperAdmin ? null : httpContextAccessor.GetApplicationsIDs();
 
-        if (isSuperAdmin)
-            user = await GetUserByCondition(u => isGuid ? u.Id == userId : u.UserName == request.Key,
+        var user = await userManager.Users
+            .Include(u => isSuperAdmin ? null : u.ApplicationUserLinks)
+            .FirstOrDefaultAsync(u =>
+                    (isGuid ? u.Id == userId : u.UserName == request.Key) &&
+                    (isSuperAdmin || u.ApplicationUserLinks.Any(l => applications.Contains(l.ApplicationId))),
                 cancellationToken);
-        else
-        {
-            var application =
-                await GetApplication(request.ApplicationId, request.ApplicationClientSecret, cancellationToken);
 
-            user = await GetUserByCondition(u => (isGuid ? u.Id == userId : u.UserName == request.Key) &&
-                                                 u.ApplicationUserLinks.Any(l => l.ApplicationId == application.Id),
-                cancellationToken,
-                true);
-        }
+        if (user == null) throw new NotFoundException("User not found");
 
-        if (user == null)
-            throw new NotFoundException("User not found");
-
-        var result = mapper.Map<UserResponse>(user);
-        return result;
-    }
-
-    private async Task<ApplicationUser> GetUserByCondition(Expression<Func<ApplicationUser, bool>> condition,
-        CancellationToken cancellationToken, bool includeLinks = false)
-    {
-        var users = userManager.Users;
-        if (includeLinks)
-            users = users.Include(u => u.ApplicationUserLinks);
-
-        return await users.FirstOrDefaultAsync(condition, cancellationToken);
-    }
-
-    private async Task<Domain.Entities.Application> GetApplication(Guid applicationId, string applicationClientSecret,
-        CancellationToken cancellationToken)
-    {
-        var application = await dbContext.Applications.FirstOrDefaultAsync(x =>
-                x.Id == applicationId && x.ClientSecret == applicationClientSecret,
-            cancellationToken);
-
-        if (application is null)
-            throw new NotFoundException("There is no such application");
-
-        return application;
+        return mapper.Map<UserResponse>(user);
     }
 }

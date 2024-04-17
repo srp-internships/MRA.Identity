@@ -11,36 +11,32 @@
     <AuthorizeView Roles="SuperAdmin">
         @if (_application != null)
         {
-            <MudTabs Elevation="2" Rounded="true" Border="true" Position="Position.Top">
-                <MudTabPanel Text="Settings">
-                    <MudGrid>
-                        <MudItem xs="12" lg="6">
-                            <MudCard>
-                                <MudCardContent>
-                                    <MudStack AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Row="false">
-                                        <MudTextField ReadOnly="true" Value="_application.Id" Label="Id" FullWidth="true"></MudTextField>
-                                        <MudTextField ReadOnly="true" Value="_application.Name" Label="Name" FullWidth="true"></MudTextField>
-                                        <MudTextField ReadOnly="true" Value="_application.Description" Label="Description" FullWidth="true"></MudTextField>
-                                        <MudTextField ReadOnly="true" Value="_application.IsProtected" Label="Protected?" FullWidth="true"></MudTextField>
-                                        <MudTextField ReadOnly="true" Value="_application.ClientSecret" Label="Secret" FullWidth="true"></MudTextField>
-                                    </MudStack>
-                                    <br><br>
-                                    <MudDivider/>
-                                    <br>
-                                    <MudStack Row="true">
-                                        <div></div><MudSpacer/>
-                                        <br>
-                                        <MudButton StartIcon="@Icons.Material.Filled.Cyclone" IconSize="Size.Large" Size="Size.Large">Regenerate secret</MudButton>
-                                        <MudButton StartIcon="@Icons.Material.Filled.Edit" IconSize="Size.Large" Size="Size.Large" OnClick="@(ShowUpdateDialog)">Edit</MudButton>
-                                        <MudButton StartIcon="@Icons.Material.Filled.Delete" IconColor="Color.Error" IconSize="Size.Large" Size="Size.Large" OnClick="@(ShowDeleteDialog)">Remove</MudButton>
-                                        <br>
-                                    </MudStack>
-                                </MudCardContent>
-                            </MudCard>
-                        </MudItem>
-                    </MudGrid>
-                </MudTabPanel>
-            </MudTabs>
+            <MudGrid>
+                <MudItem xs="12" lg="6">
+                    <MudCard>
+                        <MudCardContent>
+                            <MudStack AlignItems="AlignItems.Start" Justify="Justify.FlexStart" Spacing="2" Row="false">
+                                <MudTextField ReadOnly="true" Value="_application.Id" Label="Id" FullWidth="true"></MudTextField>
+                                <MudTextField ReadOnly="true" Value="_application.Name" Label="Name" FullWidth="true"></MudTextField>
+                                <MudTextField ReadOnly="true" Value="_application.Description" Label="Description" FullWidth="true"></MudTextField>
+                                <MudTextField ReadOnly="true" Value="_application.IsProtected" Label="Protected?" FullWidth="true"></MudTextField>
+                                <MudTextField ReadOnly="true" Value="_application.ClientSecret" Label="Secret" FullWidth="true"></MudTextField>
+                            </MudStack>
+                            <br><br>
+                            <MudDivider/>
+                            <br>
+                            <MudStack Row="true">
+                                <div></div><MudSpacer/>
+                                <br>
+                                <MudButton StartIcon="@Icons.Material.Filled.Cyclone" IconSize="Size.Large" Size="Size.Large">Regenerate secret</MudButton>
+                                <MudButton StartIcon="@Icons.Material.Filled.Edit" IconSize="Size.Large" Size="Size.Large" OnClick="@(ShowUpdateDialog)">Edit</MudButton>
+                                <MudButton StartIcon="@Icons.Material.Filled.Delete" IconColor="Color.Error" IconSize="Size.Large" Size="Size.Large" OnClick="@(ShowDeleteDialog)">Remove</MudButton>
+                                <br>
+                            </MudStack>
+                        </MudCardContent>
+                    </MudCard>
+                </MudItem>
+            </MudGrid>
         }
         else
         {

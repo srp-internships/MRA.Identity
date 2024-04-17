@@ -18,7 +18,7 @@
                               Label="Callback URLs (comma separated)"
                               Immediate="true"
                               Validation="@(new Func<string, IEnumerable<string>>(UrlsValidate))"/>
-                <MudSwitch @bind-Cheёcked="@_command.IsProtected" Label="Is Protected"/>
+                <MudSwitch @bind-Checked="@_command.IsProtected" Label="Protected"/>
             </MudItem>
         </MudForm>
     </DialogContent>

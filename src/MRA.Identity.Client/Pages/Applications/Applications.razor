@@ -12,14 +12,14 @@
                 <MudCardHeader>
                     <MudText Typo="Typo.h6" Class="mb-2">Applications</MudText>
                     <MudSpacer></MudSpacer>
-                    <MudButton StartIcon="@Icons.Material.Filled.Create" OnClick="@(ShowCreateDialog)">Create</MudButton>
+                    <MudButton Color="Color.Primary" OnClick="@(ShowCreateDialog)">Create</MudButton>
                 </MudCardHeader>
                 <MudCardContent>
                     <MudTable @ref="_table" T="ApplicationResponse" Items="_applications">
                         <HeaderContent>
                             <MudTh>Name</MudTh>
                             <MudTh>Application ID</MudTh>
-                            <MudTh>Is protected</MudTh>
+                            <MudTh>Protected</MudTh>
                             <MudTh></MudTh>
                         </HeaderContent>
 
@@ -29,13 +29,13 @@
                                 <MudText Typo="Typo.body2">@context.Description</MudText>
                             </MudTd>
                             <MudTd>
-                                <MudTextField ReadOnly Variant="Variant.Filled" Value="@context.Id"/>
+                                <MudText Typo="Typo.caption">@context.Id</MudText>
                             </MudTd>
                             <MudTd>
-                                <MudTextField ReadOnly Variant="Variant.Filled" Value="@context.IsProtected"/>
+                                <MudText Typo="Typo.caption">@(context.IsProtected ? "Yes" : "No")</MudText>
                             </MudTd>
                             <MudTd>
-                                <MudIconButton Icon="@Icons.Material.Filled.MoreHoriz" Href="@($"/application/details/{context.Slug}")"/>
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit" Href="@($"/application/details/{context.Slug}")"/>
                             </MudTd>
                         </RowTemplate>
                     </MudTable>

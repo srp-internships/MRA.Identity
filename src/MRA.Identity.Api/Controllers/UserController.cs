@@ -78,10 +78,10 @@ public class UserController(ISender mediator) : ControllerBase
 
     [HttpPost("{key}")]
     [AllowAnonymous]
-    public async Task<IActionResult> PostByKey([FromRoute] string key, [FromBody] GetUserByKeyCommand query)
+    public async Task<IActionResult> PostByKey([FromRoute] string key, [FromBody] GetUserByKeyCommand command)
     {
-        query.Key = key;
-        var userResponse = await mediator.Send(query);
+        command.Key = key;
+        var userResponse = await mediator.Send(command);
         return Ok(userResponse);
     }
 

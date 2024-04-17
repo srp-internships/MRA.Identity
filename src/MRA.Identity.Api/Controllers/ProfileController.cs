@@ -11,6 +11,7 @@ using MRA.Identity.Application.Contract.Experiences.Commands.Create;
 using MRA.Identity.Application.Contract.Experiences.Commands.Update;
 using MRA.Identity.Application.Contract.Experiences.Queries;
 using MRA.Identity.Application.Contract.Experiences.Query;
+using MRA.Identity.Application.Contract.Profile.Commands.GetProfile;
 using MRA.Identity.Application.Contract.Profile.Commands.UpdateProfile;
 using MRA.Identity.Application.Contract.Profile.Queries;
 using MRA.Identity.Application.Contract.Skills.Command;
@@ -37,10 +38,12 @@ public class ProfileController(IMediator mediator) : ControllerBase
         return Ok(result);
     }
 
+    // ExternalApplications
     [HttpPost]
-    public async Task<IActionResult> PostProfileByUserName([FromBody] GetProfileQuery query)
+    [AllowAnonymous]
+    public async Task<IActionResult> PostProfileByUserName([FromBody] GetProfileCommand command)
     {
-        var result = await mediator.Send(query);
+        var result = await mediator.Send(command);
         return Ok(result);
     }
 

@@ -6,28 +6,30 @@ using Microsoft.IdentityModel.Tokens;
 using MRA.Identity.Application.Common.Exceptions;
 using MRA.Identity.Application.Common.Interfaces.DbContexts;
 using MRA.Identity.Application.Common.Interfaces.Services;
-using MRA.Identity.Application.Contract.User.Queries;
+using MRA.Identity.Application.Contract.User.Commands.UsersByApplications;
 using MRA.Identity.Application.Contract.User.Responses;
 using MRA.Identity.Domain.Entities;
 
-namespace MRA.Identity.Application.Features.Users.Query;
+namespace MRA.Identity.Application.Features.Users.Command.GetList;
 
-public class GetListUsersQueryHandler(
+public class GetListUsersCommandHandler(
     UserManager<ApplicationUser> userManager,
-    IUserHttpContextAccessor userHttpContextAccessor,
-    IMapper mapper)
-    : IRequestHandler<GetListUsersQuery, List<UserResponse>>
+    IApplicationDbContext dbContext,
+    IMapper mapper) : IRequestHandler<GetListUsersCommand, List<UserResponse>>
 {
-    public async Task<List<UserResponse>> Handle(GetListUsersQuery request, CancellationToken cancellationToken)
+    public async Task<List<UserResponse>> Handle(GetListUsersCommand request, CancellationToken cancellationToken)
     {
-        var users = userManager.Users.AsQueryable();
+        var application =
+            await dbContext.Applications.FirstOrDefaultAsync(a =>
+                a.Id == request.ApplicationId, cancellationToken);
+        if (application == null) throw new NotFoundException("Application not found");
 
-        if (userHttpContextAccessor.GetUserName() != "SuperAdmin")
-        {
-            users = users.Include(u => u.ApplicationUserLinks)
-                .Where(u => u.ApplicationUserLinks.Any(l =>
-                    userHttpContextAccessor.GetApplicationsIDs().Contains(l.ApplicationId)));
-        }
+        if (application.ClientSecret != request.ApplicationClientSecret)
+            throw new ForbiddenAccessException("Invalid secret");
+
+        var users = userManager.Users.Include(u => u.ApplicationUserLinks)
+            .Where(u => u.ApplicationUserLinks.Any(l =>
+                l.ApplicationId == application.Id));
 
         if (!request.FullName.IsNullOrEmpty())
             users = users.Where(u => (u.FirstName + " " + u.LastName).Contains(request.FullName.Trim()));

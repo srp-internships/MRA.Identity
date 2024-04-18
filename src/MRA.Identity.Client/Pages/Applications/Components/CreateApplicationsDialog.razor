@@ -11,12 +11,12 @@
     </TitleContent>
     <DialogContent>
         <MudForm Model="@_command" Validation="Validator.ValidateValue" ValidationDelay="0" @ref="_form">
-            <MudItem xs="12">
+            <MudItem xs="12" md="12">
                 <MudTextField @bind-Value="@_command.Name" Label="Name" For="@(() => _command.Name)" Immediate="true"/>
                 <MudTextField @bind-Value="@_command.Description" Label="Description" For="@(() => _command.Description)" Immediate="true"/>
                 <MudTextField @bind-Value="@_callbackUrls"
                               Label="Callback URLs (comma separated)"
-                              Immediate="true"
+                              Immediate="true"  
                               Validation="@(new Func<string, IEnumerable<string>>(UrlsValidate))"/>
                 <MudSwitch @bind-Checked="@_command.IsProtected" Label="Protected"/>
             </MudItem>
@@ -24,7 +24,7 @@
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="@(Cancel)">@ContentService["Profile:Cancel"]</MudButton>
-        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="@(async () => await CreateAsync())">@ContentService["Applications:Create"]</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="@(async () => await CreateAsync())">Create</MudButton>
     </DialogActions>
 </MudDialog>
 

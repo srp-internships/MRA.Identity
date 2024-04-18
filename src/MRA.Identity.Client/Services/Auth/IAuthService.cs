@@ -19,4 +19,5 @@ public interface IAuthService
     Task<UserDetailsResponse> CheckUserDetails(CheckUserDetailsQuery checkUserDetailsQuery);
     Task ResendVerificationEmail();
     Task<ApiResponse> SendVerificationEmailToken(string token, string userId);
+    Task NavigateToCallbackWithJwt(string callback);
 }

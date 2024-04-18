@@ -75,6 +75,6 @@
     private async Task ShowDeleteDialog()
     {
         await DialogService.ShowAsync<DeleteApplicationsDialog>("Delete",
-            new DialogParameters { { "Slug", Slug } });
+            new DialogParameters { { "Slug", Slug } }, new DialogOptions() { FullWidth = true, MaxWidth = MaxWidth.Small });
     }
 }

@@ -13,7 +13,6 @@ namespace MRA.Identity.Application.Features.Users.Query;
 
 public class GetUserByKeyHandler(
     UserManager<ApplicationUser> userManager,
-    IApplicationDbContext dbContext,
     IMapper mapper,
     IUserHttpContextAccessor httpContextAccessor)
     : IRequestHandler<GetUserByKeyQuery, UserResponse>

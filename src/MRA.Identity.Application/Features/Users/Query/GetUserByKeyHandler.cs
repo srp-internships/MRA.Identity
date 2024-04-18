@@ -24,13 +24,20 @@ public class GetUserByKeyHandler(
         var isSuperAdmin = httpContextAccessor.GetUserName() == "SuperAdmin";
         var applications = isSuperAdmin ? null : httpContextAccessor.GetApplicationsIDs();
 
-        var user = await userManager.Users
-            .Include(u => isSuperAdmin ? null : u.ApplicationUserLinks)
-            .FirstOrDefaultAsync(u =>
-                    (isGuid ? u.Id == userId : u.UserName == request.Key) &&
-                    (isSuperAdmin || u.ApplicationUserLinks.Any(l => applications.Contains(l.ApplicationId))),
-                cancellationToken);
-
+        ApplicationUser user;
+        if (isSuperAdmin)
+            user = await userManager.Users
+                .FirstOrDefaultAsync(u =>
+                        (isGuid ? u.Id == userId : u.UserName == request.Key),
+                    cancellationToken);
+        else
+            user = await userManager.Users
+                .Include(u => u.ApplicationUserLinks)
+                .FirstOrDefaultAsync(u =>
+                        (isGuid ? u.Id == userId : u.UserName == request.Key) &&
+                        u.ApplicationUserLinks.Any(l => applications.Contains(l.ApplicationId)),
+                    cancellationToken);
+        
         if (user == null) throw new NotFoundException("User not found");
 
         return mapper.Map<UserResponse>(user);

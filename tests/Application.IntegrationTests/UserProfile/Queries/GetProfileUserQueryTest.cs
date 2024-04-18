@@ -23,7 +23,7 @@ public class GetProfileUserQueryTest : BaseTest
     [Test]
     public async Task GetProfileByUserName_ShouldReturnProfileByUserName_NotFound()
     {
-        await AddReviewerAuthorizationAsync();
+        await AddAuthorizationAsync();
         var response = await _client.GetAsync($"/api/Profile?userName=@Alex34");
 
         Assert.That(HttpStatusCode.NotFound == response.StatusCode);

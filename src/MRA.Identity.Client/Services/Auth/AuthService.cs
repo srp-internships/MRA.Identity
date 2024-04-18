@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.IdentityModel.Tokens;
 using MRA.Identity.Application.Contract.User.Commands.ChangePassword;
 using MRA.Identity.Application.Contract.User.Commands.LoginUser;
 using MRA.Identity.Application.Contract.User.Commands.RegisterUser;
@@ -23,7 +21,7 @@ namespace MRA.Identity.Client.Services.Auth;
 public class AuthService(
     IHttpClientService httpClient,
     NavigationManager navigationManager,
-   ILocalStorageService localStorageService,
+    ILocalStorageService localStorageService,
     IUserProfileService userProfileService,
     IConfiguration configuration,
     IContentService contentService,
@@ -63,22 +61,9 @@ public class AuthService(
 
         if (result.Success)
         {
-            string callbackUrl = string.Empty;
-            string page = string.Empty;
-            var currentUri = navigationManager.ToAbsoluteUri(navigationManager.Uri);
-            if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("callback", out var param))
-                callbackUrl = param;
-            if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
-                page = param;
-
             await localStorageService.SetItemAsync("authToken", result.Result);
 
-
-            if (callbackUrl.IsNullOrEmpty())
-                navigationManager.NavigateTo("/");
-            else
-                navigationManager.NavigateTo(
-                    $"{callbackUrl}?atoken={result.Result.AccessToken}&rtoken={result.Result.RefreshToken}&vdate={result.Result.AccessTokenValidateTo}&page={page}");
+            await NavigateToCallbackWithJwt(command.CallBackUrl);
             return true;
         }
 
@@ -107,7 +92,7 @@ public class AuthService(
                 CallBackUrl = command.CallBackUrl
             });
             await userProfileService.Get();
-            navigationManager.NavigateTo("/");
+            await NavigateToCallbackWithJwt(command.CallBackUrl);
             return true;
         }
 
@@ -146,11 +131,17 @@ public class AuthService(
     public async Task<ApiResponse> SendVerificationEmailToken(string token, string userId)
     {
         var response = await httpClient.GetAsync(
-                 configuration.GetIdentityUrl($"Auth/verify?token={WebUtility.UrlEncode(token)}&userid={userId}"));
+            configuration.GetIdentityUrl($"Auth/verify?token={WebUtility.UrlEncode(token)}&userid={userId}"));
         if (response.HttpStatusCode == HttpStatusCode.OK)
             return response;
-        snackbar.ShowIfError(response,contentService["Profile:Servernotrespondingtry"]);
+        snackbar.ShowIfError(response, contentService["Profile:Servernotrespondingtry"]);
         return null;
+    }
 
+    public async Task NavigateToCallbackWithJwt(string callback)
+    {
+        var jwt = await localStorageService.GetItemAsync<JwtTokenResponse>("authToken");
+        navigationManager.NavigateTo(
+            $"{callback}?atoken={jwt.AccessToken}&rtoken={jwt.RefreshToken}&vdate={jwt.AccessTokenValidateTo}");
     }
 }

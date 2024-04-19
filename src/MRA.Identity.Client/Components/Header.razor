@@ -122,11 +122,22 @@
                 </MudButton>
             </AuthorizeView>
             <AuthorizeView Roles="ApplicationAdmin">
-                <MudNavLink Href="/UserManager">
-                    <MudText>
-                        <b>User manager</b>
-                    </MudText>
-                </MudNavLink>
+                <MudMenu Label="User manager">
+                    <MudMenuItem>
+                        <MudNavLink>
+                            <MudText Href="/UserManager">
+                                <b>Users</b>
+                            </MudText>
+                        </MudNavLink>
+                    </MudMenuItem>
+                    <MudMenuItem>
+                        <MudNavLink>
+                            <MudText href="/roles">
+                                <b>Roles</b>
+                            </MudText>
+                        </MudNavLink>
+                    </MudMenuItem>
+                </MudMenu>
             </AuthorizeView>
         </CascadingAuthenticationState>
         <MudNavLink Match="NavLinkMatch.All" Href="@Configuration["Platforms:Academy"]" Target="_blank">@ContentService["Header:Academy"]</MudNavLink>

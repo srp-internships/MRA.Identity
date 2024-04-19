@@ -9,6 +9,16 @@
 <CascadingAuthenticationState>
     <AuthorizeView Roles="SuperAdmin" Context="_">
         <Authorized>
+            <MudItem xl="12" xs="12" sm="12">
+                <MudStack Row="true">
+                    <MudText Typo="Typo.h5" Class="mb-2">Roles</MudText>
+                    <MudSpacer></MudSpacer>
+                    <MudButton StartIcon="@Icons.Material.Filled.Create" OnClick="@(async () => await CreateAsync())">
+                        @ContentService["Roles:CreateNewRole"]
+                    </MudButton>
+                </MudStack>
+            </MudItem>
+            <br>
             <MudTable Hover="true" Items="_roles" Breakpoint="Breakpoint.Xs" @ref="_table">
                 <HeaderContent>
                     <MudTh>
@@ -19,11 +29,6 @@
                     </MudTh>
                     <MudTh>
                         @ContentService["Roles:Delete"]
-                    </MudTh>
-                    <MudTh>
-                        <MudButton StartIcon="@Icons.Material.Filled.Create" OnClick="@(async () => await CreateAsync())">
-                            @ContentService["Roles:CreateNewRole"]
-                        </MudButton>
                     </MudTh>
                 </HeaderContent>
                 <RowTemplate>

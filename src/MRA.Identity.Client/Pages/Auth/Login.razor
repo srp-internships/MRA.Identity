@@ -4,7 +4,6 @@
 @inject IAuthService AuthService
 @inject IContentService ContentService
 @inject NavigationManager NavigationManager
-@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <MudGrid Justify="Justify.Center" Class="align-items-center">
     <MudItem xs="12" sm="8" md="6" lg="3">
@@ -73,17 +72,8 @@
         await AuthService.LoginUserAsync(_loginCommand);
     }
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity?.IsAuthenticated ?? false)
-        {
-            NavigationManager.NavigateTo("/");
-            return;
-        }
-
         var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         var query = QueryHelpers.ParseQuery(currentUri.Query);
         if (query.TryGetValue("callback", out var callback))

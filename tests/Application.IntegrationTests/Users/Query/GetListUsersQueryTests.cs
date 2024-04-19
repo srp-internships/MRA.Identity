@@ -27,7 +27,7 @@ public class GetListUsersQueryTests : BaseTest
     [Test]
     public async Task GetListUsersQueryTests_Filters_ReturnListUsers()
     {
-        await AddAdminAuthorizationAsync();
+        await AddAuthorizationAsync();
         var url =
             $"api/User/GetListUsers/ByFilter?FullName=Ben Denison&Email=denison@gmail.com&PhoneNumber=+9921001010";
         var response = await _client.GetFromJsonAsync<List<UserResponse>>(url);

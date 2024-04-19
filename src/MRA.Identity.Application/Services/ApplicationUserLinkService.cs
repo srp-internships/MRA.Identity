@@ -28,7 +28,7 @@ public class ApplicationUserLinkService(IApplicationDbContext context) : IApplic
         _callback = callback;
         _application =
             await context.Applications.FirstOrDefaultAsync(a => a.Id == applicationId, cancellationToken)
-            ?? throw new NotFoundException($"application with id {applicationId} does not exist");
+            ?? throw new ValidationException("Invalid application Id");
         if (_application.IsProtected && checkProtected == true)
         {
             throw new ForbiddenAccessException();

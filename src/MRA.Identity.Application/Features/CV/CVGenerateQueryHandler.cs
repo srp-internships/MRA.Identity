@@ -22,7 +22,7 @@ public class CVGenerateQueryHandler(
 
     public async Task<MemoryStream> Handle(CVGenerateQuery request, CancellationToken cancellationToken)
     {
-        var userProfile = await mediator.Send(new GetPofileQuery());
+        var userProfile = await mediator.Send(new GetProfileQuery());
         var userSkills = await mediator.Send(new GetUserSkillsQuery());
         var userEducations = await mediator.Send(new GetEducationsByUserQuery());
         var userExperience = await mediator.Send(new GetExperiencesByUserQuery());

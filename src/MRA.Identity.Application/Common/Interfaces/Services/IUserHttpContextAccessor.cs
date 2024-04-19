@@ -5,4 +5,6 @@ public interface IUserHttpContextAccessor
     String GetUserName();
 
     List<string> GetUserRoles();
+    
+    List<Guid>  GetApplicationsIDs();
 }

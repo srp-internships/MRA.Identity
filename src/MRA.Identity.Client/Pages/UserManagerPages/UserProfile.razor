@@ -215,59 +215,6 @@
                             </MudTable>
 
                         </MudTabPanel>
-                        <MudTabPanel Icon="@Icons.Material.Filled.Key" Text="Claims">
-                            <MudText Typo="Typo.h6">
-                                <b>Claims</b>
-                            </MudText>
-
-                            <MudStack Row="true">
-                                <MudTextField Margin="Margin.Dense" Label="Claim Type"
-                                              Variant="Variant.Outlined" @bind-Value="_claimType"/>
-                                <MudTextField Margin="Margin.Dense" Label="Claim Value"
-                                              Variant="Variant.Outlined" @bind-Value="_claimValue"/>
-                                @if (!_loader)
-                                {
-                                    <MudIconButton Icon="@Icons.Material.Filled.Add" Variant="Variant.Filled" Color="Color.Primary" Size="Size.Large" OnClick="@OnAddClaimClick"/>
-                                }
-                                else
-                                {
-                                    <MudProgressCircular Color="Color.Primary" Indeterminate="true"/>
-                                }
-                            </MudStack>
-                            <br/>
-                            <MudText Typo="Typo.h6">
-                                <b>Basic Claims</b>
-                            </MudText>
-                            <MudTable Items="@ReadOnlyClaims" Dense="true" Hover="true" Breakpoint="@Breakpoint.None">
-                                <HeaderContent>
-                                    <MudTh>@ContentService["ClaimType"]</MudTh>
-                                    <MudTh>@ContentService["ClaimValue"]</MudTh>
-                                </HeaderContent>
-                                <RowTemplate>
-                                    <MudTd Style="width:100%">@context.ClaimType</MudTd>
-                                    <MudTd Style="width:100%">@context.ClaimValue</MudTd>
-                                </RowTemplate>
-                            </MudTable>
-                            <br><br>
-                            <MudText Typo="Typo.h6">
-                                <b>User Claims</b>
-                            </MudText>
-                            <MudTable Items="@UserClaims" Dense="true" Hover="true" Breakpoint="@Breakpoint.None">
-                                <HeaderContent>
-                                    <MudTh>@ContentService["ClaimType"]</MudTh>
-                                    <MudTh>@ContentService["ClaimValue"]</MudTh>
-                                    <MudTh></MudTh>
-                                </HeaderContent>
-                                <RowTemplate>
-                                    <MudTd Style="width:100%">@context.ClaimType</MudTd>
-                                    <MudTd Style="width:100%">@context.ClaimValue</MudTd>
-                                    <MudTd Style="width:auto">
-                                        <MudIconButton @onclick="() => OnDeleteClaimClick(context.Slug)"
-                                                       Icon="@Icons.Material.Filled.Delete" Color="Color.Error"/>
-                                    </MudTd>
-                                </RowTemplate>
-                            </MudTable>
-                        </MudTabPanel>
                     </Authorized>
                     <NotAuthorized></NotAuthorized>
                 </AuthorizeView>

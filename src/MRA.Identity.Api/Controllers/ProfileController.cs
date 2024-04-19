@@ -11,6 +11,7 @@ using MRA.Identity.Application.Contract.Experiences.Commands.Create;
 using MRA.Identity.Application.Contract.Experiences.Commands.Update;
 using MRA.Identity.Application.Contract.Experiences.Queries;
 using MRA.Identity.Application.Contract.Experiences.Query;
+using MRA.Identity.Application.Contract.Profile.Commands.GetProfile;
 using MRA.Identity.Application.Contract.Profile.Commands.UpdateProfile;
 using MRA.Identity.Application.Contract.Profile.Queries;
 using MRA.Identity.Application.Contract.Skills.Command;
@@ -33,7 +34,16 @@ public class ProfileController(IMediator mediator) : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetProfileByUserName([FromQuery] string userName = null)
     {
-        var result = await mediator.Send(new GetPofileQuery { UserName = userName });
+        var result = await mediator.Send(new GetProfileQuery { UserName = userName });
+        return Ok(result);
+    }
+
+    // ExternalApplications
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> PostProfileByUserName([FromBody] GetProfileCommand command)
+    {
+        var result = await mediator.Send(command);
         return Ok(result);
     }
 
@@ -131,7 +141,6 @@ public class ProfileController(IMediator mediator) : ControllerBase
 
 
     [HttpGet("GetAllExperiences")]
-
     public async Task<IActionResult> GetAllExperiences()
     {
         var result = await mediator.Send(new GetAllExperienceQuery());
@@ -144,5 +153,4 @@ public class ProfileController(IMediator mediator) : ControllerBase
         var result = await mediator.Send(new CVGenerateQuery());
         return File(result, "application/pdf", "cv.pdf");
     }
-
 }

@@ -29,7 +29,7 @@ public class ApplicationDbContextInitializer(
         await CreateApplicationsAsync();
 
         await CreateApplicationAdmin("MraJobs", "12345678", "mra-jobs");
-        await CreateApplicationAdmin("MraOnlinePlatform", "12345678", "mra-online-platform");
+        await CreateApplicationAdmin("MraAcademy", "12345678", "mra-online-platform");
         await CreateApplicationAdmin("MraAssetsManagement", "12345678", "mra-assets-management");
 
         if (configuration["Environment"] != "Production")
@@ -45,12 +45,12 @@ public class ApplicationDbContextInitializer(
     {
         var mraJobsApplicationSecret = "mraJobsApplicationSecret";
         var mraAssetsManagementSecret = "mraAssetsManagementSecret";
-        var mraOnlinePlatformSecret = "mraOnlinePlatformSecret";
+        var mraAcademySecret = "mraAcademySecret";
         if (configuration["Environment"] == "Production")
         {
             mraJobsApplicationSecret = cryptoStringService.GetCryptoString();
             mraAssetsManagementSecret = cryptoStringService.GetCryptoString();
-            mraOnlinePlatformSecret = cryptoStringService.GetCryptoString();
+            mraAcademySecret = cryptoStringService.GetCryptoString();
         }
 
         if (await context.Applications.FirstOrDefaultAsync(x => x.Name == "Mra Jobs") == null)
@@ -91,7 +91,7 @@ public class ApplicationDbContextInitializer(
                     Description = "",
                     DefaultRoleId = (await roleManager.FindByNameAsync("Reviewer"))!.Id,
                     CallbackUrls = [],
-                    ClientSecret = mraOnlinePlatformSecret
+                    ClientSecret = mraAcademySecret
                 });
         await context.SaveChangesAsync();
     }

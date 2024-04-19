@@ -159,7 +159,7 @@ public abstract class BaseTest
             new Claim($"{prefics}Id", reviewer.Id.ToString()),
             new Claim($"{prefics}username", reviewer.UserName),
             new Claim($"{prefics}email", reviewer.Email),
-            new Claim($"{prefics}application", "MraJobs")
+            new Claim($"{prefics}application", "4f67d20a-4f2a-4c7f-8a35-4c15c2d0c3e2")
         };
         var token = tokenService.CreateTokenByClaims(claims, out _);
         _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

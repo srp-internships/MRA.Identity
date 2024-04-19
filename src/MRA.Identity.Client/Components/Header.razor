@@ -1,12 +1,8 @@
-﻿@using MRA.Identity.Client.Components.Dialogs
-@using MudBlazor
-@using Anchor = MudBlazor.Anchor
+﻿@using Anchor = MudBlazor.Anchor
 @using Breakpoint = MudBlazor.Breakpoint
 @using Color = MudBlazor.Color
 @using DividerType = MudBlazor.DividerType
 @using Microsoft.FeatureManagement
-@using Size = MudBlazor.Size
-@using MRA.Identity.Client.Services.Profile
 @using MRA.BlazorComponents.DynamicPages.Components
 @inject LayoutService LayoutService
 @inject NavigationManager NavigationManager
@@ -67,11 +63,26 @@
                 </MudButton>
             </AuthorizeView>
             <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
-                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/UserManager" Class="@GetActiveClass(DocPages.UserManager)">
-                    <MudText>
-                        <b>User manager</b>
-                    </MudText>
-                </MudButton>
+                <MudMenu FullWidth="true" ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+                    <ActivatorContent>
+                        <MudText>
+                            <b>User manager</b>
+                        </MudText>
+                    </ActivatorContent>
+                    <ChildContent>
+
+                        <MudMenuItem Href="/UserManager">
+                            <MudText>
+                                <b>Users</b>
+                            </MudText>
+                        </MudMenuItem>
+                        <MudMenuItem Href="/roles">
+                            <MudText>
+                                <b>Roles</b>
+                            </MudText>
+                        </MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
                 <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/EmailTemplates" Class="@GetActiveClass(DocPages.UserManager)">
                     <MudText>
                         <b>Email templates</b>

@@ -14,7 +14,7 @@ namespace MRA.Identity.Client.Pages.UserManagerPages;
 public partial class UserProfile
 {
     [Parameter] public string Username { get; set; }
-    private List<UserRolesResponse> Roles { get; set; }
+    private List<UserRolesResponse> UserRoles { get; set; }
     [Inject] private IUserProfileService UserProfileService { get; set; }
     [Inject] private IRoleService RoleService { get; set; }
     private string NewRoleName { get; set; }
@@ -24,6 +24,7 @@ public partial class UserProfile
 
     private List<UserExperienceResponse> _experiences = [];
     private List<UserEducationResponse> _educations = [];
+    private List<Application.Contract.ApplicationRoles.Responses.RoleNameResponse> _roleNames = [];
 
     protected override async Task OnInitializedAsync()
     {
@@ -36,7 +37,8 @@ public partial class UserProfile
 
     private async Task ReloadDataAsync()
     {
-        Roles = await RoleService.GetUserRoles(new GetUserRolesQuery { UserName = Username });
+        UserRoles = await RoleService.GetUserRoles(new GetUserRolesQuery { UserName = Username });
+        _roleNames = await RoleService.GetRoles();
     }
 
     private async Task OnDeleteClick(string contextSlug)

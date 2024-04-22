@@ -26,9 +26,9 @@ public class GetProfileQueryHandler(
         if (userName != "SuperAdmin")
         {
             if (!request.UserName.IsNullOrEmpty()) throw new ForbiddenAccessException("Access is denied");
-            request.UserName = userName;
         }
 
+        request.UserName = userName;
         var user = await userManager.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName,
             cancellationToken);
 

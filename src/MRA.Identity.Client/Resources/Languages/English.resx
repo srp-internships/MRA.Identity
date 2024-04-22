@@ -552,6 +552,9 @@
   <data name="Roles:Role" xml:space="preserve">
     <value>Role</value>
   </data>
+  <data name="Roles:Roles" xml:space="preserve">
+    <value>Roles</value>
+  </data>
   <data name="Roles:Edit" xml:space="preserve">
     <value>Edit</value>
   </data>

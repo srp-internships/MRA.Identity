@@ -11,7 +11,7 @@
         <Authorized>
             <MudItem xl="12" xs="12" sm="12">
                 <MudStack Row="true">
-                    <MudText Typo="Typo.h5" Class="mb-2">Roles</MudText>
+                    <MudText Typo="Typo.h5" Class="mb-2">@ContentService["Roles:Role"]</MudText>
                     <MudSpacer></MudSpacer>
                     <MudButton StartIcon="@Icons.Material.Filled.Create" OnClick="@(async () => await CreateAsync())">
                         @ContentService["Roles:CreateNewRole"]

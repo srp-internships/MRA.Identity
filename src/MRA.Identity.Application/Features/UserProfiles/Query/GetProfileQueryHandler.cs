@@ -28,7 +28,8 @@ public class GetProfileQueryHandler(
             if (!request.UserName.IsNullOrEmpty()) throw new ForbiddenAccessException("Access is denied");
         }
 
-        request.UserName = userName;
+        if (request.UserName.IsNullOrEmpty()) request.UserName = userName;
+
         var user = await userManager.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName,
             cancellationToken);
 

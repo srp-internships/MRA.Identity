@@ -11,17 +11,17 @@
         <Authorized>
             <MudItem xl="12" xs="12" sm="12">
                 <MudStack Row="true">
-                    <MudText Typo="Typo.h5" Class="mb-2">@ContentService["Roles:Role"]</MudText>
-                    <MudSpacer></MudSpacer>
-                    <MudButton StartIcon="@Icons.Material.Filled.Create" OnClick="@(async () => await CreateAsync())">
-                        @ContentService["Roles:CreateNewRole"]
+                    <MudText Typo="Typo.h5"><b>@ContentService["Roles:Role"]</b></MudText>
+                    <MudSpacer/>
+                    <MudButton OnClick="@(async () => await CreateAsync())" Color="Color.Primary" Variant="Variant.Filled">
+                        <MudText> @ContentService["Roles:CreateNewRole"]</MudText>
                     </MudButton>
                 </MudStack>
             </MudItem>
             <br>
-            <MudTable Hover="true" Items="_roles" Breakpoint="Breakpoint.Xs" @ref="_table">
+            <MudTable Hover="true" Items="_roles" Breakpoint="Breakpoint.Xs" @ref="_table" Dense="true">
                 <HeaderContent>
-                    <MudTh>
+                    <MudTh Style="width: 100%">
                         @ContentService["Roles:Role"]
                     </MudTh>
                     <MudTh>
@@ -76,17 +76,20 @@
 
     private async Task DeleteAsync(string name)
     {
+        var options = new DialogOptions() { MaxWidth = MaxWidth.Small, FullWidth = true };
         await DialogService.ShowAsync<DeleteRoleDialog>("",
-            new DialogParameters { { "RoleSlug", name } });
+            new DialogParameters { { "RoleSlug", name } }, options);
     }
 
     private async Task CreateAsync()
     {
-        await DialogService.ShowAsync<CreateRoleDialog>("");
+        var options = new DialogOptions() { MaxWidth = MaxWidth.Small, FullWidth = true };
+        await DialogService.ShowAsync<CreateRoleDialog>("", options);
     }
 
     private async Task EditAsync(string name, string slug)
     {
+        var options = new DialogOptions() { MaxWidth = MaxWidth.Small, FullWidth = true };
         await DialogService.ShowAsync<UpdateRoleDialog>("",
             new DialogParameters
             {
@@ -97,7 +100,7 @@
                         NewRoleName = name
                     }
                 }
-            });
+            }, options);
     }
 
 }

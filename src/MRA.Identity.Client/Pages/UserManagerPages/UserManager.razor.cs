@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using MRA.BlazorComponents.Configuration;
 using MRA.BlazorComponents.HttpClient.Services;
+using MRA.Identity.Application.Contract.Applications.Responses;
 using MRA.Identity.Application.Contract.Common;
 using MRA.Identity.Application.Contract.Skills.Responses;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Responses;
+using MRA.Identity.Client.Services.Applications;
 using MRA.Identity.Client.Services.Profile;
 using MudBlazor;
 
@@ -20,17 +22,21 @@ public sealed partial class UserManager
     [Inject] private NavigationManager NavigationManager { get; set; }
     [Inject] private IConfiguration Configuration { get; set; }
     [Inject] private IDialogService DialogService { get; set; }
+    [Inject] private IApplicationsService ApplicationsService { get; set; }
 
+    private string SelectedApplications { get; set; }
+    private List<ApplicationResponse> _applicatios;
     private bool _isLoaded = false;
     private string _searchString = "";
 
     private GetPagedListUsersQuery _query = new();
     private MudTable<UserResponse> _table;
     private IEnumerable<string> Options { get; set; } = new HashSet<string>();
-
-
-    protected override void OnInitialized()
+    
+    protected override async Task OnInitializedAsync()
     {
+        _applicatios = await ApplicationsService.GetAllAsync();
+        StateHasChanged();
         var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 
         if (currentUri.Query.IsNullOrEmpty())
@@ -81,9 +87,8 @@ public sealed partial class UserManager
 
         if (Options != null)
         {
-            _query.Skills = string.Join(",", Options.Select(x => x.Trim())).ToString();
+            _query.ApplicationsName = string.Join(",", Options.Select(x => x.Trim())).ToString();
         }
-
         var queryParam = HttpUtility.ParseQueryString(string.Empty);
         if (!_query.Skills.IsNullOrEmpty()) queryParam["Skills"] = _query.Skills;
         queryParam["Page"] = _query.Page.ToString();
@@ -116,7 +121,6 @@ public sealed partial class UserManager
         queryParam["Page"] = _query.Page.ToString();
         queryParam["PageSize"] = _query.PageSize.ToString();
         if (!_query.Filters.IsNullOrEmpty()) queryParam["Filters"] = _query.Filters;
-
         var newUri = $"{NavigationManager.BaseUri}UserManager?{queryParam}";
         NavigationManager.NavigateTo(newUri, forceLoad: false);
     }

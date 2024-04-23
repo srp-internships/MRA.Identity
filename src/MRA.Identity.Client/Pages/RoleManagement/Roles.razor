@@ -9,9 +9,19 @@
 <CascadingAuthenticationState>
     <AuthorizeView Roles="SuperAdmin" Context="_">
         <Authorized>
-            <MudTable Hover="true" Items="_roles" Breakpoint="Breakpoint.Xs" @ref="_table">
+            <MudItem xl="12" xs="12" sm="12">
+                <MudStack Row="true">
+                    <MudText Typo="Typo.h5"><b>@ContentService["Roles:Role"]</b></MudText>
+                    <MudSpacer/>
+                    <MudButton OnClick="@(async () => await CreateAsync())" Color="Color.Primary" Variant="Variant.Filled">
+                        <MudText> @ContentService["Roles:CreateNewRole"]</MudText>
+                    </MudButton>
+                </MudStack>
+            </MudItem>
+            <br>
+            <MudTable Hover="true" Items="_roles" Breakpoint="Breakpoint.Xs" @ref="_table" Dense="true">
                 <HeaderContent>
-                    <MudTh>
+                    <MudTh Style="width: 100%">
                         @ContentService["Roles:Role"]
                     </MudTh>
                     <MudTh>
@@ -19,11 +29,6 @@
                     </MudTh>
                     <MudTh>
                         @ContentService["Roles:Delete"]
-                    </MudTh>
-                    <MudTh>
-                        <MudButton StartIcon="@Icons.Material.Filled.Create" OnClick="@(async () => await CreateAsync())">
-                            @ContentService["Roles:CreateNewRole"]
-                        </MudButton>
                     </MudTh>
                 </HeaderContent>
                 <RowTemplate>
@@ -34,7 +39,7 @@
                         <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="@(async () => await EditAsync(context.Name, context.Slug))"></MudIconButton>
                     </MudTd>
                     <MudTd>
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="@(async () => await DeleteAsync(context.Slug))"></MudIconButton>
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" Color="@Color.Error" OnClick="@(async () => await DeleteAsync(context.Slug))"></MudIconButton>
                     </MudTd>
 
                 </RowTemplate>
@@ -71,17 +76,20 @@
 
     private async Task DeleteAsync(string name)
     {
+        var options = new DialogOptions() { MaxWidth = MaxWidth.Small, FullWidth = true };
         await DialogService.ShowAsync<DeleteRoleDialog>("",
-            new DialogParameters { { "RoleSlug", name } });
+            new DialogParameters { { "RoleSlug", name } }, options);
     }
 
     private async Task CreateAsync()
     {
-        await DialogService.ShowAsync<CreateRoleDialog>("");
+        var options = new DialogOptions() { MaxWidth = MaxWidth.Small, FullWidth = true };
+        await DialogService.ShowAsync<CreateRoleDialog>("", options);
     }
 
     private async Task EditAsync(string name, string slug)
     {
+        var options = new DialogOptions() { MaxWidth = MaxWidth.Small, FullWidth = true };
         await DialogService.ShowAsync<UpdateRoleDialog>("",
             new DialogParameters
             {
@@ -92,7 +100,7 @@
                         NewRoleName = name
                     }
                 }
-            });
+            }, options);
     }
 
 }

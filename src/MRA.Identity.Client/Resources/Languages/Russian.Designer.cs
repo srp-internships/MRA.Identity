@@ -826,6 +826,15 @@ namespace MRA.Identity.Client.Resources.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Роли.
+        /// </summary>
+        internal static string Roles_Roles {
+            get {
+                return ResourceManager.GetString("Roles:Roles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Успешно.
         /// </summary>
         internal static string Roles_Success {

@@ -505,6 +505,10 @@
   <data name="Roles:Role" xml:space="preserve">
     <value>Роль</value>
   </data>
+
+  <data name="Roles:Roles" xml:space="preserve">
+    <value>Роли</value>
+  </data>
   <data name="Roles:Edit" xml:space="preserve">
     <value>Изменить</value>
   </data>

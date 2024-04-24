@@ -6,32 +6,25 @@
 <MudDialog>
     <TitleContent>
         <MudText Typo="Typo.h6">
-            <MudIcon Icon="@Icons.Material.Filled.Create" Class="mr-3 mb-n1"/>
             Create
         </MudText>
     </TitleContent>
     <DialogContent>
         <MudForm Model="@_command" Validation="Validator.ValidateValue" ValidationDelay="0" @ref="_form">
-            <MudItem xs="12" md="6">
+            <MudItem xs="12" md="12">
                 <MudTextField @bind-Value="@_command.Name" Label="Name" For="@(() => _command.Name)" Immediate="true"/>
-            </MudItem>
-            <MudItem xs="12" md="6">
                 <MudTextField @bind-Value="@_command.Description" Label="Description" For="@(() => _command.Description)" Immediate="true"/>
-            </MudItem>
-            <MudItem xs="12">
                 <MudTextField @bind-Value="@_callbackUrls"
                               Label="Callback URLs (comma separated)"
-                              Immediate="true"
+                              Immediate="true"  
                               Validation="@(new Func<string, IEnumerable<string>>(UrlsValidate))"/>
-            </MudItem>
-            <MudItem xs="12">
-                <MudSwitch @bind-Checked="@_command.IsProtected" Label="Is Protected"/>
+                <MudSwitch @bind-Checked="@_command.IsProtected" Label="Protected"/>
             </MudItem>
         </MudForm>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="@(Cancel)">@ContentService["Profile:Cancel"]</MudButton>
-        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="@(async () => await CreateAsync())">@ContentService["Applications:Create"]</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="@(async () => await CreateAsync())">Create</MudButton>
     </DialogActions>
 </MudDialog>
 

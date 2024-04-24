@@ -12,19 +12,13 @@
     </TitleContent>
     <DialogContent>
         <MudForm Model="@Command" Validation="Validator.ValidateValue" ValidationDelay="0" @ref="_form">
-            <MudItem xs="12" md="6">
+            <MudItem xs="12" md="12">
                 <MudTextField @bind-Value="@Command.Name" Label="Name" For="@(() => Command.Name)" Immediate="true"/>
-            </MudItem>
-            <MudItem xs="12" md="6">
                 <MudTextField @bind-Value="@Command.Description" Label="Description" For="@(() => Command.Description)" Immediate="true"/>
-            </MudItem>
-            <MudItem xs="12">
                 <MudTextField @bind-Value="@_callbackUrls"
                               Label="Callback URLs (comma separated)"
                               Immediate="true"
                               Validation="@(new Func<string, IEnumerable<string>>(UrlsValidate))"/>
-            </MudItem>
-            <MudItem xs="12">
                 <MudSwitch @bind-Checked="@Command.IsProtected" Label="Is Protected"/>
             </MudItem>
         </MudForm>

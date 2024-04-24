@@ -37,17 +37,20 @@ public class GetPagedListUsersQueryHandler(
                 .Where(u => u.ApplicationUserLinks.Any(l =>
                     userHttpContextAccessor.GetApplicationsIDs().Contains(l.ApplicationId)));
         }
-
-        if (request.ApplicationsName != null)
-        {
-            var applications =new List<string>();
-            foreach (var applicationName in request.ApplicationsName.Split(","))
+        else{
+            if (request.ApplicationsName != null )
             {
-                applications.Add(applicationName);
+                var applications =new List<string>();
+                foreach (var applicationName in request.ApplicationsName.Split(","))
+                {
+                    applications.Add(applicationName);
+                    users = users.Where(u =>
+                        u.ApplicationUserLinks.Any(l => l.Application.Name == applicationName));
+                }
             }
-            users = users.Where(u =>
-                u.ApplicationUserLinks.Any(l => request.ApplicationsName.Contains(l.Application.Name)));
         }
+
+      
 
         if (!request.Skills.IsNullOrEmpty())
         {

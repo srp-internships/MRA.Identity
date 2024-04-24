@@ -48,7 +48,7 @@ public partial class UserProfile
     private string _claimValue;
     private UserResponse _user;
     private bool _loader;
-
+  
     protected override async Task OnInitializedAsync()
     {
         await ReloadDataAsync();
@@ -70,7 +70,8 @@ public partial class UserProfile
                 Configuration.GetIdentityUrl($"Claims?username={Username}"));
         if (userClaimsResponse.HttpStatusCode == HttpStatusCode.OK)
         {
-            UserClaims = userClaimsResponse.Result?.Where(s=> ReadOnlyClaims.All(f => f.ClaimType != s.ClaimType)).ToList();
+            UserClaims = userClaimsResponse.Result?.Where(s => ReadOnlyClaims.All(f => f.ClaimType != s.ClaimType))
+                .ToList();
             ReadOnlyClaims.ForEach(s =>
                 s.ClaimValue = userClaimsResponse.Result?.FirstOrDefault(f => f.ClaimType == s.ClaimType)
                     ?.ClaimValue);

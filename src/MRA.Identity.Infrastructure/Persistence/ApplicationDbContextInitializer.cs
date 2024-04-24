@@ -29,7 +29,7 @@ public class ApplicationDbContextInitializer(
         await CreateApplicationsAsync();
 
         await CreateApplicationAdmin("MraJobs", "12345678", "mra-jobs");
-        await CreateApplicationAdmin("MraAcademy", "12345678", "mra-online-platform");
+        await CreateApplicationAdmin("MraAcademy", "12345678", "mra-academy");
         await CreateApplicationAdmin("MraAssetsManagement", "12345678", "mra-assets-management");
 
         if (configuration["Environment"] != "Production")
@@ -80,13 +80,13 @@ public class ApplicationDbContextInitializer(
                     ClientSecret = mraAssetsManagementSecret
                 });
 
-        if (await context.Applications.FirstOrDefaultAsync(x => x.Name == "Mra Online Platform") == null)
+        if (await context.Applications.FirstOrDefaultAsync(x => x.Name == "Mra Academy") == null)
             await context.Applications.AddAsync(
                 new Domain.Entities.Application()
                 {
-                    Id = Guid.Parse("fb2bdd6c-4e31-4255-bf40-aba748c6777f"),
-                    Name = "Mra Online Platform",
-                    Slug = "mra-online-platform",
+                    Id = Guid.Parse("fb2bdd6c-4e31-4255-bf40-aba748c6777d"),
+                    Name = "Mra Academy", 
+                    Slug = "mra-academy",
                     IsProtected = true,
                     Description = "",
                     DefaultRoleId = (await roleManager.FindByNameAsync("Reviewer"))!.Id,

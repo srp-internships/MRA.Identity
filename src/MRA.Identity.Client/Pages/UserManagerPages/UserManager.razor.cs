@@ -25,17 +25,18 @@ public sealed partial class UserManager
     [Inject] private IApplicationsService ApplicationsService { get; set; }
 
     private string SelectedApplications { get; set; }
-    private List<ApplicationResponse> _applicatios;
+    private List<ApplicationResponse> _applications;
     private bool _isLoaded = false;
     private string _searchString = "";
 
     private GetPagedListUsersQuery _query = new();
     private MudTable<UserResponse> _table;
     private IEnumerable<string> Options { get; set; } = new HashSet<string>();
-    
+
+
     protected override async Task OnInitializedAsync()
     {
-        _applicatios = await ApplicationsService.GetAllAsync();
+        _applications = await ApplicationsService.GetAllAsync();
         StateHasChanged();
         var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
 
@@ -51,9 +52,9 @@ public sealed partial class UserManager
         if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("pageSize", out var pageSize))
             _query.PageSize = int.Parse(pageSize);
 
-        if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("Skills", out var skills))
+        if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("ApplicationsName", out var applicationsName))
         {
-            Options = skills.ToList();
+            Options = applicationsName.ToList();
         }
 
         if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("filters", out var filters))
@@ -69,7 +70,6 @@ public sealed partial class UserManager
         _isLoaded = true;
         StateHasChanged();
     }
-
 
     private async Task<TableData<UserResponse>> ServerReload(TableState state)
     {
@@ -90,7 +90,7 @@ public sealed partial class UserManager
             _query.ApplicationsName = string.Join(",", Options.Select(x => x.Trim())).ToString();
         }
         var queryParam = HttpUtility.ParseQueryString(string.Empty);
-        if (!_query.Skills.IsNullOrEmpty()) queryParam["Skills"] = _query.Skills;
+        if (!_query.ApplicationsName.IsNullOrEmpty()) queryParam["ApplicationsName"] = _query.ApplicationsName;
         queryParam["Page"] = _query.Page.ToString();
         queryParam["PageSize"] = _query.PageSize.ToString();
         if (!_query.Filters.IsNullOrEmpty()) queryParam["Filters"] = _query.Filters;
@@ -117,7 +117,7 @@ public sealed partial class UserManager
     private void UpdateUri()
     {
         var queryParam = HttpUtility.ParseQueryString(string.Empty);
-        if (!_query.Skills.IsNullOrEmpty()) queryParam["Skills"] = _query.Skills;
+        if (!_query.ApplicationsName.IsNullOrEmpty()) queryParam["ApplicationsName"] = _query.ApplicationsName;
         queryParam["Page"] = _query.Page.ToString();
         queryParam["PageSize"] = _query.PageSize.ToString();
         if (!_query.Filters.IsNullOrEmpty()) queryParam["Filters"] = _query.Filters;

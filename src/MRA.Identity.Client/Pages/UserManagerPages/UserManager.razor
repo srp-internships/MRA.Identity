@@ -13,34 +13,45 @@
                         <MudSpacer/>
                         <MudItem lg="7">
                             <MudGrid>
-                                <MudItem lg="4">
-                                    <MudTextField T="string" Label="Search" @bind-Value="@_searchString"
-                                                  IconSize="Size.Medium" Margin="Margin.Dense"
-                                                  Class="mt-0" Immediate="true" Variant="Variant.Outlined">
-                                    </MudTextField>
-                                </MudItem>
-                                <MudItem lg="4">
-                                    <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))"
-                                               MultiSelection="true" @bind-Value="SelectedApplications" SelectAll="true"
-                                               Variant="Variant.Outlined" Style="margin-top: 0px;" Margin="Margin.Dense"
-                                               @bind-SelectedValues="Options" T="string" Label="Filter by Applications"
-                                               AnchorOrigin="Origin.BottomCenter" Clearable="true">
-                                        @if (_applicatios != null)
-                                        {
-                                            @foreach (var application in _applicatios)
+                                <AuthorizeView Roles="ApplicationAdmin" Context="___">
+                                    <MudItem lg="10">
+                                        <MudTextField T="string" Label="Search" @bind-Value="@_searchString"
+                                                      IconSize="Size.Medium" Margin="Margin.Dense"
+                                                      Class="mt-0" Immediate="true" Variant="Variant.Outlined">
+                                        </MudTextField>
+                                    </MudItem>
+                                </AuthorizeView>
+                                <AuthorizeView Roles="SuperAdmin" Context="__">
+                                    <MudItem lg="4">
+                                        <MudTextField T="string" Label="Search" @bind-Value="@_searchString"
+                                                      IconSize="Size.Medium" Margin="Margin.Dense"
+                                                      Class="mt-0" Immediate="true" Variant="Variant.Outlined">
+                                        </MudTextField>
+                                    </MudItem>
+                                    <MudItem lg="5">
+                                        <MudSelect MultiSelectionTextFunc="@(new Func<List<string>, string>(GetMultiSelectionText))"
+                                                   MultiSelection="true" @bind-Value="SelectedApplications" SelectAll="true"
+                                                   Variant="Variant.Outlined" Style="margin-top: 0px;" Margin="Margin.Dense"
+                                                   @bind-SelectedValues="Options" T="string" Label="Filter by Applications"
+                                                   AnchorOrigin="Origin.BottomCenter" Clearable="true">
+                                            @if (_applications != null)
                                             {
-                                                <MudSelectItem T="string" Value="@application.Name">
-                                                    <MudText>
-                                                        @application.Name
-                                                    </MudText>
-                                                    <MudText Typo="Typo.caption">
-                                                        @application.Description
-                                                    </MudText>
-                                                </MudSelectItem>
+                                                @foreach (var application in _applications)
+                                                {
+                                                    <MudSelectItem T="string" Value="@application.Name">
+                                                        <MudText>
+                                                            @application.Name
+                                                        </MudText>
+                                                        <MudText Typo="Typo.caption">
+                                                            @application.Description
+                                                        </MudText>
+                                                    </MudSelectItem>
+                                                }
                                             }
-                                        }
-                                    </MudSelect>
-                                </MudItem>
+                                        </MudSelect>
+                                    </MudItem>
+                                </AuthorizeView>
+
                                 <MudItem>
                                     <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary"
                                                         OnClick="@(async () => await _table.ReloadServerData())"

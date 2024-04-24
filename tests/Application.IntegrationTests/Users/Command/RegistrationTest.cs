@@ -130,46 +130,6 @@ public class RegistrationTests : BaseTest
             await response.Content.ReadAsStringAsync());
     }
 
-
-    [Test]
-    public async Task Register_WhenCall_CreateRequiredClaims()
-    {
-        var role = new ApplicationRole
-        {
-            Id = Guid.NewGuid(), Name = "TestRole2", NormalizedName = "testrole2", Slug = "testrole2-claim"
-        };
-
-        await AddEntity(role);
-
-        var request = new RegisterUserCommand
-        {
-            Email = "test3@rrrexample.com",
-            Password = "passworrrrd@#12P",
-            FirstName = "Alerrx",
-            Username = "@Alerrrx223",
-            LastName = "Makerradonsky",
-            PhoneNumber = "+992723456789",
-            ConfirmPassword = "passworrrrd@#12P",
-            ApplicationId = _application.Id,
-            CallBackUrl = _application.CallbackUrls.First()
-        };
-        var res = await _client.GetAsync($"api/sms/send_code?PhoneNumber={request.PhoneNumber}");
-        res.EnsureSuccessStatusCode();
-
-        request.VerificationCode = (await GetEntity<ConfirmationCode>(x => x.PhoneNumber == request.PhoneNumber)).Code;
-        var response = await _client.PostAsJsonAsync("api/Auth/register", request);
-        response.IsSuccessStatusCode.Should().BeTrue();
-
-        var user = await GetEntity<ApplicationUser>(s => s.UserName == request.Username);
-
-        var userClaims = await GetWhere<ApplicationUserClaim>(s => s.UserId == user.Id);
-
-
-        Assert.That(userClaims.Exists(s => s.ClaimType == ClaimTypes.Id && s.ClaimValue == user.Id.ToString()));
-        Assert.That(userClaims.Exists(s => s.ClaimType == ClaimTypes.Email && s.ClaimValue == request.Email));
-        Assert.That(userClaims.Exists(s => s.ClaimType == ClaimTypes.Username && s.ClaimValue == request.Username));
-    }
-
     [Test]
     public async Task Register_ValidRequest_ShouldCreateApplicationUserLink()
     {

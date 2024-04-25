@@ -58,6 +58,10 @@ public class ApplicationUserLinkService(IApplicationDbContext context) : IApplic
 
     private async Task AddApplicationUserLinkAsync(CancellationToken cancellationToken)
     {
+        if (await context.ApplicationUserLinks.FirstOrDefaultAsync(
+                x => x.ApplicationId == _applicationId && x.UserId == _userId, cancellationToken) != null)
+            return;
+
         var applicationUserLink = new ApplicationUserLink
         {
             ApplicationId = _applicationId,

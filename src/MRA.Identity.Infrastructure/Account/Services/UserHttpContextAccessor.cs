@@ -22,7 +22,6 @@ public class UserHttpContextAccessor(IHttpContextAccessor httpContextAccessor) :
     {
         var user = httpContextAccessor.HttpContext?.User;
         var userNameClaim = user?.FindFirst(ClaimTypes.Username);
-
         return userNameClaim != null ? userNameClaim.Value : string.Empty;
     }
 
@@ -30,14 +29,13 @@ public class UserHttpContextAccessor(IHttpContextAccessor httpContextAccessor) :
     {
         var user = httpContextAccessor.HttpContext?.User;
         var roleClaims = user?.FindAll(ClaimTypes.Role);
-
         return roleClaims?.Select(rc => rc.Value).ToList() ?? new List<string>();
     }
 
     public List<Guid> GetApplicationsIDs()
     {
         var user = httpContextAccessor.HttpContext?.User;
-        var applications = user?.FindAll(ClaimTypes.Application);
+        var applications = user?.FindAll(ClaimTypes.ApplicationId);
 
         return applications?.Where(rc => Guid.TryParse(rc.Value, out _))
             .Select(rc => Guid.Parse(rc.Value))

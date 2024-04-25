@@ -34,7 +34,7 @@ public class LoginUserCommandHandler(
         if (user.UserName != "SuperAdmin")
         {
             await applicationUserLinkService.CreateUserLinkIfNotExistAsync(user.Id, request.ApplicationId,
-                request.CallBackUrl, cancellationToken: cancellationToken);
+                request.CallBackUrl, checkProtected:false, cancellationToken: cancellationToken);
         }
 
         var claims = (await userClaimsPrincipalFactory.CreateAsync(user)).Claims.ToList();

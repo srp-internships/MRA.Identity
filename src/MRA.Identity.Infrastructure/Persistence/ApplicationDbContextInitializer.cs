@@ -76,7 +76,7 @@ public class ApplicationDbContextInitializer(
                     IsProtected = true,
                     Description = "",
                     DefaultRoleId = (await roleManager.FindByNameAsync("Reviewer"))!.Id,
-                    CallbackUrls = [],
+                    CallbackUrls = ["http://Localhost:5203", "https://localhost:7908"],
                     ClientSecret = mraAssetsManagementSecret
                 });
 

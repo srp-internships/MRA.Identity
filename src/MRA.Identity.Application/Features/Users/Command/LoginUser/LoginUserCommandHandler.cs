@@ -37,24 +37,8 @@ public class LoginUserCommandHandler(
                 request.CallBackUrl, cancellationToken: cancellationToken);
         }
 
-        //var claims = (await userClaimsPrincipalFactory.CreateAsync(user)).Claims.ToList();
-        var userClaims = await context.UserClaims
-            .Where(uc => uc.UserId == user.Id)
-            .Select(uc => new Claim(uc.ClaimType, uc.ClaimValue))
-            .ToListAsync(cancellationToken);
-
-        var userRoles = await userManager.GetRolesAsync(user);
-        var roleClaims = userRoles.Select(role => new Claim(ClaimTypes.Role, role)).ToList();
-
-        var applicationIds = await context.ApplicationUserLinks
-            .Where(ul => ul.UserId == user.Id)
-            .Select(ul => ul.ApplicationId)
-            .ToListAsync(cancellationToken);
-
-        var applicationClaims = applicationIds.Select(id => new Claim("applicationId", id.ToString())).ToList();
-
-        var claims = userClaims.Concat(roleClaims).Concat(applicationClaims).ToList();
-
+        var claims = (await userClaimsPrincipalFactory.CreateAsync(user)).Claims.ToList();
+     
         return new JwtTokenResponse
         {
             RefreshToken = jwtTokenService.CreateRefreshToken(claims),

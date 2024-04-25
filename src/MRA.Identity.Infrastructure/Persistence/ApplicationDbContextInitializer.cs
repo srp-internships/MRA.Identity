@@ -132,10 +132,7 @@ public class ApplicationDbContextInitializer(
                 });
             }
         }
-
-
-        //create user
-
+        
         //create userRole
         var userRole = new ApplicationUserRole
         {
@@ -151,72 +148,7 @@ public class ApplicationDbContextInitializer(
         }
         //create userRole
 
-        //create email claim
-        if (!await context.UserClaims.AnyAsync(s =>
-                s.UserId == mraAdminUser.Id &&
-                s.ClaimType == ClaimTypes.Role))
-        {
-            var userRoleClaim = new ApplicationUserClaim
-            {
-                UserId = mraAdminUser.Id,
-                ClaimType = ClaimTypes.Email,
-                ClaimValue = mraAdminUser.Email,
-                Slug = $"{mraAdminUser.UserName}-email"
-            };
-            await context.UserClaims.AddAsync(userRoleClaim);
-        }
-        //create email claim
-
-
-        //create application claim
-        if (!await context.UserClaims.AnyAsync(s =>
-                s.UserId == mraAdminUser.Id &&
-                s.ClaimType == ClaimTypes.Application))
-        {
-            var userApplicationClaim = new ApplicationUserClaim
-            {
-                UserId = mraAdminUser.Id,
-                ClaimType = ClaimTypes.Application,
-                ClaimValue = applicationName,
-                Slug = $"{mraAdminUser.UserName}-application"
-            };
-            await context.UserClaims.AddAsync(userApplicationClaim);
-        }
-
-        //create application claim
-
-        //create username claim
-        if (!await context.UserClaims.AnyAsync(s =>
-                s.UserId == mraAdminUser.Id &&
-                s.ClaimType == ClaimTypes.Username))
-        {
-            var userApplicationClaim = new ApplicationUserClaim
-            {
-                UserId = mraAdminUser.Id,
-                ClaimType = ClaimTypes.Username,
-                ClaimValue = mraAdminUser.UserName,
-                Slug = $"{mraAdminUser.UserName}-username"
-            };
-            await context.UserClaims.AddAsync(userApplicationClaim);
-        }
-        //create username claim
-
-        //create id claim
-        if (!await context.UserClaims.AnyAsync(s =>
-                s.UserId == mraAdminUser.Id &&
-                s.ClaimType == ClaimTypes.Id))
-        {
-            var userApplicationClaim = new ApplicationUserClaim
-            {
-                UserId = mraAdminUser.Id,
-                ClaimType = ClaimTypes.Id,
-                ClaimValue = mraAdminUser.Id.ToString(),
-                Slug = $"{mraAdminUser.UserName}-id"
-            };
-            await context.UserClaims.AddAsync(userApplicationClaim);
-        }
-        //create id claim
-
+     
         await context.SaveChangesAsync();
     }
 

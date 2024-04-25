@@ -152,22 +152,6 @@ public class ApplicationDbContextInitializer(
         }
         //create userRole
 
-        //create role claim
-        if (!await context.UserClaims.AnyAsync(s =>
-                s.UserId == mraAdminUser.Id &&
-                s.ClaimType == ClaimTypes.Role))
-        {
-            var userRoleClaim = new ApplicationUserClaim
-            {
-                UserId = mraAdminUser.Id,
-                ClaimType = ClaimTypes.Role,
-                ClaimValue = ApplicationClaimValues.Administrator,
-                Slug = $"{mraAdminUser.UserName}-role"
-            };
-            await context.UserClaims.AddAsync(userRoleClaim);
-        }
-        //create role claim
-
         //create email claim
         if (!await context.UserClaims.AnyAsync(s =>
                 s.UserId == mraAdminUser.Id &&

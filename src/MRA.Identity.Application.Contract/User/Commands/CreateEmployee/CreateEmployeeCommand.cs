@@ -18,5 +18,4 @@ public class CreateEmployeeCommand : IRequest<Guid>
     public string Password { get; set; } = "";
 
     public Guid ApplicationId { get; set; }
-    public string CallBackUrl { get; set; }
 }

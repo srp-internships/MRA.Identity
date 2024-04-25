@@ -12,12 +12,13 @@ namespace MRA.Identity.Application.Features.Users.Command.CreateEmployee;
 public class CreateEmployeeCommandHandler(
     UserManager<ApplicationUser> userManager,
     IApplicationDbContext context,
-    IEmailVerification emailVerification,
-    ISmsCodeChecker codeChecker,
-    IApplicationUserLinkService applicationUserLinkService) : IRequestHandler<CreateEmployeeCommand, Guid>
+    IUserHttpContextAccessor userHttpContextAccessor) : IRequestHandler<CreateEmployeeCommand, Guid>
 {
     public async Task<Guid> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
+        var applicationIds = userHttpContextAccessor.GetApplicationsIDs();
+        if (!applicationIds.Any()) throw new NotFoundException("You haven't any applications!'");
+
         var exitingUser = await context.Users.FirstOrDefaultAsync(
             u => u.PhoneNumber == request.PhoneNumber || u.Email == request.Email,
             cancellationToken: cancellationToken);
@@ -59,16 +60,12 @@ public class CreateEmployeeCommandHandler(
             throw new UnauthorizedAccessException(createResult.Errors.First().Description);
         }
 
-        var application = await context.Applications.FirstOrDefaultAsync(x => x.Id == request.ApplicationId,
-            cancellationToken: cancellationToken);
-        if (application == null) throw new NotFoundException("Application not found");
 
-        // if (application.ClientSecret != request.ApplicationClientSecret)
-        //     throw new ForbiddenAccessException("Invalid secret");
-
+        var applicationId = applicationIds.First();
         await context.ApplicationUserLinks.AddAsync(
-            new ApplicationUserLink() { ApplicationId = application.Id, UserId = user.Id }, cancellationToken);
-        
+            new ApplicationUserLink() { ApplicationId = applicationId, UserId = user.Id }, cancellationToken);
+
+
         await context.SaveChangesAsync(cancellationToken);
         return user.Id;
     }

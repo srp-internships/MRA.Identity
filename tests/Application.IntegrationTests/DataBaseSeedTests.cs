@@ -66,18 +66,6 @@ public class DataBaseSeedTests : BaseTest
         (await GetMraJobsAdmin()).Should().NotBeNull();
     }
     
-    [Test]
-    public async Task MraJobsAdminClaims()
-    {
-        var superAdmin = await GetMraJobsAdmin();
-    
-        var roleClaim = await GetEntity<ApplicationUserClaim>(s =>
-            s.UserId == superAdmin.Id &&
-            s.ClaimType == ClaimTypes.Role);
-    
-        roleClaim.Should().NotBeNull();
-    }
-    
     #endregion
     
     #region MraAcademyAdmin

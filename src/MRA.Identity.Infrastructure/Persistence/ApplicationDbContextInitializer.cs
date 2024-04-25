@@ -103,8 +103,8 @@ public class ApplicationDbContextInitializer(
             await userManager.Users.SingleOrDefaultAsync(u =>
                 u.NormalizedUserName == $"{applicationName}ADMIN".ToUpper());
 
-        if (mraAdminUser == null)
-        {
+        if (mraAdminUser != null) return;
+        
             mraAdminUser = new ApplicationUser
             {
                 Id = Guid.NewGuid(),
@@ -112,10 +112,9 @@ public class ApplicationDbContextInitializer(
                 NormalizedUserName = $"{applicationName}ADMIN".ToUpper(),
                 Email = $"{applicationName.ToLower()}admin@silkroadprofessionals.com",
             };
-
             var createMraJobsAdminResult = await userManager.CreateAsync(mraAdminUser, adminPassword);
             ThrowExceptionFromIdentityResult(createMraJobsAdminResult);
-        }
+        
 
         var application = await context.Applications.FirstOrDefaultAsync(x => x.Slug == applicationSlug);
         if (application != null)

@@ -1,13 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using MRA.Configurations.Common.Constants;
 using MRA.Identity.Application.Common.Exceptions;
 using MRA.Identity.Application.Common.Interfaces.DbContexts;
 using MRA.Identity.Application.Common.Interfaces.Services;
 using MRA.Identity.Application.Contract.User.Commands.RegisterUser;
 using MRA.Identity.Domain.Entities;
-using Newtonsoft.Json;
 
 namespace MRA.Identity.Application.Features.Users.Command.RegisterUser;
 
@@ -15,7 +13,8 @@ public class RegisterUserCommandHandler(
     UserManager<ApplicationUser> userManager,
     IApplicationDbContext context,
     IEmailVerification emailVerification,
-    ISmsCodeChecker codeChecker)
+    ISmsCodeChecker codeChecker,
+    IApplicationUserLinkService applicationUserLinkService)
     : IRequestHandler<RegisterUserCommand, Guid>
 {
     public async Task<Guid> Handle(RegisterUserCommand request,
@@ -28,18 +27,18 @@ public class RegisterUserCommandHandler(
         {
             if (exitingUser.Email == request.Email && exitingUser.PhoneNumber == request.PhoneNumber)
             {
-                throw new DuplicateWaitObjectException(
+                throw new ExistException(
                     $"Email {request.Email} and Phone Number {request.PhoneNumber} are not available!");
             }
 
             if (exitingUser.PhoneNumber == request.PhoneNumber)
             {
-                throw new DuplicateWaitObjectException($"Phone Number {request.PhoneNumber} is not available!");
+                throw new ExistException($"Phone Number {request.PhoneNumber} is not available!");
             }
 
             if (exitingUser.Email == request.Email)
             {
-                throw new DuplicateWaitObjectException($"Email {request.Email} is not available!");
+                throw new ExistException($"Email {request.Email} is not available!");
             }
         }
 
@@ -56,47 +55,30 @@ public class RegisterUserCommandHandler(
             LastName = request.LastName,
             DateOfBirth = new DateTime(2000, 1, 1)
         };
-        bool phoneVerified = codeChecker.VerifyPhone(request.VerificationCode, request.PhoneNumber);
-        if (phoneVerified) user.PhoneNumberConfirmed = true;
-        else throw new ValidationException("Phone number is not verified");
-
-        IdentityResult result = await userManager.CreateAsync(user, request.Password);
-
-        if (!result.Succeeded)
+        IdentityResult createResult = await userManager.CreateAsync(user, request.Password);
+        if (!createResult.Succeeded)
         {
-            throw new UnauthorizedAccessException(result.Errors.First().Description);
+            throw new UnauthorizedAccessException(createResult.Errors.First().Description);
+        }
+
+        var application = await applicationUserLinkService.CreateUserLinkAsync(user.Id, request.ApplicationId,
+            request.CallBackUrl, cancellationToken: cancellationToken);
+
+        if (!application.IsProtected)
+        {
+            bool phoneVerified = codeChecker.VerifyPhone(request.VerificationCode, request.PhoneNumber);
+            if (phoneVerified) user.PhoneNumberConfirmed = true;
+            else
+            {
+                context.Users.Remove(user);
+                await context.SaveChangesAsync(cancellationToken);
+                throw new ValidationException("Phone number is not verified");
+            }
         }
 
         await emailVerification.SendVerificationEmailAsync(user);
 
         await context.SaveChangesAsync(cancellationToken);
-        await CreateClaimAsync(user.UserName, user.Id, user.Email, cancellationToken);
         return user.Id;
-    }
-
-
-    private async Task CreateClaimAsync(string username, Guid id, string email,
-        CancellationToken cancellationToken = default)
-    {
-        var userClaims = new[]
-        {
-            new ApplicationUserClaim
-            {
-                UserId = id, ClaimType = ClaimTypes.Id, ClaimValue = id.ToString(), Slug = $"{username}-id"
-            },
-            new ApplicationUserClaim
-            {
-                UserId = id,
-                ClaimType = ClaimTypes.Username,
-                ClaimValue = username,
-                Slug = $"{username}-username"
-            },
-            new ApplicationUserClaim
-            {
-                UserId = id, ClaimType = ClaimTypes.Email, ClaimValue = email, Slug = $"{username}-email"
-            }
-        };
-        await context.UserClaims.AddRangeAsync(userClaims, cancellationToken);
-        await context.SaveChangesAsync(cancellationToken);
     }
 }

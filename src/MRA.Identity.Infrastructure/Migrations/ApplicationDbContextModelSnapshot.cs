@@ -29,24 +29,34 @@ namespace MRA.Identity.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CallbackUrls")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClientSecret")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("DefaultRoleId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsProtected")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Slug")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("DefaultRoleId");
 
                     b.ToTable("Applications");
                 });
@@ -464,6 +474,17 @@ namespace MRA.Identity.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("MRA.Identity.Domain.Entities.Application", b =>
+                {
+                    b.HasOne("MRA.Identity.Domain.Entities.ApplicationRole", "DefaultRole")
+                        .WithMany()
+                        .HasForeignKey("DefaultRoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("DefaultRole");
                 });
 
             modelBuilder.Entity("MRA.Identity.Domain.Entities.ApplicationUserClaim", b =>

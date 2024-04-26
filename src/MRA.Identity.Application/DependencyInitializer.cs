@@ -24,6 +24,8 @@ public static class DependencyInitializer
         services.AddScoped<ISieveCustomFilterMethods, SieveCustomFilterMethods>();
         services.AddScoped<IApplicationSieveProcessor, ApplicationSieveProcessor>();
 
+        services.AddScoped<IApplicationUserLinkService, ApplicationUserLinkService>();
+        
         services.AddAutoMapper(typeof(UsersProfile).Assembly);
 
         Assembly assem = Assembly.GetExecutingAssembly();

@@ -2,10 +2,9 @@
 @using MRA.Identity.Application.Contract.ApplicationRoles.Commands
 @inject IRoleService RoleService
 
-<MudDialog>
+<MudDialog Options="@(new DialogOptions { MaxWidth = MaxWidth.Medium })">
     <TitleContent>
         <MudText Typo="Typo.h6">
-            <MudIcon Icon="@Icons.Material.Filled.Create" Class="mr-3 mb-n1"/>
             @ContentService["Roles:Create"]
         </MudText>
     </TitleContent>
@@ -13,8 +12,12 @@
         <MudTextField @bind-Value="_command.RoleName" Label="Имя"/>
     </DialogContent>
     <DialogActions>
-        <MudButton OnClick="@(Cancel)">@ContentService["Profile:Cancel"]</MudButton>
-        <MudButton Color="Color.Primary" OnClick="@(async () => await CreateAsync())">@ContentService["Roles:Create"]</MudButton>
+        <MudButton OnClick="@(Cancel)">
+            <MudText> @ContentService["Profile:Cancel"]</MudText>
+        </MudButton>
+        <ProgressTaskButton Color="Color.Primary" OnClick="@(async () => await CreateAsync())">
+            <MudText>@ContentService["Roles:Create"] </MudText>
+        </ProgressTaskButton>
     </DialogActions>
 </MudDialog>
 

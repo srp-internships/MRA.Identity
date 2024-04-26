@@ -4,18 +4,11 @@ using MRA.Identity.Application.Common.Interfaces.Services;
 
 namespace MRA.Identity.Infrastructure.Account.Services;
 
-public class UserHttpContextAccessor : IUserHttpContextAccessor
+public class UserHttpContextAccessor(IHttpContextAccessor httpContextAccessor) : IUserHttpContextAccessor
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-
-    public UserHttpContextAccessor(IHttpContextAccessor httpContextAccessor)
-    {
-        _httpContextAccessor = httpContextAccessor;
-    }
-
     public Guid GetUserId()
     {
-        var user = _httpContextAccessor.HttpContext?.User;
+        var user = httpContextAccessor.HttpContext?.User;
 
         var idClaim = user?.FindFirst(ClaimTypes.Id);
 
@@ -27,17 +20,26 @@ public class UserHttpContextAccessor : IUserHttpContextAccessor
 
     public string GetUserName()
     {
-        var user = _httpContextAccessor.HttpContext?.User;
+        var user = httpContextAccessor.HttpContext?.User;
         var userNameClaim = user?.FindFirst(ClaimTypes.Username);
-
         return userNameClaim != null ? userNameClaim.Value : string.Empty;
     }
 
     public List<string> GetUserRoles()
     {
-        var user = _httpContextAccessor.HttpContext?.User;
+        var user = httpContextAccessor.HttpContext?.User;
         var roleClaims = user?.FindAll(ClaimTypes.Role);
-
         return roleClaims?.Select(rc => rc.Value).ToList() ?? new List<string>();
     }
+
+    public List<Guid> GetApplicationsIDs()
+    {
+        var user = httpContextAccessor.HttpContext?.User;
+        var applications = user?.FindAll(ClaimTypes.ApplicationId);
+
+        return applications?.Where(rc => Guid.TryParse(rc.Value, out _))
+            .Select(rc => Guid.Parse(rc.Value))
+            .ToList() ?? new List<Guid>();
+    }
+
 }

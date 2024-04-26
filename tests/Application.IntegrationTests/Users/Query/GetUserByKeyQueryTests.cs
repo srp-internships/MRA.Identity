@@ -42,9 +42,11 @@ public class GetUserByKeyQueryTests : BaseTest
     [Test]
     [TestCase("", HttpStatusCode.Forbidden)]
     [TestCase(ApplicationPolicies.Reviewer, HttpStatusCode.Forbidden)]
-    [TestCase(ApplicationPolicies.Administrator, HttpStatusCode.OK)]
+    [TestCase(ApplicationPolicies.Administrator, HttpStatusCode.OK,
+        "4f67d20a-4f2a-4c7f-8a35-4c15c2d0c3e2", "mraJobsApplicationSecret")]
     [TestCase(ApplicationPolicies.SuperAdministrator, HttpStatusCode.OK)]
-    public async Task GetUserByKey_Return_StatusCode(string role, HttpStatusCode statusCode)
+    public async Task GetUserByKey_Return_StatusCode(string role, HttpStatusCode statusCode,
+        string applicationId = null, string applicationClientSecret = null)
     {
         if (role == ApplicationPolicies.SuperAdministrator || role == ApplicationPolicies.Administrator)
             await AddAuthorizationAsync();
@@ -53,7 +55,9 @@ public class GetUserByKeyQueryTests : BaseTest
         else
             await AddApplicantAuthorizationAsync();
 
-        var response = await _client.GetAsync($"api/User/{UserName}");
+        var response =
+            await _client.GetAsync(
+                $"api/User/{UserName}");
         Assert.That(response.StatusCode == statusCode);
     }
 

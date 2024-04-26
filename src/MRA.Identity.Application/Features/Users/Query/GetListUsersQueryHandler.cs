@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using MRA.Identity.Application.Common.Exceptions;
 using MRA.Identity.Application.Common.Interfaces.DbContexts;
+using MRA.Identity.Application.Common.Interfaces.Services;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Responses;
 using MRA.Identity.Domain.Entities;
@@ -13,22 +14,19 @@ namespace MRA.Identity.Application.Features.Users.Query;
 
 public class GetListUsersQueryHandler(
     UserManager<ApplicationUser> userManager,
-    IApplicationDbContext dbContext,
+    IUserHttpContextAccessor userHttpContextAccessor,
     IMapper mapper)
     : IRequestHandler<GetListUsersQuery, List<UserResponse>>
 {
     public async Task<List<UserResponse>> Handle(GetListUsersQuery request, CancellationToken cancellationToken)
     {
         var users = userManager.Users.AsQueryable();
-        if (request.ApplicationId != null && !request.ApplicationClientSecret.IsNullOrEmpty())
-        {
-            if (await dbContext.Applications.FirstOrDefaultAsync(x =>
-                        x.Id == request.ApplicationId && x.ClientSecret == request.ApplicationClientSecret,
-                    cancellationToken) == null)
-                throw new NotFoundException("There is no such application");
 
+        if (userHttpContextAccessor.GetUserName() != "SuperAdmin")
+        {
             users = users.Include(u => u.ApplicationUserLinks)
-                .Where(u => u.ApplicationUserLinks.Any(l => l.ApplicationId == request.ApplicationId));
+                .Where(u => u.ApplicationUserLinks.Any(l =>
+                    userHttpContextAccessor.GetApplicationsIDs().Contains(l.ApplicationId)));
         }
 
         if (!request.FullName.IsNullOrEmpty())

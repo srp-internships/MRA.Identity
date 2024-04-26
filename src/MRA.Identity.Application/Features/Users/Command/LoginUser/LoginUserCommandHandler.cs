@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using System.Security.Claims;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MRA.Identity.Application.Common.Interfaces.DbContexts;
 using MRA.Identity.Application.Common.Interfaces.Services;
 using MRA.Identity.Application.Contract.User.Commands.LoginUser;
 using MRA.Identity.Application.Contract.User.Responses;
@@ -11,6 +13,7 @@ namespace MRA.Identity.Application.Features.Users.Command.LoginUser;
 public class LoginUserCommandHandler(
     IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
     IJwtTokenService jwtTokenService,
+    IApplicationDbContext context,
     UserManager<ApplicationUser> userManager,
     IApplicationUserLinkService applicationUserLinkService)
     : IRequestHandler<LoginUserCommand, JwtTokenResponse>
@@ -31,11 +34,11 @@ public class LoginUserCommandHandler(
         if (user.UserName != "SuperAdmin")
         {
             await applicationUserLinkService.CreateUserLinkIfNotExistAsync(user.Id, request.ApplicationId,
-                request.CallBackUrl, cancellationToken: cancellationToken);
+                request.CallBackUrl, checkProtected:false, cancellationToken: cancellationToken);
         }
 
         var claims = (await userClaimsPrincipalFactory.CreateAsync(user)).Claims.ToList();
-
+     
         return new JwtTokenResponse
         {
             RefreshToken = jwtTokenService.CreateRefreshToken(claims),

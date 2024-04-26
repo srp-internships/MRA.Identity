@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MRA.Identity.Application.Contract.User.Commands.CreateEmployee;
 using MRA.Identity.Application.Contract.User.Commands.UsersByApplications;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
@@ -84,6 +85,12 @@ public class UserController(ISender mediator) : ControllerBase
         var userResponse = await mediator.Send(command);
         return Ok(userResponse);
     }
-
     #endregion
+
+    [HttpPost("CreateEmployee")]
+    public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeCommand command)
+    {
+        var result= await mediator.Send(command);
+        return Ok(result);
+    }
 }

@@ -30,25 +30,11 @@ public class ApplicationUserLinkService(IApplicationDbContext context) : IApplic
             await context.Applications.FirstOrDefaultAsync(a => a.Id == applicationId, cancellationToken)
             ?? throw new ValidationException("Invalid application Id");
         if (_application.IsProtected && checkProtected == true)
-        {
             throw new ForbiddenAccessException();
-        }
 
         CheckCallback();
-
+        await AssignDefaultAppRole(cancellationToken);
         await AddApplicationUserLinkAsync(cancellationToken);
-
-        var userRole = new ApplicationUserRole
-        {
-            UserId = userId,
-            RoleId = _application.DefaultRoleId
-        };
-
-        if (!await context.UserRoles.AnyAsync(s => s.UserId == userRole.UserId && s.RoleId == userRole.RoleId,
-                cancellationToken: cancellationToken))
-            await context.UserRoles.AddAsync(userRole, cancellationToken);
-
-        await context.SaveChangesAsync(cancellationToken);
         return _application;
     }
 
@@ -68,6 +54,21 @@ public class ApplicationUserLinkService(IApplicationDbContext context) : IApplic
             UserId = _userId
         };
         await context.ApplicationUserLinks.AddAsync(applicationUserLink, cancellationToken);
+    }
+
+    private async Task AssignDefaultAppRole(CancellationToken cancellationToken)
+    {
+        var userRole = new ApplicationUserRole
+        {
+            UserId = _userId,
+            RoleId = _application.DefaultRoleId
+        };
+
+        if (!await context.UserRoles.AnyAsync(s => s.UserId == userRole.UserId && s.RoleId == userRole.RoleId,
+                cancellationToken: cancellationToken))
+            await context.UserRoles.AddAsync(userRole, cancellationToken);
+
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     private void CheckCallback()

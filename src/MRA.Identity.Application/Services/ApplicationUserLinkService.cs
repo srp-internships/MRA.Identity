@@ -16,8 +16,25 @@ public class ApplicationUserLinkService(IApplicationDbContext context) : IApplic
     public async Task CreateUserLinkIfNotExistAsync(Guid userId, Guid applicationId,
         string callback, bool? checkProtected = true, CancellationToken cancellationToken = default)
     {
-        if (!await HasUserLink(cancellationToken))
-            await CreateUserLinkAsync(userId, applicationId, callback, checkProtected, cancellationToken);
+        _userId = userId;
+        _applicationId = applicationId;
+        _callback = callback;
+        _application =
+            await context.Applications.FirstOrDefaultAsync(a => a.Id == applicationId, cancellationToken)
+            ?? throw new ValidationException("Invalid application Id");
+        if (await HasUserLink(cancellationToken))
+        {
+            return;
+        }
+
+        if (checkProtected == true && _application.IsProtected)
+        {
+            throw new ForbiddenAccessException();
+        }
+
+        CheckCallback();
+        await AssignDefaultAppRole(cancellationToken);
+        await AddApplicationUserLinkAsync(cancellationToken);
     }
 
     public async Task<Domain.Entities.Application> CreateUserLinkAsync(Guid userId, Guid applicationId, string callback,
@@ -54,6 +71,7 @@ public class ApplicationUserLinkService(IApplicationDbContext context) : IApplic
             UserId = _userId
         };
         await context.ApplicationUserLinks.AddAsync(applicationUserLink, cancellationToken);
+        await context.SaveChangesAsync(cancellationToken);
     }
 
     private async Task AssignDefaultAppRole(CancellationToken cancellationToken)

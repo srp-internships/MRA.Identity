@@ -28,7 +28,6 @@ public class GetPagedListUsersQueryHandler(
             .Include(u => u.UserSkills)
             .ThenInclude(s => s.Skill)
             .Include(u => u.ApplicationUserLinks)
-            .ThenInclude(a => a.Application)
             .AsNoTracking();
 
         if (userHttpContextAccessor.GetUserName() != "SuperAdmin")
@@ -37,20 +36,14 @@ public class GetPagedListUsersQueryHandler(
                 .Where(u => u.ApplicationUserLinks.Any(l =>
                     userHttpContextAccessor.GetApplicationsIDs().Contains(l.ApplicationId)));
         }
-        else{
-            if (request.ApplicationsName != null )
+        else
+        {
+            if (!request.ApplicationIds.IsNullOrEmpty())
             {
-                var applications =new List<string>();
-                foreach (var applicationName in request.ApplicationsName.Split(","))
-                {
-                    applications.Add(applicationName);
-                    users = users.Where(u =>
-                        u.ApplicationUserLinks.Any(l => l.Application.Name == applicationName));
-                }
+                var applicationIds = request.ApplicationIds.Split(",");
+                users = applicationIds.Aggregate(users, (current, applicationId) => current.Where(u => u.ApplicationUserLinks.Any(l => l.ApplicationId == Guid.Parse(applicationId.Trim()))));
             }
         }
-
-      
 
         if (!request.Skills.IsNullOrEmpty())
         {

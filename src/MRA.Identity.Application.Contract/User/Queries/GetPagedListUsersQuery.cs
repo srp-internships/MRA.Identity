@@ -6,5 +6,5 @@ namespace MRA.Identity.Application.Contract.User.Queries;
 public class GetPagedListUsersQuery : PagedListQuery<UserResponse>
 {
     public string Skills { get; set; }
-    public string ApplicationsName { get; set; }
+    public string ApplicationIds { get; set; }
 }

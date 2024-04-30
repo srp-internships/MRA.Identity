@@ -7,6 +7,7 @@
 @inject IContentService ContentService
 @inject NavigationManager NavigationManager
 @inject LayoutService LayoutService
+@inject AuthenticationStateProvider AuthenticationStateProvider 
 
 <MudGrid Justify="Justify.Center" Class="align-items-center">
     <MudItem xs="12" sm="8" md="6" lg="4">
@@ -199,7 +200,9 @@
         }
     }
 
-    protected override void OnInitialized()
+    private const string ApplicationIdClaim = "http://schemas.microsoft.com/ws/2008/06/identity/claims/applicationId";
+
+    protected override async Task OnInitializedAsync()
     {
         var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
         var query = QueryHelpers.ParseQuery(currentUri.Query);
@@ -208,6 +211,14 @@
         if (query.TryGetValue("applicationId", out var applicationId))
             if (!Guid.TryParse(applicationId, out _applicationId))
                 NavigationManager.NavigateTo("/notfound");
+        if (!string.IsNullOrWhiteSpace(applicationId))
+        {
+            var user = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (user?.User?.HasClaim(ApplicationIdClaim, applicationId) == true)
+            {
+                await AuthService.NavigateToCallbackWithJwt(callback);
+            }
+        }
     }
 
     private void ServerNotResponding()

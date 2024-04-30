@@ -71,7 +71,39 @@ public class LoginTest : BaseTest
     }
 
     [Test]
-    public async Task UserIsInApplication_ShouldCreateApplicationUserLink()
+    public async Task UserIsNotInApplicationAndAppIsProtected_ShouldNotLogin()
+    {
+        var application = new MRA.Identity.Domain.Entities.Application
+        {
+            Slug = "test-app-sluuuuuug",
+            Name = "name of protected application for " +
+                   nameof(UserIsNotInApplicationAndAppIsProtected_ShouldNotLogin),
+            Description = "this is a desc",
+            ClientSecret = "this is a secret",
+            CallbackUrls = ["https://localhost"],
+            IsProtected = true,
+            DefaultRoleId = _application.DefaultRoleId
+        };
+        await AddEntity(application);
+        var user = new ApplicationUser
+            { UserName = @"John1", Email = "Jo1hn@example.com", FirstName = "Jo1hn", LastName = "Joh1n" };
+        await AddUser(user, "Password12#1");
+
+        var request = new LoginUserCommand
+        {
+            Username = user.UserName,
+            Password = "Password12#1",
+            ApplicationId = application.Id,
+            CallBackUrl = application.CallbackUrls.First()
+        };
+        (await _client.PostAsJsonAsync("api/auth/login", request)).StatusCode.Should().NotBe(HttpStatusCode.OK);
+        var applicationUserLink =
+            await GetEntity<ApplicationUserLink>(s => s.UserId == user.Id && s.ApplicationId == application.Id);
+        applicationUserLink.Should().BeNull();
+    }
+
+    [Test]
+    public async Task UserIsInApplication_ShouldNotCreateApplicationUserLink()
     {
         var user = new ApplicationUser()
             { UserName = @"John1", Email = "John1@example.com", FirstName = "Joh1n", LastName = "Jo1hn" };
@@ -93,6 +125,9 @@ public class LoginTest : BaseTest
         };
 
         (await _client.PostAsJsonAsync("api/auth/login", request)).EnsureSuccessStatusCode();
+        var userApplicationUserLinks =
+            await GetWhere<ApplicationUserLink>(s => s.ApplicationId == _application.Id && s.UserId == user.Id);
+        userApplicationUserLinks.Count.Should().Be(1);
     }
 
     [Test]

@@ -9,6 +9,7 @@ using MRA.Identity.Domain.Entities;
 namespace MRA.Identity.Application.Features.Users.Command.LoginUser;
 
 public class LoginUserCommandHandler(
+    IUserClaimsPrincipalFactory<ApplicationUser> userClaimsPrincipalFactory,
     IJwtTokenService jwtTokenService,
     UserManager<ApplicationUser> userManager,
     IApplicationUserLinkService applicationUserLinkService)
@@ -33,7 +34,7 @@ public class LoginUserCommandHandler(
                 request.CallBackUrl, cancellationToken: cancellationToken);
         }
 
-        var claims = await userManager.GetClaimsAsync(user);
+        var claims = (await userClaimsPrincipalFactory.CreateAsync(user)).Claims.ToList();
 
         return new JwtTokenResponse
         {

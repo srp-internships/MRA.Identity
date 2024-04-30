@@ -1,25 +1,24 @@
-﻿using MediatR;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MRA.Identity.Application.Common.Exceptions;
 using MRA.Identity.Application.Common.Interfaces.DbContexts;
 using MRA.Identity.Application.Common.Interfaces.Services;
-using MRA.Identity.Application.Contract.User.Commands.RegisterUser;
+using MRA.Identity.Application.Contract.User.Commands.CreateEmployee;
 using MRA.Identity.Domain.Entities;
 
-namespace MRA.Identity.Application.Features.Users.Command.RegisterUser;
+namespace MRA.Identity.Application.Features.Users.Command.CreateEmployee;
 
-public class RegisterUserCommandHandler(
+public class CreateEmployeeCommandHandler(
     UserManager<ApplicationUser> userManager,
     IApplicationDbContext context,
-    IEmailVerification emailVerification,
-    ISmsCodeChecker codeChecker,
-    IApplicationUserLinkService applicationUserLinkService)
-    : IRequestHandler<RegisterUserCommand, Guid>
+    IUserHttpContextAccessor userHttpContextAccessor) : IRequestHandler<CreateEmployeeCommand, Guid>
 {
-    public async Task<Guid> Handle(RegisterUserCommand request,
-        CancellationToken cancellationToken)
+    public async Task<Guid> Handle(CreateEmployeeCommand request, CancellationToken cancellationToken)
     {
+        var applicationIds = userHttpContextAccessor.GetApplicationsIDs();
+        if (!applicationIds.Any()) throw new NotFoundException("You haven't any applications!'");
+
         var exitingUser = await context.Users.FirstOrDefaultAsync(
             u => u.PhoneNumber == request.PhoneNumber || u.Email == request.Email,
             cancellationToken: cancellationToken);
@@ -61,22 +60,11 @@ public class RegisterUserCommandHandler(
             throw new UnauthorizedAccessException(createResult.Errors.First().Description);
         }
 
-        var application = await applicationUserLinkService.CreateUserLinkAsync(user.Id, request.ApplicationId,
-            request.CallBackUrl, cancellationToken: cancellationToken);
 
-        if (!application.IsProtected)
-        {
-            bool phoneVerified = codeChecker.VerifyPhone(request.VerificationCode, request.PhoneNumber);
-            if (phoneVerified) user.PhoneNumberConfirmed = true;
-            else
-            {
-                context.Users.Remove(user);
-                await context.SaveChangesAsync(cancellationToken);
-                throw new ValidationException("Phone number is not verified");
-            }
-        }
+        var applicationId = applicationIds.First();
+        await context.ApplicationUserLinks.AddAsync(
+            new ApplicationUserLink() { ApplicationId = applicationId, UserId = user.Id }, cancellationToken);
 
-        await emailVerification.SendVerificationEmailAsync(user);
 
         await context.SaveChangesAsync(cancellationToken);
         return user.Id;

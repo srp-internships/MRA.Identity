@@ -27,13 +27,22 @@ public class GetPagedListUsersQueryHandler(
         var users = userManager.Users
             .Include(u => u.UserSkills)
             .ThenInclude(s => s.Skill)
+            .Include(u => u.ApplicationUserLinks)
             .AsNoTracking();
 
         if (userHttpContextAccessor.GetUserName() != "SuperAdmin")
         {
-            users = users.Include(u => u.ApplicationUserLinks)
+            users = users
                 .Where(u => u.ApplicationUserLinks.Any(l =>
                     userHttpContextAccessor.GetApplicationsIDs().Contains(l.ApplicationId)));
+        }
+        else
+        {
+            if (!request.ApplicationIds.IsNullOrEmpty())
+            {
+                var applicationIds = request.ApplicationIds.Split(",");
+                users = applicationIds.Aggregate(users, (current, applicationId) => current.Where(u => u.ApplicationUserLinks.Any(l => l.ApplicationId == Guid.Parse(applicationId.Trim()))));
+            }
         }
 
         if (!request.Skills.IsNullOrEmpty())

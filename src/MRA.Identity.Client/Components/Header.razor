@@ -56,34 +56,34 @@
                 </MudButton>
             </AuthorizeView>
             <AuthorizeView Roles="SuperAdmin">
-                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/applications" Class="@GetActiveClass(DocPages.UserManager)">
+                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/applications" Class="@GetActiveClass(DocPages.Applications)">
                     <MudText>
                         <b>Applications</b>
                     </MudText>
                 </MudButton>
             </AuthorizeView>
             <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
-                <MudMenu FullWidth="true" ActivationEvent="@MouseEvent.MouseOver" AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter">
+                <MudMenu FullWidth="true" ActivationEvent="@MouseEvent.MouseOver" 
+                         AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Class="@GetActiveClass(DocPages.UserManager)">
                     <ActivatorContent>
                         <MudText>
                             <b>User manager</b>
                         </MudText>
                     </ActivatorContent>
                     <ChildContent>
-
-                        <MudMenuItem Href="/UserManager">
+                        <MudMenuItem Href="/UserManager" Class="@GetActiveClass(DocPages.UserManager)">
                             <MudText>
                                 <b>Users</b>
                             </MudText>
                         </MudMenuItem>
-                        <MudMenuItem Href="/roles">
+                        <MudMenuItem Href="/roles" Class="@GetActiveClass(DocPages.Roles)">
                             <MudText>
                                 <b>Roles</b>
                             </MudText>
                         </MudMenuItem>
                     </ChildContent>
                 </MudMenu>
-                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/EmailTemplates" Class="@GetActiveClass(DocPages.UserManager)">
+                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/EmailTemplates" Class="@GetActiveClass(DocPages.EmailTemplates)">
                     <MudText>
                         <b>Email templates</b>
                     </MudText>

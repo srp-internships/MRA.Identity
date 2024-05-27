@@ -5,7 +5,6 @@
 @inject IContentService ContentService
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
-
 <MudGrid Justify="Justify.Center" Class="align-items-center">
     <MudItem xs="12" sm="8" md="6" lg="3">
         <EditForm Model="@_loginCommand" OnValidSubmit="OnValidSubmit">
@@ -29,13 +28,13 @@
                             </div>
                         </div>
                         <MudText>
-                            @ContentService["SignIn:LabelDontAccount"] <MudLink Href="@($"registration?callback={_callback}&page={_page}")"> @ContentService["SignIn:LinkSignUp"]</MudLink>
+                            @ContentService["SignIn:LabelDontAccount"] <MudLink Href="@($"registration?callback={_callback}&applicationId={_applicationId}")"> @ContentService["SignIn:LinkSignUp"]</MudLink>
                         </MudText>
                     </CardHeaderContent>
                 </MudCardHeader>
                 <MudCardContent>
                     <MudTextField Label="@ContentService["SignIn:UserName"]"
-                                  @bind-Value="_loginCommand.Username" For="@(() => _loginCommand.Username)"/>
+                                  @bind-Value="_loginCommand.Username" For="@(() => _loginCommand.Username)" ErrorText=""/>
 
                     <MudTextField Label="@ContentService["SignIn:Password"]"
                                   @bind-Value="_loginCommand.Password" For="@(() => _loginCommand.Password)" InputType="InputType.Password"/>
@@ -45,7 +44,7 @@
                     </MudText>
                 </MudCardContent>
                 <MudCardActions>
-                    <ProgressTaskButton Function="OnValidSubmit" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" FullWidth="true">
+                    <ProgressTaskButton OnClick="@OnValidSubmit" ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto" FullWidth="true">
                         <MudText>@ContentService["SignIn:SignIn"]</MudText>
                     </ProgressTaskButton>
                 </MudCardActions>
@@ -65,30 +64,36 @@
 
 @code {
     private readonly LoginUserCommand _loginCommand = new();
-    string _callback = string.Empty;
-    string _page = string.Empty;
+    private string _callback = string.Empty;
+    private Guid _applicationId;
 
     private async Task OnValidSubmit()
     {
         await AuthService.LoginUserAsync(_loginCommand);
     }
 
+    private const string ApplicationIdClaim = "http://schemas.microsoft.com/ws/2008/06/identity/claims/applicationId";
+
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity?.IsAuthenticated ?? false)
+        var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
+        var query = QueryHelpers.ParseQuery(currentUri.Query);
+        if (query.TryGetValue("callback", out var callback))
+            _callback = callback;
+        if (query.TryGetValue("applicationId", out var applicationId))
+            if (!Guid.TryParse(applicationId, out _applicationId))
+                NavigationManager.NavigateTo("/notfound");
+        if (!string.IsNullOrWhiteSpace(applicationId))
         {
-            NavigationManager.NavigateTo("/");
-            return;
+            var user = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (user?.User?.HasClaim(ApplicationIdClaim, applicationId) == true)
+            {
+                await AuthService.NavigateToCallbackWithJwt(callback);
+            }
         }
 
-        var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-        if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("callback", out var param))
-            _callback = param;
-        if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
-            _page = param;
+        _loginCommand.ApplicationId = _applicationId;
+        _loginCommand.CallBackUrl = _callback;
         StateHasChanged();
     }
 

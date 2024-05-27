@@ -1,45 +1,96 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MRA.Identity.Application.Contract.User.Commands.CreateEmployee;
+using MRA.Identity.Application.Contract.User.Commands.UsersByApplications;
 using MRA.Identity.Application.Contract.User.Queries;
 using MRA.Identity.Application.Contract.User.Queries.CheckUserDetails;
-using MRA.Identity.Application.Contract.User.Responses;
+using MRA.Identity.Application.Contract.UserEmail.Commands;
 
 namespace MRA.Identity.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
 [Authorize(ApplicationPolicies.Administrator)]
-public class UserController : ControllerBase
+public class UserController(ISender mediator) : ControllerBase
 {
-    private readonly ISender _mediator;
-
-    public UserController(ISender mediator)
-    {
-        _mediator = mediator;
-    }
+    #region IdentityClient
 
     [HttpGet]
-    public async Task<IActionResult> Get()
+    public async Task<IActionResult> Get([FromQuery] GetPagedListUsersQuery query)
     {
-        var users = await _mediator.Send(new GetAllUsersQuery());
+        var users = await mediator.Send(query);
         return Ok(users);
     }
-
-    [HttpGet("{key}")]
-    public async Task<IActionResult> Get([FromRoute] string key)
+    
+    [HttpGet("GetListUsers/ByFilter")]
+    public async Task<IActionResult> GetListUsers([FromQuery] GetListUsersQuery query)
     {
-        var userResponse = await _mediator.Send(new GetUserByKeyQuery{Key = key});
+        var users = await mediator.Send(query);
+        return Ok(users);
+    }
+    
+    [HttpGet("{key}")]
+    public async Task<IActionResult> GetByKey([FromRoute] string key)
+    {
+        var userResponse = await mediator.Send(new GetUserByKeyQuery { Key = key });
         return Ok(userResponse);
     }
+
+ 
 
     [HttpGet("CheckUserDetails/{userName}/{phoneNumber}/{email}")]
     [AllowAnonymous]
     public async Task<IActionResult> CheckUserDetails([FromRoute] string userName, [FromRoute] string phoneNumber,
         [FromRoute] string email)
     {
-        var result = await _mediator.Send(new CheckUserDetailsQuery()
+        var result = await mediator.Send(new CheckUserDetailsQuery()
             { UserName = userName, PhoneNumber = phoneNumber, Email = email });
+        return Ok(result);
+    }
+
+    [HttpPost("sendEmail")]
+    public async Task<IActionResult> SendEmail([FromBody] SendEmailCommand command)
+    {
+        await mediator.Send(command);
+        return Ok();
+    }
+    
+    #endregion
+
+    #region ExternalApplications
+
+    [HttpPost]
+    [AllowAnonymous]
+    public async Task<IActionResult> Post([FromBody] GetPagedListUsersCommand command)
+    {
+        var users = await mediator.Send(command);
+        return Ok(users);
+    }
+
+    [HttpPost("GetListUsersCommand/ByFilter")]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetListUsersCommand([FromBody] GetListUsersCommand command)
+    {
+        var users = await mediator.Send(command);
+        return Ok(users);
+    }
+
+
+    [HttpPost("{key}")]
+    [AllowAnonymous]
+    public async Task<IActionResult> PostByKey([FromRoute] string key, [FromBody] GetUserByKeyCommand command)
+    {
+        command.Key = key;
+        var userResponse = await mediator.Send(command);
+        return Ok(userResponse);
+    }
+    #endregion
+
+    [HttpPost("CreateEmployee")]
+    public async Task<IActionResult> CreateEmployee([FromBody] CreateEmployeeCommand command)
+    {
+        var result= await mediator.Send(command);
         return Ok(result);
     }
 }

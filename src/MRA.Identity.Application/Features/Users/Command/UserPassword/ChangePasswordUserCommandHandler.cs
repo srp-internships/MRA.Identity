@@ -23,7 +23,7 @@ public class ChangePasswordUserCommandHandler : IRequestHandler<ChangePasswordUs
         if (user == null)
             throw new NotFoundException("User not found");
 
-        bool success = await _userManager.CheckPasswordAsync(user, request.OldPassword);
+        bool success = await _userManager.CheckPasswordAsync(user, request.CurrentPassword);
         if (!success)
             throw new ValidationException("Incorrect old password");
 

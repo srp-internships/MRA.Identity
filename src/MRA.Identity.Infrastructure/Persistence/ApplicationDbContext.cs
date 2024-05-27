@@ -7,21 +7,21 @@ using MRA.Identity.Infrastructure.Persistence.TableConfigurations;
 
 namespace MRA.Identity.Infrastructure.Persistence;
 
-public sealed class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid,
-    ApplicationUserClaim, ApplicationUserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>,
-    IdentityUserToken<Guid>>, IApplicationDbContext
+public sealed class ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+    : IdentityDbContext<ApplicationUser, ApplicationRole, Guid,
+        ApplicationUserClaim, ApplicationUserRole, IdentityUserLogin<Guid>, IdentityRoleClaim<Guid>,
+        IdentityUserToken<Guid>>(options), IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) :
-        base(options)
-    {
-    }
-
     public DbSet<ConfirmationCode> ConfirmationCodes { get; set; }
     public DbSet<Skill> Skills { get; set; }
     public DbSet<EducationDetail> Educations { get; set; }
     public DbSet<ExperienceDetail> Experiences { get; set; }
 
     public DbSet<Message> Messages { get; set; }
+    public DbSet<EmailTemplate> EmailTemplates { get; set; }
+    public DbSet<UserSkill> UserSkills { get; set; }
+    public DbSet<Domain.Entities.Application> Applications { get; set; }
+    public DbSet<ApplicationUserLink> ApplicationUserLinks { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

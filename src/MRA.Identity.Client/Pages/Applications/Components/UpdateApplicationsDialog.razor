@@ -1,0 +1,75 @@
+﻿@using MRA.Identity.Application.Contract.Applications.Commands
+@using MRA.Identity.Application.Contract.Applications.Validators
+@using MRA.Identity.Client.Services.Applications
+@inject IApplicationsService ApplicationsService
+@inject NavigationManager NavigationManager
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            <MudIcon Icon="@Icons.Material.Filled.Edit" Class="mr-3 mb-n1"/>
+            Update
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm Model="@Command" Validation="Validator.ValidateValue" ValidationDelay="0" @ref="_form">
+            <MudItem xs="12" md="12">
+                <MudTextField @bind-Value="@Command.Name" Label="Name" For="@(() => Command.Name)" Immediate="true"/>
+                <MudTextField @bind-Value="@Command.Description" Label="Description" For="@(() => Command.Description)" Immediate="true"/>
+                <MudTextField @bind-Value="@_callbackUrls"
+                              Label="Callback URLs (comma separated)"
+                              Immediate="true"
+                              Validation="@(new Func<string, IEnumerable<string>>(UrlsValidate))"/>
+                <MudSwitch @bind-Checked="@Command.IsProtected" Label="Is Protected"/>
+            </MudItem>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(Cancel)">Cancel</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="@(async () => await UpdateAsync())">Update</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+
+    private MudForm _form;
+    private string _callbackUrls;
+
+    private UpdateApplicationCommandValidator Validator { get; set; } = new();
+
+
+    [Parameter] public UpdateApplicationCommand Command { get; set; }
+
+    protected override void OnInitialized()
+    {
+        _callbackUrls = Command.CallbackUrls.Aggregate("", (o, p) => o + "," + p);
+    }
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task UpdateAsync()
+    {
+        await _form.Validate();
+        if (_form.IsValid)
+        {
+            var success = await ApplicationsService.PutAsync(Command);
+            if (success)
+            {
+                NavigationManager.NavigateTo("/applications");
+                MudDialog.Close();
+            }
+        }
+    }
+
+
+    private IEnumerable<string> UrlsValidate(string arg)
+    {
+        Command.CallbackUrls = _callbackUrls.Replace(" ", "").Split(",");
+        var validateResult = Validator.ValidateValue(Command, "CallbackUrls").GetAwaiter().GetResult();
+        return validateResult;
+    }
+
+}

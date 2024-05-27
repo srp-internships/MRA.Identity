@@ -1,5 +1,4 @@
-﻿using System.Net.Http.Json;
-using MRA.Identity.Application.Contract.Skills.Command;
+﻿using MRA.Identity.Application.Contract.Skills.Command;
 
 namespace MRA.Jobs.Application.IntegrationTests.Skills.Commands;
 public class AddUserSkillsCommandTest : BaseTest

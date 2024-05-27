@@ -1,33 +1,39 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MRA.Identity.Application.Common.Exceptions;
 using MRA.Identity.Application.Common.Interfaces.DbContexts;
 using MRA.Identity.Application.Common.Interfaces.Services;
 using MRA.Identity.Application.Contract.Profile.Queries;
 using MRA.Identity.Application.Contract.Profile.Responses;
+using MRA.Identity.Domain.Entities;
 
 namespace MRA.Identity.Application.Features.UserProfiles.Query;
+
 public class GetProfileQueryHandler(
-    IApplicationDbContext context,
+    UserManager<ApplicationUser> userManager,
     IMapper mapper,
     IUserHttpContextAccessor userHttpContextAccessor)
-    : IRequestHandler<GetPofileQuery, UserProfileResponse>
+    : IRequestHandler<GetProfileQuery, UserProfileResponse>
 {
-    public async Task<UserProfileResponse> Handle(GetPofileQuery request, CancellationToken cancellationToken)
+    public async Task<UserProfileResponse> Handle(GetProfileQuery request, CancellationToken cancellationToken)
     {
-        var userRoles = userHttpContextAccessor.GetUserRoles();
         var userName = userHttpContextAccessor.GetUserName();
 
-        if (request.UserName != null && !userRoles.Any())
-            throw new ForbiddenAccessException("Access is denied");
+        if (userName != "SuperAdmin")
+        {
+            if (!request.UserName.IsNullOrEmpty()) throw new ForbiddenAccessException("Access is denied");
+        }
 
-        if (request.UserName != null)
-            userName = request.UserName;
+        if (request.UserName.IsNullOrEmpty()) request.UserName = userName;
 
-        var user = await context.Users
-            .FirstOrDefaultAsync(u => u.UserName == userName, cancellationToken: cancellationToken);
-        _ = user ?? throw new NotFoundException("user is not found");
+        var user = await userManager.Users.FirstOrDefaultAsync(x => x.UserName == request.UserName,
+            cancellationToken);
+
+        if (user == null) throw new NotFoundException("user is not found");
         var response = mapper.Map<UserProfileResponse>(user);
         return response;
     }

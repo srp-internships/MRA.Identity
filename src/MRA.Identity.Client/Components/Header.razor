@@ -1,20 +1,15 @@
-﻿@using MRA.Identity.Client.Components.Dialogs
-@using MRA.Identity.Client.Services.Message
-@using MudBlazor
-@using Anchor = MudBlazor.Anchor
+﻿@using Anchor = MudBlazor.Anchor
 @using Breakpoint = MudBlazor.Breakpoint
 @using Color = MudBlazor.Color
 @using DividerType = MudBlazor.DividerType
 @using Microsoft.FeatureManagement
-@using Size = MudBlazor.Size
-@using AltairCA.Blazor.WebAssembly.Cookie
-@using MRA.Identity.Client.Services.Profile
 @using MRA.BlazorComponents.DynamicPages.Components
 @inject LayoutService LayoutService
 @inject NavigationManager NavigationManager
 @inject IConfiguration Configuration
 @inject IFeatureManager FeatureManager
 @inject IDialogService DialogService
+@inject ILocalStorageService LocalStorage
 
 <MudToolBar Class="toolbar-fixed-blur">
     <MudHidden Breakpoint="Breakpoint.MdAndUp">
@@ -52,21 +47,45 @@
         </MudHidden>
     </a>
     <MudHidden Breakpoint="Breakpoint.SmAndDown">
-        <MudButton Href="/" Color="Color.Inherit" Variant="Variant.Text" Class="@GetActiveClass(DocPages.Profile)">
-            <MudText>
-                <b>@ContentService["Profile:MyProfile"]</b>
-            </MudText>
-        </MudButton>
         <CascadingAuthenticationState>
-            <AuthorizeView Roles="ApplicationAdmin">
-                <MudButton Target="_blank" Color="Color.Inherit" Variant="Variant.Text" OnClick="OpenDialog">
+            <AuthorizeView>
+                <MudButton Href="/" Color="Color.Inherit" Variant="Variant.Text" Class="@GetActiveClass(DocPages.Profile)">
                     <MudText>
-                        <b>@ContentService["Header:SendMessage"] </b>
+                        <b>@ContentService["Profile:MyProfile"]</b>
                     </MudText>
                 </MudButton>
-                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/UserManager" Class="@GetActiveClass(DocPages.UserManager)">
+            </AuthorizeView>
+            <AuthorizeView Roles="SuperAdmin">
+                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/applications" Class="@GetActiveClass(DocPages.Applications)">
                     <MudText>
-                        <b>User manager</b>
+                        <b>Applications</b>
+                    </MudText>
+                </MudButton>
+            </AuthorizeView>
+            <AuthorizeView Roles="ApplicationAdmin, SuperAdmin">
+                <MudMenu FullWidth="true" ActivationEvent="@MouseEvent.MouseOver" 
+                         AnchorOrigin="Origin.BottomCenter" TransformOrigin="Origin.TopCenter" Class="@GetActiveClass(DocPages.UserManager)">
+                    <ActivatorContent>
+                        <MudText>
+                            <b>User manager</b>
+                        </MudText>
+                    </ActivatorContent>
+                    <ChildContent>
+                        <MudMenuItem Href="/UserManager" Class="@GetActiveClass(DocPages.UserManager)">
+                            <MudText>
+                                <b>Users</b>
+                            </MudText>
+                        </MudMenuItem>
+                        <MudMenuItem Href="/roles" Class="@GetActiveClass(DocPages.Roles)">
+                            <MudText>
+                                <b>Roles</b>
+                            </MudText>
+                        </MudMenuItem>
+                    </ChildContent>
+                </MudMenu>
+                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/EmailTemplates" Class="@GetActiveClass(DocPages.EmailTemplates)">
+                    <MudText>
+                        <b>Email templates</b>
                     </MudText>
                 </MudButton>
             </AuthorizeView>
@@ -77,12 +96,12 @@
             </MudText>
         </MudButton>
 
-        <MudButton Href="@Configuration["Platforms:Jobs"]" Color="Color.Inherit" Variant="Variant.Text">
+        <MudButton Href="@($"{Configuration["Platforms:Jobs"]}{token}")" Color="Color.Inherit" Variant="Variant.Text">
             <MudText>
                 <b>@ContentService["Header:Jobs"] </b>
             </MudText>
         </MudButton>
-        <DynamicHeaderButtons/>
+        <DynamicHeaderButtons Application="Identity"/>
 
     </MudHidden>
     <MudSpacer/>
@@ -106,22 +125,35 @@
     <MudNavMenu Rounded="true" Dense="true" Color="Color.Primary" Class="pa-2">
         <MudNavLink Match="NavLinkMatch.All" Href="/" Target="_blank">@ContentService["Profile:MyProfile"]</MudNavLink>
         <CascadingAuthenticationState>
+            <AuthorizeView Roles="SuperAdmin">
+                <MudButton Color="Color.Inherit" Variant="Variant.Text" Href="/applications" Class="@GetActiveClass(DocPages.UserManager)">
+                    <MudText>
+                        <b>Applications</b>
+                    </MudText>
+                </MudButton>
+            </AuthorizeView>
             <AuthorizeView Roles="ApplicationAdmin">
-                <MudNavLink OnClick="OpenDialog">
-                    <MudText>
-                        <b>@ContentService["Header:SendMessage"] </b>
-                    </MudText>
-                </MudNavLink>
-                <MudNavLink Href="/UserManager">
-                    <MudText>
-                        <b>User manager</b>
-                    </MudText>
-                </MudNavLink>
+                <MudMenu Label="User manager">
+                    <MudMenuItem>
+                        <MudNavLink>
+                            <MudText Href="/UserManager">
+                                <b>Users</b>
+                            </MudText>
+                        </MudNavLink>
+                    </MudMenuItem>
+                    <MudMenuItem>
+                        <MudNavLink>
+                            <MudText href="/roles">
+                                <b>Roles</b>
+                            </MudText>
+                        </MudNavLink>
+                    </MudMenuItem>
+                </MudMenu>
             </AuthorizeView>
         </CascadingAuthenticationState>
         <MudNavLink Match="NavLinkMatch.All" Href="@Configuration["Platforms:Academy"]" Target="_blank">@ContentService["Header:Academy"]</MudNavLink>
-        <MudNavLink Match="NavLinkMatch.All" Href="@Configuration["Platforms:Jobs"]" Target="_blank">@ContentService["Header:Jobs"]</MudNavLink>
-        <DynamicHeaderNavLinks/>
+        <MudNavLink Match="NavLinkMatch.All" Href="@($"{Configuration["Platforms:Jobs"]}{token}")" Target="_blank">@ContentService["Header:Jobs"]</MudNavLink>
+        <DynamicHeaderNavLinks Application="Identity"/>
     </MudNavMenu>
     @if (_betaVersion)
     {
@@ -130,9 +162,8 @@
 </MudDrawer>
 
 @code {
-
     bool _open = false;
-
+    private string token = "";
     private bool _betaVersion;
 
     void ToggleDrawer()
@@ -145,7 +176,9 @@
     protected override async Task OnInitializedAsync()
     {
         _betaVersion = await FeatureManager.IsEnabledAsync(FeatureFlags.BetaVersion);
-
+        var authToken = await LocalStorage.GetItemAsync<JwtTokenResponse>("authToken");
+        if (authToken != null)
+            token = $"?atoken={authToken.AccessToken}&rtoken={authToken.RefreshToken}&vdate={authToken.AccessTokenValidateTo}";
         StateHasChanged();
         NavigationManager.LocationChanged += HandleLocationChanged;
         await base.OnInitializedAsync();
@@ -165,12 +198,6 @@
     public void Dispose()
     {
         NavigationManager.LocationChanged -= HandleLocationChanged;
-    }
-
-    public void OpenDialog()
-    {
-        var options = new DialogOptions() { CloseButton = true, MaxWidth = MaxWidth.ExtraExtraLarge, FullWidth = true };
-        DialogService.Show<DialogMessageSender>("Send message", options);
     }
 
 }

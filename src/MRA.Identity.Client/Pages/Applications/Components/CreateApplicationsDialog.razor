@@ -1,0 +1,74 @@
+﻿@using MRA.Identity.Application.Contract.Applications.Commands
+@using MRA.Identity.Application.Contract.Applications.Validators
+@using MRA.Identity.Client.Services.Applications
+@inject IApplicationsService ApplicationsService
+
+<MudDialog>
+    <TitleContent>
+        <MudText Typo="Typo.h6">
+            Create
+        </MudText>
+    </TitleContent>
+    <DialogContent>
+        <MudForm Model="@_command" Validation="Validator.ValidateValue" ValidationDelay="0" @ref="_form">
+            <MudItem xs="12" md="12">
+                <MudTextField @bind-Value="@_command.Name" Label="Name" For="@(() => _command.Name)" Immediate="true"/>
+                <MudTextField @bind-Value="@_command.Description" Label="Description" For="@(() => _command.Description)" Immediate="true"/>
+                <MudTextField @bind-Value="@_callbackUrls"
+                              Label="Callback URLs (comma separated)"
+                              Immediate="true"  
+                              Validation="@(new Func<string, IEnumerable<string>>(UrlsValidate))"/>
+                <MudSwitch @bind-Checked="@_command.IsProtected" Label="Protected"/>
+            </MudItem>
+        </MudForm>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@(Cancel)">@ContentService["Profile:Cancel"]</MudButton>
+        <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="@(async () => await CreateAsync())">Create</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; } = null!;
+
+    private MudForm _form;
+    private string _callbackUrls;
+
+    private CreateApplicationCommandValidator Validator { get; set; } = new();
+
+
+    private readonly CreateApplicationCommand _command = new()
+    {
+        Name = "",
+        Description = "",
+        CallbackUrls = [],
+        IsProtected = false
+    };
+
+    private void Cancel()
+    {
+        MudDialog.Cancel();
+    }
+
+    private async Task CreateAsync()
+    {
+        await _form.Validate();
+        if (_form.IsValid)
+        {
+            var success = await ApplicationsService.PostAsync(_command);
+            if (success)
+            {
+                MudDialog.Close();
+            }
+        }
+    }
+
+
+    private IEnumerable<string> UrlsValidate(string arg)
+    {
+        _command.CallbackUrls = _callbackUrls.Replace(" ", "").Split(",");
+        var validateResult = Validator.ValidateValue(_command, "CallbackUrls").GetAwaiter().GetResult();
+        return validateResult;
+    }
+
+}

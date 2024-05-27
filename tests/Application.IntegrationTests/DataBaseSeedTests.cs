@@ -66,30 +66,17 @@ public class DataBaseSeedTests : BaseTest
         (await GetMraJobsAdmin()).Should().NotBeNull();
     }
     
-    [Test]
-    public async Task MraJobsAdminClaims()
-    {
-        var superAdmin = await GetMraJobsAdmin();
-    
-        var roleClaim = await GetEntity<ApplicationUserClaim>(s =>
-            s.UserId == superAdmin.Id &&
-            s.ClaimType == ClaimTypes.Role);
-    
-        roleClaim.Should().NotBeNull();
-    }
-    
     #endregion
     
-    
-    #region MraOnlinePlatformAdmin
+    #region MraAcademyAdmin
 
-    private async Task<ApplicationUser> GetMraOnlinePlatformAdmin() =>
-        await GetEntity<ApplicationUser>(s => s.UserName == "MraOnlinePlatformAdmin");
+    private async Task<ApplicationUser> GetMraAcademyAdmin() =>
+        await GetEntity<ApplicationUser>(s => s.UserName == "MraAcademyAdmin");
 
     [Test]
-    public async Task MraOnlinePlatformRole()
+    public async Task MraAcademyRole()
     {
-        var superAdmin = await GetMraOnlinePlatformAdmin();
+        var superAdmin = await GetMraAcademyAdmin();
         var superAdminRole = await GetEntity<ApplicationRole>(s =>
             s.NormalizedName == ApplicationClaimValues.Administrator.ToUpper());
         superAdminRole.Should().NotBeNull();
@@ -102,22 +89,9 @@ public class DataBaseSeedTests : BaseTest
     }
 
     [Test]
-    public async Task MraOnlinePlatformAdminUser()
+    public async Task MraAcademyAdminUser()
     {
-        (await GetMraOnlinePlatformAdmin()).Should().NotBeNull();
+        (await GetMraAcademyAdmin()).Should().NotBeNull();
     }
-
-    [Test]
-    public async Task MraOnlinePlatformAdminClaims()
-    {
-        var superAdmin = await GetMraOnlinePlatformAdmin();
-
-        var roleClaim = await GetEntity<ApplicationUserClaim>(s =>
-            s.UserId == superAdmin.Id &&
-            s.ClaimType == ClaimTypes.Role);
-
-        roleClaim.Should().NotBeNull();
-    }
-
     #endregion
 }

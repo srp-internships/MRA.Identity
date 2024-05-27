@@ -1,14 +1,13 @@
 ﻿@page "/registration"
 @using Microsoft.AspNetCore.WebUtilities
 @using MRA.Identity.Client.Components.SignUpCardHeader
-@using System.Net
 @inject ISnackbar Snackbar
 @inject IUserProfileService UserProfileService
 @inject IAuthService AuthService
 @inject IContentService ContentService
 @inject NavigationManager NavigationManager
-@inject AuthenticationStateProvider AuthenticationStateProvider
 @inject LayoutService LayoutService
+@inject AuthenticationStateProvider AuthenticationStateProvider 
 
 <MudGrid Justify="Justify.Center" Class="align-items-center">
     <MudItem xs="12" sm="8" md="6" lg="4">
@@ -34,7 +33,7 @@
                             </MudHidden>
                         }
                         <MudText>
-                            @ContentService["SignUp:LabelHaveAccount"]<MudLink Href="@($"login?callback={_callback}&page={_page}")"> @ContentService["SignUp:LinkSignIn"]</MudLink>
+                            @ContentService["SignUp:LabelHaveAccount"]<MudLink Href="@($"login?callback={_callback}&applicationId={_applicationId}")"> @ContentService["SignUp:LinkSignIn"]</MudLink>
                         </MudText>
                     </CardHeaderContent>
                 </MudCardHeader>
@@ -69,7 +68,7 @@
                     </EditForm>
                 </MudCardContent>
                 <MudCardActions>
-                    <ProgressTaskButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Function="SendCode" Color="Color.Primary"
+                    <ProgressTaskButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" OnClick="@SendCode" Color="Color.Primary"
                                         Class="ml-auto" FullWidth="true">
                         <MudText>@ContentService["SignUp:ButtonNext"]</MudText>
                     </ProgressTaskButton>
@@ -95,13 +94,12 @@
                     <br/>
                     <br/>
                     <MudCardActions>
-                        <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" Function="ConfirmCode">
+                        <ProgressTaskButton Variant="Variant.Filled" Color="Color.Primary" FullWidth="true" OnClick="@ConfirmCode">
                             <MudText>@ContentService["SignUp:Apply"]</MudText>
                         </ProgressTaskButton>
                         <MudButton Variant="Variant.Text" Color="Color.Info" FullWidth="true" OnClick="SendCode" Disabled="@_isResendDisabled">
                             <MudText>@ContentService["SignUp:ResendCode"]</MudText>
                         </MudButton>
-
                     </MudCardActions>
                     <div>
                         <MudText Color="Color.Default">@_timeLeft @ContentService["SignUp:Secconds"]</MudText>
@@ -117,7 +115,7 @@
     private FluentValidationValidator _fluentValidationValidator;
     private int _step;
     string _callback = string.Empty;
-    private string _page = string.Empty;
+    private Guid _applicationId;
 
     private bool _isShow;
     private InputType _passwordInput = InputType.Password;
@@ -202,23 +200,25 @@
         }
     }
 
+    private const string ApplicationIdClaim = "http://schemas.microsoft.com/ws/2008/06/identity/claims/applicationId";
+
     protected override async Task OnInitializedAsync()
     {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-        if (user.Identity.IsAuthenticated)
-        {
-            NavigationManager.NavigateTo("/");
-            return;
-        }
-
         var currentUri = NavigationManager.ToAbsoluteUri(NavigationManager.Uri);
-        if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("callback", out var param))
-            _callback = param;
-        if (QueryHelpers.ParseQuery(currentUri.Query).TryGetValue("page", out param))
-            _page = param;
-        StateHasChanged();
+        var query = QueryHelpers.ParseQuery(currentUri.Query);
+        if (query.TryGetValue("callback", out var callback))
+            _callback = callback;
+        if (query.TryGetValue("applicationId", out var applicationId))
+            if (!Guid.TryParse(applicationId, out _applicationId))
+                NavigationManager.NavigateTo("/notfound");
+        if (!string.IsNullOrWhiteSpace(applicationId))
+        {
+            var user = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            if (user?.User?.HasClaim(ApplicationIdClaim, applicationId) == true)
+            {
+                await AuthService.NavigateToCallbackWithJwt(callback);
+            }
+        }
     }
 
     private void ServerNotResponding()
@@ -244,7 +244,8 @@
         {
             _registerUser.VerificationCode = _code;
             _registerUser.Username = _registerUser.Username.Trim();
-
+            _registerUser.CallBackUrl = _callback;
+            _registerUser.ApplicationId = _applicationId;
             await AuthService.RegisterUserAsync(_registerUser);
         }
     }

@@ -17,4 +17,8 @@ public interface IApplicationDbContext
     public DbSet<EducationDetail> Educations { get; set; }
     public DbSet<ExperienceDetail> Experiences { get; set; }
     public DbSet<Message> Messages { get; set; }
+    public DbSet<EmailTemplate> EmailTemplates { get; set; }
+    public DbSet<UserSkill> UserSkills { get; set; }
+    public DbSet<Domain.Entities.Application> Applications { get; set; }
+    public DbSet<ApplicationUserLink> ApplicationUserLinks { get; set; }
 }

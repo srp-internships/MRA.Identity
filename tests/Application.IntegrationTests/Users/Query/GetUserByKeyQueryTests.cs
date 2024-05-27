@@ -1,8 +1,5 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using Microsoft.IdentityModel.Tokens;
-using MRA.Identity.Application.Contract.User.Responses;
-using MRA.Identity.Domain.Entities;
+﻿using MRA.Identity.Application.Contract.User.Responses;
+using MRA.Identity.Infrastructure.Identity;
 
 namespace MRA.Jobs.Application.IntegrationTests.Users.Query;
 
@@ -43,18 +40,25 @@ public class GetUserByKeyQueryTests : BaseTest
     }
 
     [Test]
-    [TestCase("")]
-    [TestCase("Reviewer")]
-    public async Task GetUserByKey_Return_Forbidden(string role)
+    [TestCase("", HttpStatusCode.Forbidden)]
+    [TestCase(ApplicationPolicies.Reviewer, HttpStatusCode.Forbidden)]
+    [TestCase(ApplicationPolicies.Administrator, HttpStatusCode.OK,
+        "4f67d20a-4f2a-4c7f-8a35-4c15c2d0c3e2", "mraJobsApplicationSecret")]
+    [TestCase(ApplicationPolicies.SuperAdministrator, HttpStatusCode.OK)]
+    public async Task GetUserByKey_Return_StatusCode(string role, HttpStatusCode statusCode,
+        string applicationId = null, string applicationClientSecret = null)
     {
-        if (role.IsNullOrEmpty())
-            await AddApplicantAuthorizationAsync();
-        else
+        if (role == ApplicationPolicies.SuperAdministrator || role == ApplicationPolicies.Administrator)
+            await AddAuthorizationAsync();
+        else if (role == ApplicationPolicies.Reviewer)
             await AddReviewerAuthorizationAsync();
+        else
+            await AddApplicantAuthorizationAsync();
 
-
-        var response = await _client.GetAsync($"api/User/{UserName}");
-        Assert.That(response.StatusCode == HttpStatusCode.Forbidden);
+        var response =
+            await _client.GetAsync(
+                $"api/User/{UserName}");
+        Assert.That(response.StatusCode == statusCode);
     }
 
     private async Task AddUser()

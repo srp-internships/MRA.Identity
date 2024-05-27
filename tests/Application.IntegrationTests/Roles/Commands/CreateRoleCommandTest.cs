@@ -1,8 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using FluentAssertions;
-using MRA.Identity.Application.Contract.ApplicationRoles.Commands;
-using MRA.Identity.Domain.Entities;
+﻿using MRA.Identity.Application.Contract.ApplicationRoles.Commands;
 
 namespace MRA.Jobs.Application.IntegrationTests.Roles.Commands;
 public class CreateRoleCommandTest : BaseTest

@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using Microsoft.AspNetCore.Mvc;
-using MRA.Identity.Application.Contract.Educations.Command.Create;
+﻿using MRA.Identity.Application.Contract.Educations.Command.Create;
 
 namespace MRA.Jobs.Application.IntegrationTests.Educations.Commands;
 

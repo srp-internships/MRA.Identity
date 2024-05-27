@@ -16,8 +16,9 @@ using MRA.Identity.Infrastructure.Persistence;
 using MRA.Configurations.Initializer.Azure.EmailService;
 using MRA.Configurations.Initializer.Services;
 using MRA.Configurations.Initializer.OsonSms.SmsService;
-using Microsoft.Extensions.Logging;
 using MRA.Configurations.Common.Constants;
+using MRA.Identity.Application.Contract;
+using MRA.Identity.Infrastructure.Services;
 
 namespace MRA.Identity.Infrastructure;
 
@@ -25,6 +26,7 @@ public static class DependencyInitializer
 {
     public static void AddInfrastructure(this IServiceCollection services, IConfiguration configurations)
     {
+        services.AddTransient<ISlugService, SlugService>();
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             string dbConnectionString = configurations.GetConnectionString("DefaultConnection");
@@ -76,6 +78,7 @@ public static class DependencyInitializer
                 options.User.RequireUniqueEmail = false;
             })
             .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddClaimsPrincipalFactory<CustomUserClaimsPrincipalFactory>()
             .AddDefaultTokenProviders();
 
 
@@ -108,6 +111,10 @@ public static class DependencyInitializer
 
             auth.AddPolicy(ApplicationPolicies.Administrator, op => op
                 .RequireRole(ApplicationClaimValues.SuperAdministrator, ApplicationClaimValues.Administrator));
+
+            auth.AddPolicy(ApplicationPolicies.Reviewer, op => op
+                .RequireRole(ApplicationClaimValues.Reviewer, ApplicationClaimValues.Administrator,
+                    ApplicationClaimValues.SuperAdministrator));
         });
 
         var corsAllowedHosts = configurations.GetSection("MraIdentity-CORS").Get<string[]>();

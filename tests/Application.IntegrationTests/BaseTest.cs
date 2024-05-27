@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MRA.Identity.Application.Common.Interfaces.Services;
 using MRA.Identity.Domain.Entities;
+using MRA.Identity.Infrastructure.Identity;
 using MRA.Identity.Infrastructure.Persistence;
 
 namespace MRA.Jobs.Application.IntegrationTests;
@@ -19,6 +20,14 @@ public abstract class BaseTest
     protected ApplicationUser Applicant { get; private set; }
     protected ApplicationUser Reviewer { get; private set; }
 
+    protected const string NewUserPassword = "asds;daAFES32!#";
+
+    protected readonly ApplicationUser NewUser = new()
+    {
+        UserName = "uuuuser", Email = "user@example.com",
+        NormalizedEmail = "user@example.com".ToUpper()
+    };
+
     /// <summary>
     /// Initializing of factory and _context. And Creating a InMemoryDB
     /// </summary>
@@ -27,6 +36,7 @@ public abstract class BaseTest
     public virtual async Task OneTimeSetup()
     {
         _factory = new CustomWebApplicationFactory();
+        await AddUser(NewUser, NewUserPassword);
 
         // Register a new user and add it to the database to check whether he has logged in
         var request1 = new ApplicationUser()
@@ -146,6 +156,26 @@ public abstract class BaseTest
         var claims = new List<Claim>
         {
             new Claim($"{prefics}role", "Reviewer"),
+            new Claim($"{prefics}Id", reviewer.Id.ToString()),
+            new Claim($"{prefics}username", reviewer.UserName),
+            new Claim($"{prefics}email", reviewer.Email),
+            new Claim($"{prefics}application", "4f67d20a-4f2a-4c7f-8a35-4c15c2d0c3e2")
+        };
+        var token = tokenService.CreateTokenByClaims(claims, out _);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+    }
+
+    protected async Task AddAdminAuthorizationAsync()
+    {
+        using var scope = _factory.Services.GetService<IServiceScopeFactory>().CreateScope();
+        var tokenService = scope.ServiceProvider.GetRequiredService<IJwtTokenService>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var reviewer = await userManager.Users.FirstOrDefaultAsync(s => s.UserName == "@Reviewer");
+        var prefics = "http://schemas.microsoft.com/ws/2008/06/identity/claims/";
+        Reviewer = reviewer;
+        var claims = new List<Claim>
+        {
+            new Claim($"{prefics}role", ApplicationClaimValues.Administrator),
             new Claim($"{prefics}Id", reviewer.Id.ToString()),
             new Claim($"{prefics}username", reviewer.UserName),
             new Claim($"{prefics}email", reviewer.Email),

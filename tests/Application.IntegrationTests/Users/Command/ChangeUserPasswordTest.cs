@@ -1,7 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Json;
-using Microsoft.AspNetCore.Mvc;
-using MRA.Identity.Application.Contract.User.Commands.ChangePassword;
+﻿using MRA.Identity.Application.Contract.User.Commands.ChangePassword;
 
 namespace MRA.Jobs.Application.IntegrationTests.Users.Command;
 
@@ -15,7 +12,7 @@ public class ChangeUserPasswordTest : BaseTest
         // Arrange
         var command = new ChangePasswordUserCommand
         {
-            OldPassword = "password@#12P",
+            CurrentPassword = "password@#12P",
             NewPassword = "password@#12P123",
             ConfirmPassword = "password@#12P123"
         };
@@ -36,7 +33,7 @@ public class ChangeUserPasswordTest : BaseTest
         // Arrange
         var command = new ChangePasswordUserCommand
         {
-            OldPassword = "password@#12P11111111",
+            CurrentPassword = "password@#12P11111111",
             NewPassword = "password@#12P123",
             ConfirmPassword = "password@#12P123"
         };

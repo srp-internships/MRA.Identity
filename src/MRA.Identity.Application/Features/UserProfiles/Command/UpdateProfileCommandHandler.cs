@@ -9,26 +9,18 @@ using MRA.Identity.Domain.Entities;
 
 namespace MRA.Identity.Application.Features.UserProfiles.Command;
 
-public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand, bool>
+public class UpdateProfileCommandHandler(
+    UserManager<ApplicationUser> userManager,
+    IUserHttpContextAccessor userHttpContextAccessor,
+    IMapper mapper)
+    : IRequestHandler<UpdateProfileCommand, bool>
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IUserHttpContextAccessor _userHttpContextAccessor;
-    private readonly IMapper _mapper;
-
-    public UpdateProfileCommandHandler(UserManager<ApplicationUser> userManager,
-        IUserHttpContextAccessor userHttpContextAccessor,
-        IMapper mapper)
-    {
-        _userManager = userManager;
-        _userHttpContextAccessor = userHttpContextAccessor;
-        _mapper = mapper;
-    }
     public async Task<bool> Handle(UpdateProfileCommand request, CancellationToken cancellationToken)
     {
-        var user = await _userManager.FindByNameAsync(_userHttpContextAccessor.GetUserName());
+        var user = await userManager.FindByNameAsync(userHttpContextAccessor.GetUserName());
         _ = user ?? throw new NotFoundException("user is not found");
 
-        var exitingUser = await _userManager.Users.FirstOrDefaultAsync(u => u.UserName != user.UserName &&
+        var exitingUser = await userManager.Users.FirstOrDefaultAsync(u => u.UserName != user.UserName &&
         (u.PhoneNumber == request.PhoneNumber || u.Email == request.Email), cancellationToken: cancellationToken);
         if (exitingUser != null)
         {
@@ -51,10 +43,10 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         if (user.Email != request.Email)
             user.EmailConfirmed = false;
         if (user.PhoneNumber != request.PhoneNumber) user.PhoneNumberConfirmed = false;
-        _mapper.Map(request, user);
+        mapper.Map(request, user);
 
 
-        return (await _userManager.UpdateAsync(user)).Succeeded;
+        return (await userManager.UpdateAsync(user)).Succeeded;
 
     }
 }

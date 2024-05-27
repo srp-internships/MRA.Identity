@@ -11,6 +11,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: Minor version for each merge
+        id: taggerDryRun
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          WITH_V: false
+          DRY_RUN: true
+
+      - name: Set version in csproj
+        run: |
+          version="${{ steps.taggerDryRun.outputs.new_tag }}"
+          sed -i "s/<Version>.*<\/Version>/<Version>$version<\/Version>/" ./src/MRA.Identity.Application.Contract/MRA.Identity.Application.Contract.csproj
+
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
@@ -31,3 +43,11 @@ jobs:
       - name: Publish to NuGet
         run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
         working-directory: ./src/MRA.Identity.Application.Contract
+
+
+      - name: Minor version for each merge
+        id: taggerFinal
+        uses: anothrNick/github-tag-action@1.64.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+          WITH_V: true

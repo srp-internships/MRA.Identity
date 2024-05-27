@@ -9,7 +9,7 @@ using MRA.Identity.Application.Contract.User.Commands.LoginUser;
 using MRA.Identity.Application.Contract.User.Commands.RegisterUser;
 using MRA.Identity.Application.Contract.User.Commands.ResetPassword;
 using MRA.Identity.Application.Contract.User.Queries;
-using MRA.Identity.Application.Contract.User.Queries.GetUserNameByPhoneNymber;
+using MRA.Identity.Application.Contract.User.Queries.GetUserNameByPhoneNumber;
 
 namespace MRA.Identity.Api.Controllers;
 
@@ -44,8 +44,7 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Verify(string token, Guid userId)
     {
         await _emailVerification.VerifyEmailAsync(token, userId);
-
-        return Content("<h1>Thank you!</h1><p>Your email address has been successfully confirmed.</p>","text/html");
+        return Ok();
     }
 
 

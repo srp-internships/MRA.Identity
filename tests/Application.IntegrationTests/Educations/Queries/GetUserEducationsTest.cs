@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace MRA.Jobs.Application.IntegrationTests.Educations.Queries;
+﻿namespace MRA.Jobs.Application.IntegrationTests.Educations.Queries;
 
 public class GetUserEducationsTest : BaseTest
 {

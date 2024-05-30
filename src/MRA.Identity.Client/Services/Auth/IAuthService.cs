@@ -20,4 +20,6 @@ public interface IAuthService
     Task ResendVerificationEmail();
     Task<ApiResponse> SendVerificationEmailToken(string token, string userId);
     Task NavigateToCallbackWithJwt(string callback);
+    string GetDefaultSSOAppId();
+    string GetDefaultSSOAppCallback();
 }

@@ -4,6 +4,7 @@
 @inject ISnackbar Snackbar
 @inject IUserProfileService UserProfileService
 @inject IAuthService AuthService
+@inject IConfiguration Configuration
 @inject IContentService ContentService
 @inject NavigationManager NavigationManager
 @inject LayoutService LayoutService
@@ -211,6 +212,17 @@
         if (query.TryGetValue("applicationId", out var applicationId))
             if (!Guid.TryParse(applicationId, out _applicationId))
                 NavigationManager.NavigateTo("/notfound");
+
+        if (string.IsNullOrWhiteSpace(_callback))
+        {
+            _callback = Configuration["DefaultSSOApplication:Id"];
+        }
+
+        if (_applicationId == Guid.Empty)
+        {
+            _applicationId = Guid.Parse(Configuration["DefaultSSOApplication:Id"]!);
+        }
+
         if (!string.IsNullOrWhiteSpace(applicationId))
         {
             var user = await AuthenticationStateProvider.GetAuthenticationStateAsync();

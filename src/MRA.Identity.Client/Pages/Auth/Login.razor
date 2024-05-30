@@ -92,6 +92,16 @@
             }
         }
 
+        if (string.IsNullOrWhiteSpace(_callback))
+        {
+            _callback = AuthService.GetDefaultSSOAppCallback();
+        }
+
+        if (_applicationId == Guid.Empty)
+        {
+            _applicationId = Guid.Parse(AuthService.GetDefaultSSOAppId());
+        }
+
         _loginCommand.ApplicationId = _applicationId;
         _loginCommand.CallBackUrl = _callback;
         StateHasChanged();

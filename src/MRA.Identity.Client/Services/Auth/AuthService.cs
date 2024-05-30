@@ -144,4 +144,14 @@ public class AuthService(
         navigationManager.NavigateTo(
             $"{callback}?atoken={jwt.AccessToken}&rtoken={jwt.RefreshToken}&vdate={jwt.AccessTokenValidateTo}");
     }
+
+    public string GetDefaultSSOAppId()
+    {
+        return configuration["DefaultSSOApplication:Id"];
+    }
+
+    public string GetDefaultSSOAppCallback()
+    {
+        return configuration["DefaultSSOApplication:Callback"];
+    }
 }
